@@ -49,10 +49,14 @@ nav{
 
 .nav-links{
     display:flex;
+    align-items:center;
     gap:32px;
 }
 
 .nav-links a{
+    display:inline-flex;
+    align-items:center;
+    height:40px;
     position:relative;
     text-decoration:none;
     color:white;
@@ -67,7 +71,7 @@ nav{
     content:"";
     position:absolute;
     left:0;
-    bottom:-6px;
+    bottom:4px;
     width:0;
     height:2px;
     background:#c08bff;
@@ -128,7 +132,10 @@ nav{
 }
 
 /* ===== UI IMAGE ===== */
-.ui-wrap{position:relative;perspective:1400px}
+.ui-wrap{
+    position:relative;
+    perspective:1400px;
+}
 
 .ui-glow{
     position:absolute;
@@ -143,24 +150,29 @@ nav{
     pointer-events:none;
 }
 
+.ui-float{
+    animation:floatUI 6s ease-in-out infinite;
+}
+
 .ui-card{
     position:relative;
     border-radius:28px;
     overflow:hidden;
     transform-style:preserve-3d;
-    animation:floatUI 6s ease-in-out infinite;
     box-shadow:
         0 0 0 1px rgba(200,150,255,0.45),
         0 0 70px rgba(180,120,255,0.65),
         0 70px 180px rgba(0,0,0,0.95);
 }
+
 @keyframes floatUI{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-12px)}
 }
+
 .ui-card img{width:100%}
 
-/* ===== SECTIONS ===== */
+/* ===== SECTION ===== */
 section{
     max-width:1300px;
     margin:0 auto;
@@ -176,45 +188,16 @@ section h2{
 .reveal{
     opacity:0;
     transform:translateY(40px);
-    transition:1s ease;
+    transition:0.9s ease;
 }
 .reveal.show{
     opacity:1;
     transform:none;
 }
 
-/* ===== CARDS ===== */
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:40px;
-}
-
-.glass{
-    background:rgba(255,255,255,0.06);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,0.18);
-    border-radius:26px;
-    padding:48px;
-    box-shadow:0 35px 100px rgba(0,0,0,0.7);
-    transition:0.4s;
-}
-.glass:hover{
-    transform:translateY(-12px);
-    box-shadow:
-        0 0 60px rgba(180,110,255,0.6),
-        0 50px 130px rgba(0,0,0,0.85);
-}
-
-.stat{
-    font-size:48px;
-    color:#dcb6ff;
-    font-weight:700;
-}
-
 /* ===== FAQ ===== */
 .faq-item{
-    margin-bottom:26px;
+    margin-bottom:28px;
     cursor:pointer;
     transition:0.3s;
 }
@@ -225,18 +208,20 @@ section h2{
     padding:26px 32px;
     border-radius:22px;
     border:1px solid rgba(255,255,255,0.18);
+    font-weight:600;
 }
 
 .faq-a{
     max-height:0;
     overflow:hidden;
-    transition:0.4s;
+    transition:0.45s ease;
     padding:0 32px;
-    opacity:0.85;
+    opacity:0.9;
+    line-height:1.7;
 }
 .faq-item.active .faq-a{
-    max-height:320px;
-    padding:20px 32px 0;
+    max-height:600px;
+    padding:22px 32px 0;
 }
 
 /* ===== FOOTER ===== */
@@ -265,7 +250,6 @@ footer{
         </div>
         <div class="nav-links">
             <a href="#">Home</a>
-            <a href="#compatibility">Compatibility</a>
             <a href="#faq">Q & A</a>
             <a class="nav-download"
                href="https://work.ink/26Yy/FeairlExecutor"
@@ -288,36 +272,57 @@ footer{
 
     <div class="ui-wrap">
         <div class="ui-glow" id="uiGlow"></div>
-        <div class="ui-card" id="uiCard">
-            <img src="UI.png">
+        <div class="ui-float">
+            <div class="ui-card" id="uiCard">
+                <img src="UI.png">
+            </div>
         </div>
     </div>
 </div>
 
-<section id="compatibility" class="reveal">
-    <h2>Execution Compatibility</h2>
-    <div class="grid">
-        <div class="glass">
-            <h3>UNC Compatibility</h3>
-            <div class="stat">99%</div>
-        </div>
-        <div class="glass">
-            <h3>sUNC Compatibility</h3>
-            <div class="stat">98%</div>
-        </div>
-    </div>
-</section>
-
 <section id="faq" class="reveal">
     <h2>Q & A</h2>
 
-    <div class="faq-item"><div class="faq-q">Why does my antivirus flag Feairl?</div><div class="faq-a">False positives caused by injection and memory interaction.</div></div>
-    <div class="faq-item"><div class="faq-q">Is Feairl safe to use?</div><div class="faq-a">Feairl does not contain malicious behavior.</div></div>
-    <div class="faq-item"><div class="faq-q">Do I need to disable antivirus?</div><div class="faq-a">Disabling is not required. Whitelisting is recommended.</div></div>
-    <div class="faq-item"><div class="faq-q">Is Feairl free?</div><div class="faq-a">Yes, Feairl provides a free version.</div></div>
-    <div class="faq-item"><div class="faq-q">Why do some scripts not work?</div><div class="faq-a">Some scripts rely on unsupported UNC or sUNC features.</div></div>
-    <div class="faq-item"><div class="faq-q">What is the difference between UNC and sUNC?</div><div class="faq-a">They represent different execution compatibility layers.</div></div>
-    <div class="faq-item"><div class="faq-q">How often is Feairl updated?</div><div class="faq-a">Updates are released frequently.</div></div>
+    <div class="faq-item">
+        <div class="faq-q">Why does my antivirus flag Feairl?</div>
+        <div class="faq-a">
+            Feairl uses process injection and memory interaction techniques that are
+            commonly flagged by antivirus software. These detections are false
+            positives and do not indicate malicious behavior.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">Is Feairl safe to use?</div>
+        <div class="faq-a">
+            Feairl does not contain malware, spyware, or hidden background processes.
+            All functionality is focused on script execution and compatibility.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">Do I need to disable my antivirus?</div>
+        <div class="faq-a">
+            Disabling antivirus software is not recommended. Adding Feairl to your
+            antivirus whitelist or exclusions list is the correct approach.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">Why do some scripts not work?</div>
+        <div class="faq-a">
+            Some scripts rely on unsupported UNC or sUNC features, outdated APIs,
+            or behavior changed by recent Roblox updates.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">Is there any risk when using Feairl?</div>
+        <div class="faq-a">
+            Using executors may violate Roblox's terms of service. Users are
+            responsible for understanding and accepting all potential risks.
+        </div>
+    </div>
 
 </section>
 
@@ -339,11 +344,9 @@ card.addEventListener("mousemove",e=>{
     const r=card.getBoundingClientRect();
     const x=e.clientX-r.left;
     const y=e.clientY-r.top;
-
     card.style.transform=
         `rotateX(${((y/r.height)-0.5)*-14}deg)
          rotateY(${((x/r.width)-0.5)*14}deg)`;
-
     glow.style.setProperty("--x",`${x}px`);
     glow.style.setProperty("--y",`${y}px`);
 });
@@ -351,15 +354,17 @@ card.addEventListener("mouseleave",()=>{
     card.style.transform="rotateX(0) rotateY(0)";
 });
 
-/* Scroll reveal */
+/* Scroll reveal (fix: run once on load) */
 const reveals=document.querySelectorAll(".reveal");
-window.addEventListener("scroll",()=>{
+function revealCheck(){
     reveals.forEach(r=>{
         if(r.getBoundingClientRect().top<window.innerHeight-80){
             r.classList.add("show");
         }
     });
-});
+}
+window.addEventListener("scroll",revealCheck);
+revealCheck(); /* ⭐ 首次載入直接執行 */
 </script>
 
 </body>

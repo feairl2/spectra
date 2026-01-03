@@ -132,10 +132,7 @@ nav{
 }
 
 /* ===== UI IMAGE ===== */
-.ui-wrap{
-    position:relative;
-    perspective:1400px;
-}
+.ui-wrap{position:relative;perspective:1400px}
 
 .ui-glow{
     position:absolute;
@@ -150,26 +147,21 @@ nav{
     pointer-events:none;
 }
 
-.ui-float{
-    animation:floatUI 6s ease-in-out infinite;
-}
-
 .ui-card{
     position:relative;
     border-radius:28px;
     overflow:hidden;
     transform-style:preserve-3d;
+    animation:floatUI 6s ease-in-out infinite;
     box-shadow:
         0 0 0 1px rgba(200,150,255,0.45),
         0 0 70px rgba(180,120,255,0.65),
         0 70px 180px rgba(0,0,0,0.95);
 }
-
 @keyframes floatUI{
     0%,100%{transform:translateY(0)}
     50%{transform:translateY(-12px)}
 }
-
 .ui-card img{width:100%}
 
 /* ===== SECTION ===== */
@@ -188,7 +180,7 @@ section h2{
 .reveal{
     opacity:0;
     transform:translateY(40px);
-    transition:0.9s ease;
+    transition:1s ease;
 }
 .reveal.show{
     opacity:1;
@@ -220,7 +212,7 @@ section h2{
     line-height:1.7;
 }
 .faq-item.active .faq-a{
-    max-height:600px;
+    max-height:500px;
     padding:22px 32px 0;
 }
 
@@ -250,6 +242,7 @@ footer{
         </div>
         <div class="nav-links">
             <a href="#">Home</a>
+            <a href="#compatibility">Compatibility</a>
             <a href="#faq">Q & A</a>
             <a class="nav-download"
                href="https://work.ink/26Yy/FeairlExecutor"
@@ -272,10 +265,8 @@ footer{
 
     <div class="ui-wrap">
         <div class="ui-glow" id="uiGlow"></div>
-        <div class="ui-float">
-            <div class="ui-card" id="uiCard">
-                <img src="UI.png">
-            </div>
+        <div class="ui-card" id="uiCard">
+            <img src="UI.png">
         </div>
     </div>
 </div>
@@ -284,43 +275,83 @@ footer{
     <h2>Q & A</h2>
 
     <div class="faq-item">
-        <div class="faq-q">Why does my antivirus flag Feairl?</div>
+        <div class="faq-q">Why does my antivirus detect Feairl as a threat?</div>
         <div class="faq-a">
-            Feairl uses process injection and memory interaction techniques that are
-            commonly flagged by antivirus software. These detections are false
-            positives and do not indicate malicious behavior.
+            Executors interact with process memory and perform injection techniques.
+            These behaviors are commonly flagged by antivirus software as potential
+            threats, even when no malicious intent exists. This is known as a false
+            positive.
         </div>
     </div>
 
     <div class="faq-item">
-        <div class="faq-q">Is Feairl safe to use?</div>
+        <div class="faq-q">Does Feairl contain malware or spyware?</div>
         <div class="faq-a">
-            Feairl does not contain malware, spyware, or hidden background processes.
-            All functionality is focused on script execution and compatibility.
+            No. Feairl does not include malware, spyware, keyloggers, or hidden
+            background processes. All functionality is focused solely on script
+            execution and compatibility.
         </div>
     </div>
 
     <div class="faq-item">
-        <div class="faq-q">Do I need to disable my antivirus?</div>
+        <div class="faq-q">Do I need to disable my antivirus to use Feairl?</div>
         <div class="faq-a">
-            Disabling antivirus software is not recommended. Adding Feairl to your
-            antivirus whitelist or exclusions list is the correct approach.
+            Disabling your antivirus is not recommended. Instead, adding Feairl
+            to your antivirus whitelist or exclusions list will allow it to run
+            correctly without reducing overall system protection.
         </div>
     </div>
 
     <div class="faq-item">
-        <div class="faq-q">Why do some scripts not work?</div>
+        <div class="faq-q">Is Feairl free to use?</div>
         <div class="faq-a">
-            Some scripts rely on unsupported UNC or sUNC features, outdated APIs,
-            or behavior changed by recent Roblox updates.
+            Feairl currently provides a free version that offers high execution
+            compatibility. Additional versions or features may be introduced
+            in the future.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">What is the difference between UNC and sUNC?</div>
+        <div class="faq-a">
+            UNC and sUNC represent different execution compatibility layers.
+            Some scripts rely on advanced or less common functions that may
+            only be available under specific compatibility conditions.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">Why do some scripts fail to execute?</div>
+        <div class="faq-a">
+            Script failures can occur when a script depends on features that
+            are not yet supported, outdated syntax, or changes introduced
+            by Roblox updates.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">What should I do if injection fails?</div>
+        <div class="faq-a">
+            Make sure Roblox is fully loaded before injecting, restart both
+            Roblox and Feairl if needed, and ensure that your antivirus is
+            not blocking required components.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-q">How often is Feairl updated?</div>
+        <div class="faq-a">
+            Updates are released frequently to maintain compatibility with
+            Roblox updates and to improve stability and execution reliability.
         </div>
     </div>
 
     <div class="faq-item">
         <div class="faq-q">Is there any risk when using Feairl?</div>
         <div class="faq-a">
-            Using executors may violate Roblox's terms of service. Users are
-            responsible for understanding and accepting all potential risks.
+            Using executors may violate Roblox terms of service. Users are
+            responsible for understanding and accepting any potential risks
+            associated with usage.
         </div>
     </div>
 
@@ -344,9 +375,11 @@ card.addEventListener("mousemove",e=>{
     const r=card.getBoundingClientRect();
     const x=e.clientX-r.left;
     const y=e.clientY-r.top;
+
     card.style.transform=
         `rotateX(${((y/r.height)-0.5)*-14}deg)
          rotateY(${((x/r.width)-0.5)*14}deg)`;
+
     glow.style.setProperty("--x",`${x}px`);
     glow.style.setProperty("--y",`${y}px`);
 });
@@ -354,17 +387,15 @@ card.addEventListener("mouseleave",()=>{
     card.style.transform="rotateX(0) rotateY(0)";
 });
 
-/* Scroll reveal (fix: run once on load) */
+/* Scroll reveal */
 const reveals=document.querySelectorAll(".reveal");
-function revealCheck(){
+window.addEventListener("scroll",()=>{
     reveals.forEach(r=>{
         if(r.getBoundingClientRect().top<window.innerHeight-80){
             r.classList.add("show");
         }
     });
-}
-window.addEventListener("scroll",revealCheck);
-revealCheck(); /* ⭐ 首次載入直接執行 */
+});
 </script>
 
 </body>

@@ -18,30 +18,28 @@ body{
     color:#fff;
 }
 
-/* ===== 上方導覽列 ===== */
+/* ===== 導覽列 ===== */
 nav{
     position:sticky;
     top:0;
     z-index:10;
     background:rgba(10,0,20,0.6);
     backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
     border-bottom:1px solid rgba(255,255,255,0.12);
 }
 
 .nav-inner{
-    max-width:1200px;
+    max-width:1250px;
     margin:0 auto;
     padding:16px 24px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
 }
 
 .nav-title{
     font-size:20px;
     font-weight:600;
-    letter-spacing:0.5px;
 }
 
 .nav-links a{
@@ -53,81 +51,76 @@ nav{
     transition:0.25s;
 }
 
-.nav-links a:hover{
-    opacity:1;
-}
+.nav-links a:hover{ opacity:1; }
 
-/* ===== Header ===== */
+/* ===== Hero ===== */
 header{
-    padding:90px 20px 70px;
+    padding:100px 20px 80px;
     text-align:center;
 }
 
 header h1{
-    font-size:50px;
-    margin-bottom:14px;
+    font-size:52px;
+    margin-bottom:16px;
 }
 
 header p{
     font-size:18px;
     opacity:0.75;
+    max-width:700px;
+    margin:0 auto;
 }
 
 /* 下載按鈕 */
 .glass-download{
     display:inline-block;
-    margin-top:38px;
-    padding:16px 44px;
-    border-radius:16px;
+    margin-top:42px;
+    padding:18px 48px;
+    border-radius:18px;
     text-decoration:none;
     color:white;
     font-weight:600;
 
     background:rgba(255,255,255,0.08);
     backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-
     border:1px solid rgba(255,255,255,0.35);
-    box-shadow:0 20px 45px rgba(0,0,0,0.65);
+    box-shadow:0 25px 60px rgba(0,0,0,0.65);
     transition:0.3s;
 }
 
 .glass-download:hover{
     transform:translateY(-4px);
     box-shadow:
-        0 0 40px rgba(160,90,255,0.45),
-        0 30px 70px rgba(0,0,0,0.75);
+        0 0 45px rgba(160,90,255,0.45),
+        0 35px 80px rgba(0,0,0,0.8);
 }
 
 /* ===== Section ===== */
 section{
-    max-width:1200px;
+    max-width:1250px;
     margin:0 auto;
-    padding:70px 20px;
+    padding:80px 20px;
 }
 
 section h2{
-    font-size:34px;
-    margin-bottom:30px;
+    font-size:36px;
+    margin-bottom:36px;
 }
 
-/* ===== 卡片區 ===== */
-.card-grid{
+/* ===== 卡片格 ===== */
+.grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:30px;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:32px;
 }
 
 .glass-card{
     background:rgba(255,255,255,0.06);
     backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-
     border:1px solid rgba(255,255,255,0.18);
-    border-radius:22px;
-    padding:36px;
-
-    box-shadow:0 30px 70px rgba(0,0,0,0.65);
+    border-radius:24px;
+    padding:40px;
+    box-shadow:0 30px 75px rgba(0,0,0,0.65);
 }
 
 .glass-card h3{
@@ -137,22 +130,49 @@ section h2{
 
 .glass-card p{
     font-size:16px;
-    line-height:1.75;
+    line-height:1.8;
     opacity:0.9;
 }
 
-/* ===== 數值顯示 ===== */
+/* 數值 */
 .stat{
-    margin-top:22px;
-    font-size:40px;
+    font-size:42px;
     font-weight:700;
+    margin:18px 0;
     color:#c79bff;
+}
+
+/* ===== FAQ ===== */
+.faq{
+    max-width:1000px;
+    margin:0 auto;
+}
+
+.faq-item{
+    margin-bottom:24px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:20px;
+    padding:26px 32px;
+}
+
+.faq-item h4{
+    margin:0 0 10px;
+    font-size:20px;
+}
+
+.faq-item p{
+    margin:0;
+    font-size:15px;
+    line-height:1.7;
+    opacity:0.9;
 }
 
 /* ===== Footer ===== */
 footer{
     text-align:center;
-    padding:35px 15px;
+    padding:40px 15px;
     opacity:0.45;
     font-size:14px;
 }
@@ -161,22 +181,24 @@ footer{
 
 <body>
 
-<!-- 導覽列 -->
 <nav>
     <div class="nav-inner">
         <div class="nav-title">Feairl</div>
         <div class="nav-links">
             <a href="#">Home</a>
-            <a href="#features">Features</a>
+            <a href="#compatibility">Compatibility</a>
+            <a href="#faq">Q&A</a>
             <a href="https://work.ink/26Yy/FeairlExecutor" target="_blank">Download</a>
         </div>
     </div>
 </nav>
 
-<!-- 主標 -->
 <header>
     <h1>Feairl Executor</h1>
-    <p>High-performance Roblox executor built for stability and power</p>
+    <p>
+        Feairl is a modern, high-performance Roblox executor built for
+        stability, compatibility, and a clean execution experience.
+    </p>
 
     <a class="glass-download"
        href="https://work.ink/26Yy/FeairlExecutor"
@@ -185,30 +207,96 @@ footer{
     </a>
 </header>
 
-<!-- 功能區 -->
-<section id="features">
+<section id="compatibility">
     <h2>Execution Compatibility</h2>
 
-    <div class="card-grid">
-
-        <!-- UNC -->
+    <div class="grid">
         <div class="glass-card">
             <h3>UNC Compatibility</h3>
             <div class="stat">99%</div>
             <p>
-                Feairl provides extremely high UNC execution compatibility,
-                allowing the majority of scripts to run reliably and accurately
-                with stable performance.
+                Feairl achieves extremely high UNC compatibility, allowing
+                the majority of scripts to execute correctly with stable
+                and consistent performance.
             </p>
         </div>
 
-        <!-- sUNC -->
         <div class="glass-card">
             <h3>sUNC Compatibility</h3>
             <div class="stat">98%</div>
             <p>
-                With advanced execution handling, Feairl supports most sUNC
-                scripts, delivering consistent results and reduced errors.
+                Advanced execution handling ensures strong sUNC support,
+                reducing script errors and increasing overall reliability.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Why Feairl?</h2>
+
+    <div class="grid">
+        <div class="glass-card">
+            <h3>Performance Focused</h3>
+            <p>
+                Optimized execution paths provide fast injection times
+                and smooth script execution.
+            </p>
+        </div>
+
+        <div class="glass-card">
+            <h3>Clean & Modern UI</h3>
+            <p>
+                Designed with a modern dark interface that is easy on
+                the eyes and simple to use.
+            </p>
+        </div>
+
+        <div class="glass-card">
+            <h3>Frequent Updates</h3>
+            <p>
+                Regular updates ensure compatibility with the latest
+                Roblox changes and scripts.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section id="faq">
+    <h2>Q & A / Frequently Asked Questions</h2>
+
+    <div class="faq">
+
+        <div class="faq-item">
+            <h4>Q: 為什麼防毒軟體會誤報 Feairl？</h4>
+            <p>
+                A: 由於執行器需要進行注入與記憶體操作，
+                部分防毒軟體會將其誤判為威脅。
+                Feairl 本身不包含任何惡意行為。
+            </p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Q: 使用 Feairl 需要關閉防毒嗎？</h4>
+            <p>
+                A: 部分防毒軟體可能會阻止執行器正常運作，
+                建議將 Feairl 加入白名單以確保正常使用。
+            </p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Q: Feairl 是免費的嗎？</h4>
+            <p>
+                A: 是的，Feairl 提供免費版本，讓使用者能夠
+                體驗高相容性的執行環境。
+            </p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Q: 為什麼有些腳本無法執行？</h4>
+            <p>
+                A: 不同腳本依賴的 UNC / sUNC 功能不同，
+                部分腳本可能尚未完全支援，請等待後續更新。
             </p>
         </div>
 

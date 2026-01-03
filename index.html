@@ -127,7 +127,7 @@ nav{
     box-shadow:0 0 60px rgba(180,110,255,.9);
 }
 
-/* ===== UI IMAGE + EFFECTS ===== */
+/* ===== UI IMAGE ===== */
 .ui-wrap{
     position:relative;
     perspective:1400px;
@@ -144,7 +144,6 @@ nav{
     );
     filter:blur(55px);
     pointer-events:none;
-    transition:.2s;
 }
 
 .ui-float{
@@ -167,12 +166,9 @@ nav{
     transition:transform .15s;
 }
 
-.ui-card img{
-    width:100%;
-    display:block;
-}
+.ui-card img{width:100%;display:block}
 
-/* ===== SECTION ===== */
+/* ===== SECTIONS ===== */
 section{
     max-width:1300px;
     margin:0 auto;
@@ -230,11 +226,23 @@ section h2{
     transition:.45s ease;
     padding:0 32px;
     opacity:.9;
+    line-height:1.7;
 }
 
 .faq-item.active .faq-a{
-    max-height:600px;
+    max-height:800px;
     padding:22px 32px 0;
+}
+
+/* ===== REVEAL ===== */
+.reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:1s ease;
+}
+.reveal.show{
+    opacity:1;
+    transform:none;
 }
 
 /* ===== FOOTER ===== */
@@ -274,69 +282,86 @@ footer{
     </div>
 </nav>
 
-<div class="hero">
+<div class="hero reveal">
     <div class="hero-text">
         <h1>Feairl Executor</h1>
         <p>
-            A modern high-performance Roblox executor built for stability,
-            compatibility, and clean execution.
+            A modern high-performance Roblox executor focused on execution
+            stability, compatibility, and consistent behavior across updates.
         </p>
         <a class="download-btn"
            href="https://work.ink/26Yy/FeairlExecutor"
            target="_blank">Download Feairl</a>
     </div>
 
-    <!-- UI IMAGE -->
-    <div class="ui-wrap">
+    <div class="ui-wrap reveal">
         <div class="ui-glow" id="uiGlow"></div>
         <div class="ui-float">
             <div class="ui-card" id="uiCard">
-                <img src="UI.png" alt="Feairl UI">
+                <img src="UI.png">
             </div>
         </div>
     </div>
 </div>
 
-<section id="compatibility">
+<section id="compatibility" class="reveal">
     <h2>Execution Compatibility</h2>
     <div class="compat-grid">
-        <div class="compat-card">
+        <div class="compat-card reveal">
             <h3>UNC Compatibility</h3>
             <div class="compat-stat">99%</div>
+            <p>Designed to support the majority of commonly used executor functions with high reliability.</p>
         </div>
-        <div class="compat-card">
+        <div class="compat-card reveal">
             <h3>sUNC Compatibility</h3>
             <div class="compat-stat">98%</div>
+            <p>Advanced handling for scripts that rely on extended or specialized execution features.</p>
         </div>
     </div>
 </section>
 
-<section id="faq">
+<section id="faq" class="reveal">
     <h2>Q & A</h2>
 
-    <div class="faq-item">
+    <div class="faq-item reveal">
         <div class="faq-q">Why does my antivirus flag Feairl?</div>
-        <div class="faq-a">False positives caused by injection behavior.</div>
+        <div class="faq-a">
+            Feairl uses injection and memory interaction techniques that are commonly
+            flagged by antivirus software. These detections are false positives and
+            do not indicate malicious behavior.
+        </div>
     </div>
 
-    <div class="faq-item">
-        <div class="faq-q">Is Feairl safe?</div>
-        <div class="faq-a">Feairl contains no malware or spyware.</div>
+    <div class="faq-item reveal">
+        <div class="faq-q">Is Feairl safe to use?</div>
+        <div class="faq-a">
+            Feairl does not include malware, spyware, or hidden background processes.
+            All functionality is strictly related to script execution and stability.
+        </div>
     </div>
 
-    <div class="faq-item">
-        <div class="faq-q">Do I need to disable antivirus?</div>
-        <div class="faq-a">No. Whitelisting is recommended.</div>
+    <div class="faq-item reveal">
+        <div class="faq-q">Do I need to disable antivirus software?</div>
+        <div class="faq-a">
+            Disabling antivirus protection is not recommended. Adding Feairl to your
+            antivirus whitelist or exclusion list is the correct approach.
+        </div>
     </div>
 
-    <div class="faq-item">
-        <div class="faq-q">Why do some scripts not work?</div>
-        <div class="faq-a">Some scripts rely on unsupported UNC or sUNC features.</div>
+    <div class="faq-item reveal">
+        <div class="faq-q">Why do some scripts fail to execute?</div>
+        <div class="faq-a">
+            Some scripts depend on unsupported UNC or sUNC features, outdated APIs,
+            or behavior changes introduced by recent Roblox updates.
+        </div>
     </div>
 
-    <div class="faq-item">
-        <div class="faq-q">Is there any risk?</div>
-        <div class="faq-a">Using executors may violate Roblox ToS.</div>
+    <div class="faq-item reveal">
+        <div class="faq-q">Is there any risk when using Feairl?</div>
+        <div class="faq-a">
+            Using executors may violate Roblox's terms of service. Users are
+            responsible for understanding and accepting any associated risks.
+        </div>
     </div>
 </section>
 
@@ -350,7 +375,7 @@ document.querySelectorAll('.faq-item').forEach(i=>{
     i.onclick=()=>i.classList.toggle('active');
 });
 
-/* UI mouse tilt + glow follow */
+/* UI mouse tilt + glow */
 const card = document.getElementById("uiCard");
 const glow = document.getElementById("uiGlow");
 
@@ -366,10 +391,21 @@ card.addEventListener("mousemove", e=>{
     glow.style.setProperty("--x",`${x}px`);
     glow.style.setProperty("--y",`${y}px`);
 });
-
 card.addEventListener("mouseleave", ()=>{
     card.style.transform = "rotateX(0) rotateY(0)";
 });
+
+/* Scroll reveal */
+const reveals = document.querySelectorAll(".reveal");
+function revealCheck(){
+    reveals.forEach(r=>{
+        if(r.getBoundingClientRect().top < window.innerHeight - 80){
+            r.classList.add("show");
+        }
+    });
+}
+window.addEventListener("scroll", revealCheck);
+revealCheck(); // initial load
 </script>
 
 </body>

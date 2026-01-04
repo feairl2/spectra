@@ -19,7 +19,7 @@ body{
     overflow-x:hidden;
 }
 
-/* ===== NAV (FIXED ALIGNMENT) ===== */
+/* ===== NAV ===== */
 nav{
     position:sticky;
     top:0;
@@ -28,16 +28,14 @@ nav{
     backdrop-filter:blur(16px);
     border-bottom:1px solid rgba(255,255,255,.12);
 }
-
 .nav-inner{
     max-width:1400px;
     margin:auto;
     padding:14px 28px;
     display:flex;
     justify-content:space-between;
-    align-items:center; /* ⭐ 關鍵 */
+    align-items:center;
 }
-
 .nav-left{
     display:flex;
     align-items:center;
@@ -45,33 +43,26 @@ nav{
     font-size:20px;
     font-weight:600;
 }
-
 .nav-left img{
     width:34px;
     height:34px;
     display:block;
 }
-
-/* ⭐ 關鍵修正區 */
 .nav-links{
     display:flex;
-    align-items:center;   /* ⭐ 垂直置中 */
+    align-items:center;
     gap:32px;
 }
-
 .nav-links a{
-    display:inline-flex;  /* ⭐ 不用 baseline */
-    align-items:center;   /* ⭐ 文字垂直置中 */
-    height:36px;          /* ⭐ 統一高度 */
-    padding:0 2px;
+    display:inline-flex;
+    align-items:center;
+    height:36px;
     color:white;
     text-decoration:none;
     opacity:.75;
     transition:.25s;
 }
-
 .nav-links a:hover{opacity:1}
-
 .nav-download{
     padding:8px 20px;
     border-radius:14px;
@@ -220,6 +211,12 @@ section{
     font-weight:700;
     color:#dcb6ff;
 }
+.compat-desc{
+    margin-top:14px;
+    font-size:15px;
+    opacity:.75;
+    line-height:1.6;
+}
 
 /* ===== FAQ ===== */
 .faq-item{margin-bottom:28px;cursor:pointer}
@@ -280,13 +277,11 @@ footer{text-align:center;padding:42px;opacity:.45}
 </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero reveal">
     <h1 class="hero-title">Feairl <span class="v2">V2</span></h1>
     <div class="hero-tagline">Be a Stealth Pro Gamer</div>
 </section>
 
-<!-- UI -->
 <div class="ui-section reveal">
     <div class="ui-wrap">
         <div class="ui-glow" id="uiGlow"></div>
@@ -296,14 +291,12 @@ footer{text-align:center;padding:42px;opacity:.45}
     </div>
 </div>
 
-<!-- DOWNLOAD -->
 <div class="download-wrap reveal">
     <a class="download-main" href="https://work.ink/26Yy/FeairlExecutor" target="_blank">
         Download Feairl
     </a>
 </div>
 
-<!-- STEALTH METRICS -->
 <div class="stealth reveal">
     <h2>Stealth Injection System</h2>
     <p>Advanced stealth injection designed to minimize detection vectors.</p>
@@ -323,22 +316,27 @@ footer{text-align:center;padding:42px;opacity:.45}
     </div>
 </div>
 
-<!-- COMPATIBILITY -->
 <section id="compatibility" class="reveal">
 <h2>Execution Compatibility</h2>
 <div class="compat-grid">
     <div class="compat-card">
         <h3>UNC Compatibility</h3>
         <div class="compat-stat">99%</div>
+        <div class="compat-desc">
+            Supports the majority of commonly used executor functions with stable behavior.
+        </div>
     </div>
+
     <div class="compat-card">
         <h3>sUNC Compatibility</h3>
         <div class="compat-stat">98%</div>
+        <div class="compat-desc">
+            Represents extremely high script support, including advanced and complex execution behaviors.
+        </div>
     </div>
 </div>
 </section>
 
-<!-- FAQ -->
 <section id="faq" class="reveal">
 <h2>Q & A</h2>
 
@@ -368,7 +366,6 @@ footer{text-align:center;padding:42px;opacity:.45}
 <footer>© 2026 Feairl. All rights reserved.</footer>
 
 <script>
-/* UI tilt + glow */
 const card=document.getElementById("uiCard");
 const glow=document.getElementById("uiGlow");
 card.addEventListener("mousemove",e=>{
@@ -385,7 +382,6 @@ card.addEventListener("mouseleave",()=>{
     card.style.transform="rotateX(0) rotateY(0)";
 });
 
-/* Scroll reveal */
 const reveals=document.querySelectorAll(".reveal");
 function revealCheck(){
     reveals.forEach(r=>{

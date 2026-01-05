@@ -6,7 +6,6 @@
 
 <link rel="icon" href="./Feairllogo.png" type="image/png">
 <link rel="apple-touch-icon" href="./Feairllogo.png">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -69,7 +68,7 @@ nav{
 
 /* ===== HERO ===== */
 .hero{
-    padding:24px 24px 24px;
+    padding:24px 24px 20px;
     text-align:center;
 }
 .hero-title{
@@ -82,7 +81,7 @@ nav{
     text-shadow:0 0 40px rgba(180,120,255,.95);
 }
 .hero-tagline{
-    margin-top:8px;
+    margin-top:6px;
     font-size:82px;
     font-weight:900;
     background:linear-gradient(90deg,#c08bff,#6aa6ff,#ff8bd8);
@@ -90,7 +89,7 @@ nav{
     -webkit-text-fill-color:transparent;
 }
 
-/* ✅ 游標修正（關鍵） */
+/* 游標（強制顯示） */
 .cursor{
     margin-left:6px;
     color:#fff;
@@ -138,24 +137,73 @@ nav{
 }
 .ui-card img{width:100%;display:block}
 
-/* ===== DOWNLOAD ===== */
+/* ===== MAIN DOWNLOAD CTA ===== */
 .download-wrap{
     display:flex;
     justify-content:center;
-    margin:24px 0 120px;
+    margin:28px 0 120px;
 }
+
 .download-main{
+    position:relative;
     padding:22px 72px;
     border-radius:26px;
     border:1px solid rgba(255,255,255,.35);
-    background:rgba(255,255,255,.08);
+    background:rgba(255,255,255,.12);
     color:white;
-    text-decoration:none;
     font-size:18px;
     font-weight:600;
-    transition:.2s;
+    text-decoration:none;
+    overflow:hidden;
+
+    /* 永遠不變暗、不縮放 */
+    opacity:1 !important;
+    transform:none !important;
 }
-.download-main:hover{transform:scale(1.05)}
+
+/* 原本文字 */
+.download-main .label{
+    position:relative;
+    z-index:2;
+    transition:.35s;
+}
+
+/* Work.ink */
+.download-main .hover-text{
+    position:absolute;
+    left:50%;
+    bottom:-30px;
+    transform:translateX(-50%);
+    font-size:14px;
+    letter-spacing:2px;
+    opacity:0;
+    transition:.35s;
+    z-index:2;
+}
+
+/* 模糊層 */
+.download-main::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,.35);
+    backdrop-filter:blur(0px);
+    opacity:0;
+    transition:.35s;
+}
+
+/* Hover 行為 */
+.download-main:hover::before{
+    opacity:1;
+    backdrop-filter:blur(12px);
+}
+.download-main:hover .label{
+    opacity:.35;
+}
+.download-main:hover .hover-text{
+    bottom:14px;
+    opacity:1;
+}
 
 /* ===== STEALTH ===== */
 .stealth{
@@ -245,7 +293,7 @@ footer{text-align:center;padding:42px;opacity:.45}
         <a href="#">Home</a>
         <a href="#compatibility">Compatibility</a>
         <a href="#faq">Q & A</a>
-        <a class="nav-download" href="#">Download</a>
+        <a class="nav-download" href="https://work.ink/26Yy/FeairlExecutor" target="_blank">Download</a>
     </div>
 </div>
 </nav>
@@ -267,15 +315,18 @@ footer{text-align:center;padding:42px;opacity:.45}
 </div>
 
 <div class="download-wrap">
-    <a class="download-main" href="#">Download Feairl</a>
+    <a class="download-main" href="https://work.ink/26Yy/FeairlExecutor" target="_blank">
+        <span class="label">Download Feairl</span>
+        <span class="hover-text">Work.ink</span>
+    </a>
 </div>
 
 <div class="stealth">
     <h2>Stealth Injection System</h2>
-    <p>Advanced stealth-based injection system with minimal detection vectors.</p>
+    <p>Advanced stealth-based injection architecture designed to minimize detection vectors.</p>
     <div class="stealth-grid">
         <div class="stealth-card"><div>Detection Rate</div><div class="stealth-value">0.00%</div></div>
-        <div class="stealth-card"><div>Total Bans</div><div class="stealth-value">0</div></div>
+        <div class="stealth-card"><div>Total Bans (2026)</div><div class="stealth-value">0</div></div>
         <div class="stealth-card"><div>Injection Mode</div><div class="stealth-value">Stealth</div></div>
     </div>
 </div>
@@ -303,31 +354,21 @@ footer{text-align:center;padding:42px;opacity:.45}
     <div class="faq-q">Why does my antivirus flag Feairl?</div>
     <div class="faq-a">False positives caused by injection behavior.</div>
 </div>
-
 <div class="faq-item">
     <div class="faq-q">Is Feairl safe?</div>
     <div class="faq-a">Feairl contains no malware or spyware.</div>
 </div>
-
 <div class="faq-item">
     <div class="faq-q">Do I need to disable antivirus?</div>
     <div class="faq-a">Whitelisting is recommended.</div>
 </div>
-
 <div class="faq-item">
     <div class="faq-q">Why do some scripts not work?</div>
-    <div class="faq-a">
-        Some scripts rely on unsupported, outdated, or deprecated executor functions.
-        Script behavior may vary depending on how it was written.
-    </div>
+    <div class="faq-a">Some scripts rely on unsupported or deprecated functions.</div>
 </div>
-
 <div class="faq-item">
     <div class="faq-q">Is there any risk?</div>
-    <div class="faq-a">
-        Using executors may violate Roblox Terms of Service.
-        Users assume full responsibility.
-    </div>
+    <div class="faq-a">Using executors may violate Roblox Terms of Service.</div>
 </div>
 
 </section>
@@ -335,11 +376,32 @@ footer{text-align:center;padding:42px;opacity:.45}
 <footer>© 2026 Feairl. All rights reserved.</footer>
 
 <script>
-/* 游標文字切換 */
+/* UI Tilt */
+const card=document.getElementById("uiCard");
+const glow=document.getElementById("uiGlow");
+card.addEventListener("mousemove",e=>{
+    const r=card.getBoundingClientRect();
+    const x=e.clientX-r.left;
+    const y=e.clientY-r.top;
+    card.style.transform=
+        `rotateX(${((y/r.height)-.5)*-14}deg)
+         rotateY(${((x/r.width)-.5)*14}deg)`;
+    glow.style.setProperty("--x",`${x}px`);
+    glow.style.setProperty("--y",`${y}px`);
+});
+card.addEventListener("mouseleave",()=>{
+    card.style.transform="rotateX(0) rotateY(0)";
+});
+
+/* FAQ */
+document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').onclick=()=>item.classList.toggle('active');
+});
+
+/* Dynamic Tagline */
 const words=["Pro Gamer","Cheater","Hack"];
 const textEl=document.getElementById("dynamicText");
 let w=0,c=0,del=false;
-
 (function loop(){
     const word=words[w];
     if(!del){

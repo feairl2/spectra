@@ -43,14 +43,8 @@ nav{
     font-size:20px;
     font-weight:600;
 }
-.nav-left img{
-    width:34px;
-    height:34px;
-}
-.nav-links{
-    display:flex;
-    gap:32px;
-}
+.nav-left img{width:34px;height:34px}
+.nav-links{display:flex;gap:32px}
 .nav-links a{
     color:white;
     text-decoration:none;
@@ -65,7 +59,7 @@ nav{
     background:rgba(255,255,255,.08);
 }
 
-/* ===== HERO（貼頂） ===== */
+/* ===== HERO ===== */
 .hero{
     padding:100px 24px 40px;
     text-align:center;
@@ -88,9 +82,9 @@ nav{
     -webkit-text-fill-color:transparent;
 }
 
-/* ===== UI（緊貼標語） ===== */
+/* ===== UI ===== */
 .ui-section{
-    padding:20px 24px 20px;
+    padding:20px 24px;
     display:flex;
     justify-content:center;
 }
@@ -124,7 +118,7 @@ nav{
 }
 .ui-card img{width:100%;display:block}
 
-/* ===== DOWNLOAD（緊貼 UI） ===== */
+/* ===== DOWNLOAD ===== */
 .download-wrap{
     display:flex;
     justify-content:center;
@@ -143,7 +137,7 @@ nav{
 }
 .download-main:hover{transform:scale(1.05)}
 
-/* ===== 其餘區塊原樣 ===== */
+/* ===== STEALTH ===== */
 .stealth{
     max-width:1100px;
     margin:0 auto 140px;
@@ -168,13 +162,72 @@ nav{
     transform:translateY(-8px);
     box-shadow:0 0 50px rgba(180,120,255,.4);
 }
+.stealth-label{opacity:.7}
+.stealth-value{
+    font-size:44px;
+    font-weight:800;
+    color:#dcb6ff;
+}
 
+/* ===== SECTIONS ===== */
 section{
     max-width:1300px;
     margin:auto;
     padding:120px 24px;
 }
+.compat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:36px;
+}
+.compat-card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:26px;
+    padding:42px;
+}
+.compat-stat{
+    font-size:46px;
+    font-weight:700;
+    color:#dcb6ff;
+}
+.compat-desc{opacity:.75;line-height:1.6}
 
+/* ===== FAQ ===== */
+.faq-item{margin-bottom:28px}
+.faq-q{
+    background:rgba(255,255,255,.06);
+    padding:26px 32px;
+    border-radius:22px;
+    border:1px solid rgba(255,255,255,.18);
+    font-weight:600;
+    cursor:pointer;
+}
+.faq-a{
+    max-height:0;
+    overflow:hidden;
+    transition:.45s ease;
+    padding:0 32px;
+    opacity:.9;
+    line-height:1.7;
+}
+.faq-item.active .faq-a{
+    max-height:800px;
+    padding:22px 32px 0;
+}
+
+/* ===== REVEAL ===== */
+.reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:1s ease;
+}
+.reveal.show{
+    opacity:1;
+    transform:none;
+}
+
+/* ===== FOOTER ===== */
 footer{text-align:center;padding:42px;opacity:.45}
 
 @media(max-width:900px){
@@ -200,13 +253,11 @@ footer{text-align:center;padding:42px;opacity:.45}
 </div>
 </nav>
 
-<!-- 標題 + 標語 -->
 <section class="hero reveal">
     <h1 class="hero-title">Feairl <span class="v2">V2</span></h1>
     <div class="hero-tagline">Be a Stealth Pro Gamer</div>
 </section>
 
-<!-- UI.png -->
 <div class="ui-section reveal">
     <div class="ui-wrap">
         <div class="ui-glow" id="uiGlow"></div>
@@ -216,12 +267,100 @@ footer{text-align:center;padding:42px;opacity:.45}
     </div>
 </div>
 
-<!-- Download -->
 <div class="download-wrap reveal">
     <a class="download-main" href="https://work.ink/26Yy/FeairlExecutor" target="_blank">
         Download Feairl
     </a>
 </div>
+
+<div class="stealth reveal">
+    <h2>Stealth Injection System</h2>
+    <p>
+        Feairl utilizes an advanced stealth-based injection architecture designed to minimize
+        detection vectors and reduce behavioral anomalies during execution.
+    </p>
+    <div class="stealth-grid">
+        <div class="stealth-card">
+            <div class="stealth-label">Detection Rate</div>
+            <div class="stealth-value">0.00%</div>
+        </div>
+        <div class="stealth-card">
+            <div class="stealth-label">Total Bans (2026)</div>
+            <div class="stealth-value">0</div>
+        </div>
+        <div class="stealth-card">
+            <div class="stealth-label">Injection Mode</div>
+            <div class="stealth-value">Stealth</div>
+        </div>
+    </div>
+</div>
+
+<section id="compatibility" class="reveal">
+<h2>Execution Compatibility</h2>
+<div class="compat-grid">
+    <div class="compat-card">
+        <h3>UNC Compatibility</h3>
+        <div class="compat-stat">99%</div>
+        <div class="compat-desc">
+            Feairl supports the vast majority of commonly used UNC executor functions,
+            ensuring stable script execution across popular environments.
+        </div>
+    </div>
+    <div class="compat-card">
+        <h3>sUNC Compatibility</h3>
+        <div class="compat-stat">98%</div>
+        <div class="compat-desc">
+            Advanced and complex scripts relying on extended functionality are supported,
+            providing high flexibility for power users.
+        </div>
+    </div>
+</div>
+</section>
+
+<section id="faq" class="reveal">
+<h2>Q & A</h2>
+
+<div class="faq-item">
+    <div class="faq-q">Why does my antivirus flag Feairl?</div>
+    <div class="faq-a">
+        Some antivirus software may falsely detect Feairl due to its injection-based
+        execution methods. These are false positives and do not indicate malicious intent.
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q">Is Feairl safe?</div>
+    <div class="faq-a">
+        Yes. Feairl does not include malware, spyware, or unauthorized data collection.
+        The software only performs script execution as intended.
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q">Do I need to disable antivirus?</div>
+    <div class="faq-a">
+        Disabling antivirus is not required, but adding Feairl to your antivirus whitelist
+        is recommended to avoid execution interruptions.
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q">Why do some scripts not work?</div>
+    <div class="faq-a">
+        Certain scripts may rely on unsupported or deprecated functions.
+        Script compatibility varies depending on how the script was written.
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-q">Is there any risk?</div>
+    <div class="faq-a">
+        Using executors may violate Roblox’s Terms of Service.
+        Users assume full responsibility when using third-party execution tools.
+    </div>
+</div>
+
+</section>
 
 <footer>© 2026 Feairl. All rights reserved.</footer>
 
@@ -253,6 +392,10 @@ function revealCheck(){
 }
 window.addEventListener("scroll",revealCheck);
 revealCheck();
+
+document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').onclick=()=>item.classList.toggle('active');
+});
 </script>
 
 </body>

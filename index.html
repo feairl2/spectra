@@ -5,7 +5,6 @@
 <title>Feairl Executor</title>
 
 <link rel="icon" href="./Feairllogo.png" type="image/png">
-<link rel="shortcut icon" href="./Feairllogo.png" type="image/png">
 <link rel="apple-touch-icon" href="./Feairllogo.png">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +44,6 @@ nav{
 }
 .nav-left img{width:34px;height:34px}
 
-/* 🔧 修正偏上問題 */
 .nav-links{
     display:flex;
     align-items:center;
@@ -57,16 +55,12 @@ nav{
     height:40px;
     color:white;
     text-decoration:none;
-    opacity:.75;
     transition:.25s;
 }
-.nav-links a:hover{opacity:1}
+.nav-links a:not(.nav-download){opacity:.75}
+.nav-links a:not(.nav-download):hover{opacity:1}
 
-/* 🔥 Download：靜止就像按鈕 */
 .nav-download{
-    height:40px;
-    display:inline-flex;
-    align-items:center;
     padding:0 22px;
     border-radius:14px;
     border:1px solid rgba(200,150,255,.6);
@@ -75,20 +69,13 @@ nav{
         rgba(200,150,255,.35),
         rgba(120,80,255,.25)
     );
-    color:white;
     font-weight:600;
-    opacity:1;
     box-shadow:0 0 20px rgba(180,120,255,.45);
-    transition:.25s;
-}
-.nav-download:hover{
-    transform:translateY(-1px);
-    box-shadow:0 0 30px rgba(180,120,255,.75);
 }
 
-/* ===== HERO（拉到最高） ===== */
+/* ===== HERO ===== */
 .hero{
-    padding:28px 24px 24px; /* ← 關鍵 */
+    padding:24px 24px 24px;
     text-align:center;
 }
 .hero-title{
@@ -101,12 +88,23 @@ nav{
     text-shadow:0 0 40px rgba(180,120,255,.95);
 }
 .hero-tagline{
-    margin-top:10px;
+    margin-top:8px;
     font-size:82px;
     font-weight:900;
     background:linear-gradient(90deg,#c08bff,#6aa6ff,#ff8bd8);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
+}
+
+/* 游標 */
+.cursor{
+    display:inline-block;
+    margin-left:6px;
+    animation:blink 1s infinite;
+}
+@keyframes blink{
+    0%,50%,100%{opacity:1}
+    25%,75%{opacity:0}
 }
 
 /* ===== UI ===== */
@@ -123,7 +121,7 @@ nav{
 }
 .ui-glow{
     position:absolute;
-    inset:-100px;
+    inset:-120px;
     border-radius:80px;
     background:radial-gradient(
         circle at var(--x,50%) var(--y,50%),
@@ -195,7 +193,7 @@ nav{
     color:#dcb6ff;
 }
 
-/* ===== GENERIC SECTION ===== */
+/* ===== SECTION ===== */
 section{
     max-width:1300px;
     margin:auto;
@@ -282,7 +280,9 @@ footer{text-align:center;padding:42px;opacity:.45}
 
 <section class="hero reveal">
     <h1 class="hero-title">Feairl <span class="v2">V2</span></h1>
-    <div class="hero-tagline">Be a Stealth Pro Gamer</div>
+    <div class="hero-tagline">
+        Be A Stealth <span id="dynamicText"></span><span class="cursor">|</span>
+    </div>
 </section>
 
 <div class="ui-section reveal">
@@ -384,6 +384,7 @@ footer{text-align:center;padding:42px;opacity:.45}
 <footer>© 2026 Feairl. All rights reserved.</footer>
 
 <script>
+/* UI Tilt */
 const card=document.getElementById("uiCard");
 const glow=document.getElementById("uiGlow");
 
@@ -401,6 +402,7 @@ card.addEventListener("mouseleave",()=>{
     card.style.transform="rotateX(0) rotateY(0)";
 });
 
+/* Scroll Reveal */
 const reveals=document.querySelectorAll(".reveal");
 function revealCheck(){
     reveals.forEach(r=>{
@@ -412,9 +414,27 @@ function revealCheck(){
 window.addEventListener("scroll",revealCheck);
 revealCheck();
 
+/* FAQ */
 document.querySelectorAll('.faq-item').forEach(item=>{
     item.querySelector('.faq-q').onclick=()=>item.classList.toggle('active');
 });
+
+/* Dynamic Tagline */
+const words=["Pro Gamer","Cheater","Hack"];
+const textEl=document.getElementById("dynamicText");
+let w=0,c=0,del=false;
+
+(function loop(){
+    const word=words[w];
+    if(!del){
+        textEl.textContent=word.slice(0,++c);
+        if(c===word.length) setTimeout(()=>del=true,1200);
+    }else{
+        textEl.textContent=word.slice(0,--c);
+        if(c===0){del=false;w=(w+1)%words.length}
+    }
+    setTimeout(loop,del?60:90);
+})();
 </script>
 
 </body>

@@ -6,6 +6,7 @@
 
 <link rel="icon" href="./Feairllogo.png" type="image/png">
 <link rel="apple-touch-icon" href="./Feairllogo.png">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -61,7 +62,11 @@ nav{
     padding:0 22px;
     border-radius:14px;
     border:1px solid rgba(200,150,255,.6);
-    background:linear-gradient(135deg,rgba(200,150,255,.35),rgba(120,80,255,.25));
+    background:linear-gradient(
+        135deg,
+        rgba(200,150,255,.35),
+        rgba(120,80,255,.25)
+    );
     font-weight:600;
     box-shadow:0 0 20px rgba(180,120,255,.45);
 }
@@ -89,7 +94,7 @@ nav{
     -webkit-text-fill-color:transparent;
 }
 
-/* 游標（強制顯示） */
+/* 游標 */
 .cursor{
     margin-left:6px;
     color:#fff;
@@ -155,25 +160,23 @@ nav{
     font-weight:600;
     text-decoration:none;
     overflow:hidden;
-
-    /* 永遠不變暗、不縮放 */
     opacity:1 !important;
-    transform:none !important;
 }
 
-/* 原本文字 */
 .download-main .label{
     position:relative;
     z-index:2;
     transition:.35s;
 }
 
-/* Work.ink */
+/* Work.ink：真正置中 */
 .download-main .hover-text{
     position:absolute;
-    left:50%;
-    bottom:-30px;
-    transform:translateX(-50%);
+    inset:0;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding-bottom:14px;
     font-size:14px;
     letter-spacing:2px;
     opacity:0;
@@ -192,17 +195,23 @@ nav{
     transition:.35s;
 }
 
-/* Hover 行為 */
+/* Hover */
 .download-main:hover::before{
     opacity:1;
     backdrop-filter:blur(12px);
 }
-.download-main:hover .label{
-    opacity:.35;
+.download-main:hover .label{opacity:.35}
+.download-main:hover .hover-text{opacity:1}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:1s ease;
 }
-.download-main:hover .hover-text{
-    bottom:14px;
+.reveal.show{
     opacity:1;
+    transform:none;
 }
 
 /* ===== STEALTH ===== */
@@ -212,24 +221,6 @@ nav{
     padding:40px 24px;
     text-align:center;
 }
-.stealth h2{font-size:34px;color:#e7d4ff}
-.stealth p{opacity:.75;margin-bottom:40px}
-.stealth-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:28px;
-}
-.stealth-card{
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(200,150,255,.25);
-    border-radius:22px;
-    padding:34px 28px;
-}
-.stealth-value{
-    font-size:44px;
-    font-weight:800;
-    color:#dcb6ff;
-}
 
 /* ===== SECTION ===== */
 section{
@@ -238,25 +229,6 @@ section{
     padding:120px 24px;
 }
 
-/* ===== COMPAT ===== */
-.compat-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:36px;
-}
-.compat-card{
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:26px;
-    padding:42px;
-}
-.compat-stat{
-    font-size:46px;
-    font-weight:700;
-    color:#dcb6ff;
-}
-.compat-desc{opacity:.75;line-height:1.6}
-
 /* ===== FAQ ===== */
 .faq-item{margin-bottom:28px}
 .faq-q{
@@ -264,7 +236,6 @@ section{
     padding:26px 32px;
     border-radius:22px;
     border:1px solid rgba(255,255,255,.18);
-    font-weight:600;
     cursor:pointer;
 }
 .faq-a{
@@ -272,8 +243,6 @@ section{
     overflow:hidden;
     transition:.45s ease;
     padding:0 32px;
-    opacity:.9;
-    line-height:1.7;
 }
 .faq-item.active .faq-a{
     max-height:900px;
@@ -298,14 +267,14 @@ footer{text-align:center;padding:42px;opacity:.45}
 </div>
 </nav>
 
-<section class="hero">
+<section class="hero reveal">
     <h1 class="hero-title">Feairl <span class="v2">V2</span></h1>
     <div class="hero-tagline">
         Be A Stealth <span id="dynamicText"></span><span class="cursor">|</span>
     </div>
 </section>
 
-<div class="ui-section">
+<div class="ui-section reveal">
     <div class="ui-wrap">
         <div class="ui-glow" id="uiGlow"></div>
         <div class="ui-card" id="uiCard">
@@ -314,63 +283,28 @@ footer{text-align:center;padding:42px;opacity:.45}
     </div>
 </div>
 
-<div class="download-wrap">
+<div class="download-wrap reveal">
     <a class="download-main" href="https://work.ink/26Yy/FeairlExecutor" target="_blank">
         <span class="label">Download Feairl</span>
         <span class="hover-text">Work.ink</span>
     </a>
 </div>
 
-<div class="stealth">
+<div class="stealth reveal">
     <h2>Stealth Injection System</h2>
-    <p>Advanced stealth-based injection architecture designed to minimize detection vectors.</p>
-    <div class="stealth-grid">
-        <div class="stealth-card"><div>Detection Rate</div><div class="stealth-value">0.00%</div></div>
-        <div class="stealth-card"><div>Total Bans (2026)</div><div class="stealth-value">0</div></div>
-        <div class="stealth-card"><div>Injection Mode</div><div class="stealth-value">Stealth</div></div>
-    </div>
+    <p>Advanced stealth-based injection architecture.</p>
 </div>
 
-<section id="compatibility">
+<section id="compatibility" class="reveal">
 <h2>Execution Compatibility</h2>
-<div class="compat-grid">
-    <div class="compat-card">
-        <h3>UNC Compatibility</h3>
-        <div class="compat-stat">99%</div>
-        <div class="compat-desc">Supports most commonly used executor functions.</div>
-    </div>
-    <div class="compat-card">
-        <h3>sUNC Compatibility</h3>
-        <div class="compat-stat">98%</div>
-        <div class="compat-desc">Supports advanced and complex scripts.</div>
-    </div>
-</div>
 </section>
 
-<section id="faq">
+<section id="faq" class="reveal">
 <h2>Q & A</h2>
-
 <div class="faq-item">
     <div class="faq-q">Why does my antivirus flag Feairl?</div>
     <div class="faq-a">False positives caused by injection behavior.</div>
 </div>
-<div class="faq-item">
-    <div class="faq-q">Is Feairl safe?</div>
-    <div class="faq-a">Feairl contains no malware or spyware.</div>
-</div>
-<div class="faq-item">
-    <div class="faq-q">Do I need to disable antivirus?</div>
-    <div class="faq-a">Whitelisting is recommended.</div>
-</div>
-<div class="faq-item">
-    <div class="faq-q">Why do some scripts not work?</div>
-    <div class="faq-a">Some scripts rely on unsupported or deprecated functions.</div>
-</div>
-<div class="faq-item">
-    <div class="faq-q">Is there any risk?</div>
-    <div class="faq-a">Using executors may violate Roblox Terms of Service.</div>
-</div>
-
 </section>
 
 <footer>© 2026 Feairl. All rights reserved.</footer>
@@ -392,6 +326,18 @@ card.addEventListener("mousemove",e=>{
 card.addEventListener("mouseleave",()=>{
     card.style.transform="rotateX(0) rotateY(0)";
 });
+
+/* Scroll Reveal */
+const reveals=document.querySelectorAll(".reveal");
+function revealCheck(){
+    reveals.forEach(r=>{
+        if(r.getBoundingClientRect().top<window.innerHeight-80){
+            r.classList.add("show");
+        }
+    });
+}
+window.addEventListener("scroll",revealCheck);
+revealCheck();
 
 /* FAQ */
 document.querySelectorAll('.faq-item').forEach(item=>{

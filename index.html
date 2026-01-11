@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Feairl | The Elite Script Executor</title>
+    
+    <link rel="icon" href="feairl.png" type="image/png">
+    <link rel="apple-touch-icon" href="feairl.png">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -44,15 +48,25 @@
             align-items: center;
         }
 
-        .logo {
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-left img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        .logo-text {
             font-weight: 800;
             font-size: 22px;
             letter-spacing: -0.8px;
-            text-decoration: none;
             color: var(--fg);
-            transition: 0.3s;
         }
-        .logo:hover { opacity: 0.8; }
 
         .nav-links { display: flex; gap: 32px; align-items: center; }
         .nav-links a {
@@ -125,10 +139,10 @@
             box-shadow: 0 40px 100px rgba(0,0,0,0.6);
             transition: transform 0.5s ease;
         }
-        .ui-window:hover { transform: scale(1.01); }
-        .ui-window img { width: 100%; display: block; opacity: 0.9; }
+        .ui-window:hover { transform: scale(1.005); }
+        .ui-window img { width: 100%; display: block; opacity: 0.95; }
 
-        /* ===== STATS (Three Boards) ===== */
+        /* ===== STATS BOARDS ===== */
         .stats-section {
             max-width: 1200px;
             margin: 0 auto 120px;
@@ -151,20 +165,11 @@
             overflow: hidden;
         }
 
-        .stat-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-            opacity: 0; transition: 0.4s;
-        }
-
         .stat-card:hover {
             transform: translateY(-10px);
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.2);
         }
-        .stat-card:hover::before { opacity: 1; }
 
         .stat-label {
             color: var(--muted);
@@ -200,7 +205,6 @@
             background: transparent;
             border-bottom: 1px solid var(--border);
             margin-bottom: 8px;
-            transition: 0.3s;
         }
 
         .qa-q {
@@ -211,9 +215,8 @@
             align-items: center;
             font-weight: 600;
             font-size: 18px;
-            transition: 0.3s;
+            transition: color 0.3s;
         }
-        .qa-q:hover { color: var(--muted); }
 
         .qa-a {
             max-height: 0;
@@ -232,6 +235,7 @@
             width: 20px; height: 20px; 
             position: relative; 
             transition: 0.4s;
+            color: var(--muted);
         }
         .icon::before, .icon::after {
             content: ""; position: absolute; background: currentColor;
@@ -239,7 +243,7 @@
         }
         .icon::after { transform: translateY(-50%) rotate(90deg); }
         
-        .qa-item.active .icon { transform: rotate(45deg); }
+        .qa-item.active .icon { transform: rotate(45deg); color: var(--fg); }
         .qa-item.active .qa-q { color: var(--fg); }
 
         /* ===== FOOTER ===== */
@@ -260,7 +264,10 @@
 
 <nav>
     <div class="nav-inner">
-        <a href="#" class="logo">FEAIRL</a>
+        <a href="#" class="nav-left">
+            <img src="feairl.png" alt="Feairl Logo">
+            <span class="logo-text">FEAIRL</span>
+        </a>
         <div class="nav-links">
             <a href="#features">Specifications</a>
             <a href="#qa">Q&A</a>
@@ -271,13 +278,13 @@
 
 <section class="hero reveal">
     <h1>FEAIRL V2</h1>
-    <p>The next-generation script executor. Stability, safety, and performance refined into a single interface.</p>
-    <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-hero">Get Feairl Now</a>
+    <p>The elite script executor. Absolute stability, optimized safety, and high-tier performance redefined.</p>
+    <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-hero">Initialize Executor</a>
 </section>
 
 <div class="preview-container reveal">
     <div class="ui-window">
-        <img src="UI.png" alt="Feairl Executor Interface">
+        <img src="UI.png" alt="Feairl Executor Dashboard">
     </div>
 </div>
 
@@ -286,17 +293,17 @@
         <div class="stat-card">
             <span class="stat-label">Safety Status</span>
             <span class="stat-value">0%</span>
-            <p class="stat-desc">Zero detection incidents throughout 2026. Feairl uses high-tier stealth injection to stay under the radar.</p>
+            <p class="stat-desc">Zero detection record in 2026. Feairl uses high-tier stealth injection to stay undetected during operations.</p>
         </div>
         <div class="stat-card">
-            <span class="stat-label">UNC Standard</span>
+            <span class="stat-label">UNC Support</span>
             <span class="stat-value">99%</span>
-            <p class="stat-desc">Broad script support. This executor handles the majority of standard environment functions with ease.</p>
+            <p class="stat-desc">Extensive script compatibility. This executor handles almost all standard library functions seamlessly.</p>
         </div>
         <div class="stat-card">
-            <span class="stat-label">sUNC Logic</span>
+            <span class="stat-label">sUNC Engine</span>
             <span class="stat-value">98%</span>
-            <p class="stat-desc">Engineered for sophisticated script logic. Run high-end internal tools without compatibility errors.</p>
+            <p class="stat-desc">Optimized for sophisticated script logic. Run the most advanced community tools without compatibility issues.</p>
         </div>
     </div>
 </section>
@@ -308,37 +315,37 @@
     
     <div class="qa-item">
         <div class="qa-q">Why is this executor flagged by antivirus? <div class="icon"></div></div>
-        <div class="qa-a">As a powerful script executor, Feairl interacts directly with game memory. This behavior is often flagged as a false positive by security software. Whitelisting the application is a standard procedure.</div>
+        <div class="qa-a">Script executors interact with active memory to run code, which is often flagged as a false positive by security software. Whitelisting the Feairl folder is completely safe and required.</div>
     </div>
 
     <div class="qa-item">
-        <div class="qa-q">How does sUNC improve script performance? <div class="icon"></div></div>
-        <div class="qa-a">Sophisticated UNC (sUNC) ensures that this executor can handle complex custom functions found in top-tier scripts, providing a smoother experience than basic alternatives.</div>
+        <div class="qa-q">How does sUNC benefit advanced users? <div class="icon"></div></div>
+        <div class="qa-a">Sophisticated UNC (sUNC) ensures that complex scripts relying on deep environment calls run without errors, offering stability that standard executors cannot provide.</div>
     </div>
 
     <div class="qa-item">
-        <div class="qa-q">Is my account safe using this executor? <div class="icon"></div></div>
-        <div class="qa-a">Feairl is built for stealth. Our injection core is updated 24/7 to bypass new detection methods, making it one of the safest executors on the market in 2026.</div>
+        <div class="qa-q">Is my account protected while using Feairl? <div class="icon"></div></div>
+        <div class="qa-a">Yes. Our 2026 stealth injection core is designed specifically to bypass modern detection systems. We maintain 24/7 monitoring to ensure the executor stays safe.</div>
     </div>
 
     <div class="qa-item">
         <div class="qa-q">Does it support multi-account usage? <div class="icon"></div></div>
-        <div class="qa-a">Yes. Feairl V2 is optimized for multi-instance tasks. You can run several accounts simultaneously with minimal CPU and RAM impact.</div>
+        <div class="qa-a">Absolutely. Feairl V2 is designed for efficiency, allowing you to run multiple accounts simultaneously with minimal impact on your system resources.</div>
     </div>
 
     <div class="qa-item">
-        <div class="qa-q">How often are updates released? <div class="icon"></div></div>
-        <div class="qa-a">Whenever a platform update occurs, our team pushes an executor patch immediately. We prioritize uptime to ensure your scripts are always ready.</div>
+        <div class="qa-q">How are executor updates handled? <div class="icon"></div></div>
+        <div class="qa-a">Updates are pushed immediately following any platform changes. Our auto-patch system ensures you have the latest executor version with minimal downtime.</div>
     </div>
 
     <div class="qa-item">
-        <div class="qa-q">What should I do if the executor crashes? <div class="icon"></div></div>
-        <div class="qa-a">Ensure all redistributables are updated and your antivirus hasn't quarantined a core file. Re-downloading and whitelisting the folder usually fixes most issues.</div>
+        <div class="qa-q">What should I do if a script fails to execute? <div class="icon"></div></div>
+        <div class="qa-a">First, verify the script's compatibility with UNC standards. If it still fails, ensure your antivirus hasn't blocked any core executor components and try re-injecting.</div>
     </div>
 </section>
 
 <footer>
-    <p>&copy; 2026 Feairl Project. Leading the future of script executor technology.</p>
+    <p>&copy; 2026 Feairl Project. Professional Executor Technology.</p>
 </footer>
 
 <script>
@@ -347,10 +354,7 @@
         q.onclick = () => {
             const item = q.parentElement;
             const isActive = item.classList.contains('active');
-            
-            // Optional: Close other open items
             document.querySelectorAll('.qa-item').forEach(el => el.classList.remove('active'));
-            
             if (!isActive) item.classList.add('active');
         };
     });

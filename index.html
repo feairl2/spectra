@@ -17,6 +17,7 @@
             --muted: #a1a1a6;
             --border: rgba(255, 255, 255, 0.08);
             --accent: #ffffff;
+            --discord: #5865F2; /* Discord 官方顏色 */
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
@@ -111,6 +112,13 @@
             max-width: 720px;
         }
 
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+        }
+
         .btn-hero {
             display: inline-block;
             background: var(--fg);
@@ -123,6 +131,18 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .btn-hero:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.1); }
+
+        /* Discord Hero Button Style */
+        .btn-discord {
+            background: rgba(255,255,255,0.05);
+            color: var(--fg);
+            border: 1px solid var(--border);
+        }
+        .btn-discord:hover {
+            background: var(--discord);
+            border-color: var(--discord);
+            color: white;
+        }
 
         /* ===== PREVIEW ===== */
         .preview-container {
@@ -271,7 +291,7 @@
         <div class="nav-links">
             <a href="#features">Specifications</a>
             <a href="#qa">Q&A</a>
-            <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-download-nav">Download</a>
+            <a href="https://discord.gg/6fErG5CGDg" target="_blank">Discord</a> <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-download-nav">Download</a>
         </div>
     </div>
 </nav>
@@ -279,7 +299,8 @@
 <section class="hero reveal">
     <h1>FEAIRL V2</h1>
     <p>Powerful Keyless High-performance And Secure Executor.</p>
-    <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-hero">Get Feairl Now</a>
+    <div class="hero-btns"> <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-hero">Get Feairl Now</a>
+        <a href="https://discord.gg/6fErG5CGDg" target="_blank" class="btn-hero btn-discord">Join Discord</a> </div>
 </section>
 
 <div class="preview-container reveal">

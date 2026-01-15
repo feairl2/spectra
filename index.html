@@ -17,7 +17,9 @@
             --muted: #a1a1a6;
             --border: rgba(255, 255, 255, 0.08);
             --accent: #ffffff;
-            --discord: #5865F2; /* Discord 官方顏色 */
+            --discord: #5865F2; 
+            --status-green: #22c55e;
+            --status-red: #ef4444;
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
@@ -30,254 +32,99 @@
             overflow-x: hidden;
         }
 
-        /* ===== NAVIGATION ===== */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            z-index: 1000;
-            background: rgba(15, 15, 17, 0.75);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
+        .status-container {
+            display: inline-flex;
             align-items: center;
-        }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .nav-left img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            font-weight: 800;
-            font-size: 22px;
-            letter-spacing: -0.8px;
-            color: var(--fg);
-        }
-
-        .nav-links { display: flex; gap: 32px; align-items: center; }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--muted);
-            font-size: 14px;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-        .nav-links a:hover { color: var(--fg); }
-
-        .btn-download-nav {
-            background: var(--fg);
-            color: var(--bg) !important;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: 700;
-        }
-
-        /* ===== HERO ===== */
-        .hero {
-            padding: 200px 24px 100px;
-            text-align: center;
-            background: radial-gradient(circle at 50% -20%, #22222a 0%, #0f0f11 60%);
-        }
-
-        .hero h1 {
-            font-size: clamp(54px, 12vw, 110px);
-            font-weight: 800;
-            letter-spacing: -0.06em;
-            margin: 0;
-            line-height: 0.85;
-            background: linear-gradient(180deg, #fff 40%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: var(--muted);
-            font-size: clamp(18px, 3.5vw, 24px);
-            margin: 32px auto 48px;
-            max-width: 720px;
-        }
-
-        .hero-btns {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .btn-hero {
-            display: inline-block;
-            background: var(--fg);
-            color: var(--bg);
-            padding: 20px 48px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 17px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn-hero:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.1); }
-
-        /* Discord Hero Button Style */
-        .btn-discord {
-            background: rgba(255,255,255,0.05);
-            color: var(--fg);
-            border: 1px solid var(--border);
-        }
-        .btn-discord:hover {
-            background: var(--discord);
-            border-color: var(--discord);
-            color: white;
-        }
-
-        /* ===== PREVIEW ===== */
-        .preview-container {
-            max-width: 1100px;
-            margin: -40px auto 120px;
-            padding: 0 24px;
-        }
-
-        .ui-window {
-            background: var(--bg-sub);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-            transition: transform 0.5s ease;
-        }
-        .ui-window:hover { transform: scale(1.005); }
-        .ui-window img { width: 100%; display: block; opacity: 0.95; }
-
-        /* ===== STATS BOARDS ===== */
-        .stats-section {
-            max-width: 1200px;
-            margin: 0 auto 120px;
-            padding: 0 24px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 60px 40px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            gap: 10px;
             margin-bottom: 20px;
-            display: block;
         }
 
-        .stat-value {
-            font-size: 72px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            display: block;
-            letter-spacing: -3px;
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.5s ease;
         }
 
+        .dot-online {
+            background-color: var(--status-green);
+            box-shadow: 0 0 10px var(--status-green), 0 0 20px var(--status-green);
+        }
+        .dot-online::after {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border-radius: 50%;
+            border: 2px solid var(--status-green);
+            animation: pulse-green 2s infinite;
+        }
+
+        .dot-offline {
+            background-color: var(--status-red);
+            box-shadow: 0 0 10px var(--status-red), 0 0 20px var(--status-red);
+        }
+        .dot-offline::after {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border-radius: 50%;
+            border: 2px solid var(--status-red);
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        @keyframes pulse-red {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(15, 15, 17, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-left { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-left img { width: 28px; height: 28px; object-fit: contain; }
+        .logo-text { font-weight: 800; font-size: 22px; letter-spacing: -0.8px; color: var(--fg); }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 500; transition: 0.2s; }
+        .nav-links a:hover { color: var(--fg); }
+        .btn-download-nav { background: var(--fg); color: var(--bg) !important; padding: 8px 18px; border-radius: 6px; font-weight: 700; }
+        .hero { padding: 200px 24px 100px; text-align: center; background: radial-gradient(circle at 50% -20%, #22222a 0%, #0f0f11 60%); }
+        .hero h1 { font-size: clamp(54px, 12vw, 110px); font-weight: 800; letter-spacing: -0.06em; margin: 0; line-height: 0.85; background: linear-gradient(180deg, #fff 40%, #888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--muted); font-size: clamp(18px, 3.5vw, 24px); margin: 32px auto 48px; max-width: 720px; }
+        .hero-btns { display: flex; gap: 16px; justify-content: center; align-items: center; }
+        .btn-hero { display: inline-block; background: var(--fg); color: var(--bg); padding: 20px 48px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 17px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .btn-hero:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.1); }
+        .btn-discord { background: rgba(255,255,255,0.05); color: var(--fg); border: 1px solid var(--border); }
+        .btn-discord:hover { background: var(--discord); border-color: var(--discord); color: white; }
+        .preview-container { max-width: 1100px; margin: -40px auto 120px; padding: 0 24px; }
+        .ui-window { background: var(--bg-sub); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.6); transition: transform 0.5s ease; }
+        .ui-window img { width: 100%; display: block; opacity: 0.95; }
+        .stats-section { max-width: 1200px; margin: 0 auto 120px; padding: 0 24px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 20px; padding: 60px 40px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
+        .stat-card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); }
+        .stat-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; }
+        .stat-value { font-size: 72px; font-weight: 800; margin-bottom: 16px; display: block; letter-spacing: -3px; }
         .stat-desc { color: var(--muted); font-size: 16px; line-height: 1.6; }
-
-        /* ===== Q&A ===== */
-        .qa-section {
-            max-width: 850px;
-            margin: 150px auto;
-            padding: 0 24px;
-        }
-
+        .qa-section { max-width: 850px; margin: 150px auto; padding: 0 24px; }
         .qa-header { text-align: center; margin-bottom: 60px; }
         .qa-header h2 { font-size: 48px; font-weight: 800; letter-spacing: -2px; }
-
-        .qa-item {
-            background: transparent;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 8px;
-        }
-
-        .qa-q {
-            padding: 32px 0;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            font-size: 18px;
-            transition: color 0.3s;
-        }
-
-        .qa-a {
-            max-height: 0;
-            overflow: hidden;
-            color: var(--muted);
-            line-height: 1.8;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .qa-item.active .qa-a {
-            max-height: 500px;
-            padding-bottom: 32px;
-        }
-
-        .icon { 
-            width: 20px; height: 20px; 
-            position: relative; 
-            transition: 0.4s;
-            color: var(--muted);
-        }
-        .icon::before, .icon::after {
-            content: ""; position: absolute; background: currentColor;
-            top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%);
-        }
+        .qa-item { background: transparent; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+        .qa-q { padding: 32px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 18px; transition: color 0.3s; }
+        .qa-a { max-height: 0; overflow: hidden; color: var(--muted); line-height: 1.8; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .qa-item.active .qa-a { max-height: 500px; padding-bottom: 32px; }
+        .icon { width: 20px; height: 20px; position: relative; transition: 0.4s; color: var(--muted); }
+        .icon::before, .icon::after { content: ""; position: absolute; background: currentColor; top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
         .icon::after { transform: translateY(-50%) rotate(90deg); }
-        
         .qa-item.active .icon { transform: rotate(45deg); color: var(--fg); }
         .qa-item.active .qa-q { color: var(--fg); }
-
-        /* ===== FOOTER ===== */
-        footer {
-            padding: 100px 24px;
-            text-align: center;
-            border-top: 1px solid var(--border);
-            opacity: 0.6;
-        }
-
-        /* Animations */
+        footer { padding: 100px 24px; text-align: center; border-top: 1px solid var(--border); opacity: 0.6; }
         .reveal { opacity: 0; transform: translateY(30px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.show { opacity: 1; transform: translateY(0); }
-
     </style>
 </head>
 <body>
@@ -291,7 +138,8 @@
         <div class="nav-links">
             <a href="#features">Specifications</a>
             <a href="#qa">Q&A</a>
-            <a href="https://discord.gg/6fErG5CGDg" target="_blank">Discord</a> <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-download-nav">Download</a>
+            <a href="https://discord.gg/6fErG5CGDg" target="_blank">Discord</a> 
+            <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-download-nav">Download</a>
         </div>
     </div>
 </nav>
@@ -299,8 +147,10 @@
 <section class="hero reveal">
     <h1>FEAIRL V3</h1>
     <p>Powerful Keyless High-performance And Secure Executor.</p>
-    <div class="hero-btns"> <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-hero">Get Feairl Now</a>
-        <a href="https://discord.gg/6fErG5CGDg" target="_blank" class="btn-hero btn-discord">Join Discord</a> </div>
+    <div class="hero-btns"> 
+        <a href="https://work.ink/26Yy/FeairlExecutor" class="btn-hero">Get Feairl Now</a>
+        <a href="https://discord.gg/6fErG5CGDg" target="_blank" class="btn-hero btn-discord">Join Discord</a> 
+    </div>
 </section>
 
 <div class="preview-container reveal">
@@ -312,7 +162,10 @@
 <section id="features" class="stats-section reveal">
     <div class="stats-grid">
         <div class="stat-card">
-            <span class="stat-label">Safety Status</span>
+            <div class="status-container">
+                <span id="statusDot" class="dot"></span>
+                <span id="statusText" class="stat-label">Checking Status...</span>
+            </div>
             <span class="stat-value">0%</span>
             <p class="stat-desc">Zero detection record in 2026. Feairl uses high-tier stealth injection to stay undetected during operations.</p>
         </div>
@@ -330,42 +183,41 @@
 </section>
 
 <section id="qa" class="qa-section reveal">
-    <div class="qa-header">
-        <h2>Questions & Answers</h2>
-    </div>
-    
-    <div class="qa-item">
-        <div class="qa-q">Why is this executor flagged by antivirus? <div class="icon"></div></div>
-        <div class="qa-a">Script executors interact with active memory to run code, which is often flagged as a false positive by security software. Whitelisting the Feairl folder is completely safe and required.</div>
-    </div>
-
-    <div class="qa-item">
-        <div class="qa-q">How does sUNC benefit advanced users? <div class="icon"></div></div>
-        <div class="qa-a">Sophisticated UNC (sUNC) ensures that complex scripts relying on deep environment calls run without errors, offering stability that standard executors cannot provide.</div>
-    </div>
-
-    <div class="qa-item">
-        <div class="qa-q">Is my account protected while using Feairl? <div class="icon"></div></div>
-        <div class="qa-a">Yes. Our 2026 stealth injection core is designed specifically to bypass modern detection systems. We maintain 24/7 monitoring to ensure the executor stays safe.</div>
-    </div>
-
-    <div class="qa-item">
-        <div class="qa-q">Feairl cannot be injected? Injection failed? <div class="icon"></div></div>
-        <div class="qa-a">Actually, the injection failure might be related to your Windows security/antivirus software blocking it. Please check the protection logs and unquarantine the injector.</div>
-    </div>
-
-    <div class="qa-item">
-        <div class="qa-q">Does Feairl update automatically? <div class="icon"></div></div>
-        <div class="qa-a">No, you need to check our official Discord update information and download it again after updating.</div>
-    </div>
+    <div class="qa-header"><h2>Questions & Answers</h2></div>
+    <div class="qa-item"><div class="qa-q">Why is this executor flagged by antivirus? <div class="icon"></div></div><div class="qa-a">Script executors interact with active memory to run code, which is often flagged as a false positive by security software. Whitelisting the Feairl folder is completely safe and required.</div></div>
+    <div class="qa-item"><div class="qa-q">How does sUNC benefit advanced users? <div class="icon"></div></div><div class="qa-a">Sophisticated UNC (sUNC) ensures that complex scripts relying on deep environment calls run without errors, offering stability that standard executors cannot provide.</div></div>
 </section>
 
-<footer>
-    <p>&copy; 2026 Feairl Project. Professional Executor Technology.</p>
-</footer>
+<footer><p>&copy; 2026 Feairl Project. Professional Executor Technology.</p></footer>
 
 <script>
-    // Q&A Toggle Logic
+    async function updateStatus() {
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+
+        try {
+            const response = await fetch('state.txt?t=' + new Date().getTime());
+            if (!response.ok) throw new Error();
+            
+            const state = (await response.text()).trim().toLowerCase();
+
+            if (state === 'true') {
+                dot.className = 'dot dot-online';
+                text.innerText = 'Safety Status: Undetected';
+            } else {
+                dot.className = 'dot dot-offline';
+                text.innerText = 'Safety Status: Maintenance';
+            }
+        } catch (error) {
+            dot.className = 'dot dot-offline';
+            text.innerText = 'Safety Status: Unknown';
+        }
+    }
+
+    updateStatus();
+
+    setInterval(updateStatus, 30000);
+
     document.querySelectorAll('.qa-q').forEach(q => {
         q.onclick = () => {
             const item = q.parentElement;
@@ -375,15 +227,11 @@
         };
     });
 
-    // Intersection Observer for Reveal Animations
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('show');
-            }
+            if (entry.isIntersecting) entry.target.classList.add('show');
         });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 

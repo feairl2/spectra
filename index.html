@@ -32,7 +32,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== NAVIGATION ===== */
+        /* ===== 導航欄 ===== */
         nav {
             position: fixed;
             top: 0; width: 100%;
@@ -51,13 +51,7 @@
             align-items: center;
         }
 
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
+        .nav-left { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .nav-left img { width: 28px; height: 28px; object-fit: contain; }
         .logo-text { font-weight: 800; font-size: 22px; letter-spacing: -0.8px; color: var(--fg); }
 
@@ -79,7 +73,7 @@
             font-weight: 700;
         }
 
-        /* ===== HERO & STATUS DOT ===== */
+        /* ===== HERO & 呼吸燈 ===== */
         .hero {
             padding: 200px 24px 100px;
             text-align: center;
@@ -90,8 +84,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 20px; /* 標題與燈號的間距 */
-            position: relative;
+            gap: 25px;
         }
 
         .hero h1 {
@@ -105,39 +98,30 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* 標題旁的指示燈樣式 */
+        /* 呼吸燈樣式 */
         .title-dot {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-            transition: 0.5s;
+            transition: background-color 0.5s ease;
+            margin-top: 10px;
         }
 
         .dot-green {
-            background: var(--green);
-            box-shadow: 0 0 20px var(--green), 0 0 40px var(--green);
-        }
-        .dot-green::after {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border-radius: 50%; border: 3px solid var(--green);
-            animation: pulse-ring 2s infinite;
+            background-color: var(--green);
+            box-shadow: 0 0 25px var(--green);
+            animation: breathe 2s infinite ease-in-out;
         }
 
         .dot-red {
-            background: var(--red);
-            box-shadow: 0 0 20px var(--red), 0 0 40px var(--red);
-        }
-        .dot-red::after {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border-radius: 50%; border: 3px solid var(--red);
-            animation: pulse-ring 2s infinite;
+            background-color: var(--red);
+            box-shadow: 0 0 25px var(--red);
+            animation: breathe 2s infinite ease-in-out;
         }
 
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(3); opacity: 0; }
+        @keyframes breathe {
+            0%, 100% { opacity: 1; transform: scale(1); filter: brightness(1.2); }
+            50% { opacity: 0.7; transform: scale(0.9); filter: brightness(0.8); }
         }
 
         .hero p {
@@ -151,38 +135,43 @@
         .btn-hero {
             display: inline-block; background: var(--fg); color: var(--bg);
             padding: 20px 48px; border-radius: 8px; text-decoration: none;
-            font-weight: 700; font-size: 17px; transition: 0.3s;
+            font-weight: 700; font-size: 17px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .btn-hero:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.1); }
         .btn-discord { background: rgba(255,255,255,0.05); color: var(--fg); border: 1px solid var(--border); }
         .btn-discord:hover { background: var(--discord); color: white; border-color: var(--discord); }
 
-        /* ===== PREVIEW & STATS ===== */
+        /* ===== 內容預覽與數據卡片 ===== */
         .preview-container { max-width: 1100px; margin: -40px auto 120px; padding: 0 24px; }
-        .ui-window { background: var(--bg-sub); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
+        .ui-window { background: var(--bg-sub); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.6); transition: transform 0.5s ease; }
+        .ui-window:hover { transform: scale(1.01); }
         .ui-window img { width: 100%; display: block; opacity: 0.95; }
 
         .stats-section { max-width: 1200px; margin: 0 auto 120px; padding: 0 24px; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 20px; padding: 60px 40px; }
+        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 20px; padding: 60px 40px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .stat-card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); }
         .stat-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block; }
         .stat-value { font-size: 72px; font-weight: 800; margin-bottom: 16px; display: block; letter-spacing: -3px; }
         .stat-desc { color: var(--muted); font-size: 16px; line-height: 1.6; }
 
-        /* ===== Q&A ===== */
+        /* ===== Q&A 區塊 ===== */
         .qa-section { max-width: 850px; margin: 150px auto; padding: 0 24px; }
         .qa-header { text-align: center; margin-bottom: 60px; }
         .qa-header h2 { font-size: 48px; font-weight: 800; letter-spacing: -2px; }
-        .qa-item { border-bottom: 1px solid var(--border); }
-        .qa-q { padding: 32px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 18px; }
-        .qa-a { max-height: 0; overflow: hidden; color: var(--muted); line-height: 1.8; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .qa-item { border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+        .qa-q { padding: 32px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 18px; transition: color 0.3s; }
+        .qa-a { max-height: 0; overflow: hidden; color: var(--muted); line-height: 1.8; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         .qa-item.active .qa-a { max-height: 500px; padding-bottom: 32px; }
         .icon { width: 20px; height: 20px; position: relative; transition: 0.4s; color: var(--muted); }
         .icon::before, .icon::after { content: ""; position: absolute; background: currentColor; top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
         .icon::after { transform: translateY(-50%) rotate(90deg); }
         .qa-item.active .icon { transform: rotate(45deg); color: var(--fg); }
+        .qa-item.active .qa-q { color: var(--fg); }
 
         footer { padding: 100px 24px; text-align: center; border-top: 1px solid var(--border); opacity: 0.6; }
+
+        /* 進場動畫設定 */
         .reveal { opacity: 0; transform: translateY(30px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.show { opacity: 1; transform: translateY(0); }
     </style>
@@ -217,7 +206,9 @@
 </section>
 
 <div class="preview-container reveal">
-    <div class="ui-window"><img src="UI.png" alt="Dashboard"></div>
+    <div class="ui-window">
+        <img src="UI.png" alt="Feairl UI">
+    </div>
 </div>
 
 <section id="features" class="stats-section reveal">
@@ -267,20 +258,21 @@
 <footer><p>&copy; 2026 Feairl Project. Professional Executor Technology.</p></footer>
 
 <script>
+    // 讀取 state.txt
     async function updateStatus() {
         const dot = document.getElementById('statusDot');
         try {
             const resp = await fetch('state.txt?t=' + Date.now());
             const status = (await resp.text()).trim().toLowerCase();
-            dot.className = (status === 'true') ? 'title-dot dot-green' : 'title-dot dot-red';
+            dot.className = (status === 'true') ? 'title-dot dot-green' : 'title-dot dot-offline';
         } catch (e) {
             dot.className = 'title-dot dot-red';
         }
     }
-
     updateStatus();
     setInterval(updateStatus, 30000);
 
+    // Q&A 點擊動畫
     document.querySelectorAll('.qa-q').forEach(q => {
         q.onclick = () => {
             const item = q.parentElement;
@@ -290,6 +282,7 @@
         };
     });
 
+    // 進場動畫偵測
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
     }, { threshold: 0.1 });

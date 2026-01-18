@@ -61,29 +61,21 @@
         .nav-left img { width: 28px; height: 28px; object-fit: contain; }
         .logo-text { font-weight: 800; font-size: 22px; letter-spacing: -0.8px; color: var(--fg); }
 
+        /* 修改後的靜態綠色發光燈 */
         .status-dot-nav {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            margin-left: 4px;
-            transition: 0.5s;
-        }
-
-        .dot-green {
+            margin-left: 6px;
             background-color: var(--green);
-            box-shadow: 0 0 15px var(--green);
-            animation: breathe 2s infinite ease-in-out;
+            box-shadow: 0 0 10px var(--green), 0 0 5px rgba(34, 197, 94, 0.5);
+            flex-shrink: 0;
+            display: none; /* 初始隱藏，由 JS 控制顯示 */
         }
 
-        .dot-red {
-            background-color: var(--red);
-            box-shadow: 0 0 15px var(--red);
-            animation: breathe 2s infinite ease-in-out;
-        }
-
-        @keyframes breathe {
-            0%, 100% { opacity: 1; transform: scale(1); filter: brightness(1.2); }
-            50% { opacity: 0.6; transform: scale(0.85); filter: brightness(0.8); }
+        /* 只有在狀態為 true 時才顯示（或您可以設定為永遠顯示） */
+        .dot-active {
+            display: inline-block;
         }
 
         .nav-links { display: flex; gap: 32px; align-items: center; }
@@ -139,7 +131,7 @@
         .btn-discord { background: rgba(255,255,255,0.05); color: var(--fg); border: 1px solid var(--border); }
         .btn-discord:hover { background: var(--discord); color: white; border-color: var(--discord); }
 
-        /* ===== INFINITE MARQUEE (核心修改處) ===== */
+        /* ===== INFINITE MARQUEE ===== */
         .marquee-container {
             width: 100%;
             overflow: hidden;
@@ -149,37 +141,35 @@
 
         .marquee-content {
             display: flex;
-            width: max-content; /* 確保內容長度由圖片決定 */
-            animation: scroll 30s linear infinite; /* 控制滾動速度 */
+            width: max-content;
+            animation: scroll 40s linear infinite;
         }
 
-        /* 當滑鼠懸停時暫停動畫 */
         .marquee-content:hover {
             animation-play-state: paused;
         }
 
         .marquee-item {
             flex-shrink: 0;
-            width: 600px; /* 您可以根據圖片比例調整寬度 */
-            margin: 0 15px;
-            border-radius: 16px;
+            width: 550px;
+            margin: 0 20px;
+            border-radius: 12px;
             border: 1px solid var(--border);
             overflow: hidden;
             background: var(--bg-sub);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
 
         .marquee-item img {
             width: 100%;
             height: auto;
             display: block;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
         @keyframes scroll {
             from { transform: translateX(0); }
-            to { transform: translateX(-50%); } /* 捲動到一半處，實現無縫連接 */
+            to { transform: translateX(-50%); }
         }
 
         /* ===== STATS ===== */
@@ -296,15 +286,21 @@
 <footer><p>&copy; 2026 Feairl Project. Professional Executor Technology.</p></footer>
 
 <script>
-    // 讀取狀態
+    // 讀取狀態並顯示綠燈
     async function updateStatus() {
         const dot = document.getElementById('statusDot');
         try {
             const resp = await fetch('state.txt?t=' + Date.now());
             const status = (await resp.text()).trim().toLowerCase();
-            dot.className = (status === 'true') ? 'status-dot-nav dot-green' : 'status-dot-nav dot-red';
+            // 只要狀態為 true，就顯示發光的綠色圓點
+            if (status === 'true') {
+                dot.classList.add('dot-active');
+            } else {
+                dot.classList.remove('dot-active');
+            }
         } catch (e) {
-            dot.className = 'status-dot-nav dot-red';
+            // 出錯時預設不顯示或您可以自訂
+            dot.classList.remove('dot-active');
         }
     }
     updateStatus();

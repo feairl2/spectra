@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Spectra V3 | Defined by Excellence</title>
@@ -7,245 +7,229 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Outfit:wght@100;400;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000000;
+            --bg: #000;
             --gold: #ffcc00;
-            --gold-glow: rgba(255, 204, 0, 0.4);
+            --gold-glow: rgba(255, 204, 0, 0.3);
             --border: rgba(255, 255, 255, 0.1);
-            --glass: rgba(15, 15, 15, 0.6);
-            --text-dim: #949494;
+            --text-dim: #a1a1a6;
+            --glass: rgba(10, 10, 10, 0.7);
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        /* ===== 背景動態系統 ===== */
-        .bg-gradient {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
-        }
-        .ambient-light {
-            position: fixed; width: 800px; height: 800px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 204, 0, 0.04) 0%, transparent 70%);
-            z-index: -1; filter: blur(100px); animation: move 25s infinite alternate;
-        }
-        @keyframes move { 
-            0% { transform: translate(-20%, -20%); } 
-            100% { transform: translate(40%, 30%); } 
-        }
+        /* ===== BACKGROUND AMBIENCE ===== */
+        #starCanvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.6; pointer-events: none; }
+        .ambient-glow { position: fixed; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(255,204,0,0.03) 0%, transparent 70%); z-index: -1; filter: blur(100px); top: -10%; right: -10%; animation: pulse 15s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.2); opacity: 0.8; } }
 
-        #particleCanvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; }
-
-        /* ===== 導航欄：高端懸浮膠囊 ===== */
+        /* ===== NAVIGATION CAPSULE ===== */
         .nav-wrapper { position: fixed; top: 30px; width: 100%; display: flex; justify-content: center; z-index: 2000; padding: 0 20px; }
         nav {
-            width: 100%; max-width: 1100px; padding: 12px 40px;
+            width: 100%; max-width: 1200px; padding: 12px 40px;
             background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border: 1px solid var(--border); border-radius: 100px;
             display: flex; align-items: center; justify-content: space-between;
         }
-        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; flex: 1; }
-        .logo img { width: 32px; filter: drop-shadow(0 0 5px var(--gold)); }
-        .logo-text { font-family: 'Outfit'; font-weight: 900; font-size: 24px; letter-spacing: -1px; }
+        .nav-left { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; flex: 1; }
+        .nav-left img { width: 32px; height: 32px; filter: drop-shadow(0 0 5px var(--gold)); }
+        .logo-text { font-family: 'Outfit'; font-weight: 900; font-size: 26px; letter-spacing: -1.5px; }
 
-        .nav-center { display: flex; gap: 35px; flex: 2; justify-content: center; }
-        .nav-center a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
+        .nav-center { display: flex; gap: 40px; flex: 2; justify-content: center; }
+        .nav-center a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; }
         .nav-center a:hover { color: var(--gold); }
 
         .nav-right { flex: 1; text-align: right; color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: 1px; }
 
-        /* ===== Section 通用樣式 ===== */
-        section { max-width: 1200px; margin: 0 auto; padding: 120px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* ===== LAYOUT SYSTEM ===== */
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 120px 20px; text-align: center; }
+        .reveal { opacity: 0; transform: translateY(60px); transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        .tag { color: var(--gold); font-weight: 800; letter-spacing: 6px; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; }
-        h1 { font-family: 'Outfit'; font-size: clamp(60px, 12vw, 130px); font-weight: 900; line-height: 0.85; margin: 0; letter-spacing: -4px; }
-        h2 { font-family: 'Outfit'; font-size: 60px; font-weight: 400; margin: 0 0 20px; }
-        p { color: var(--text-dim); font-size: 19px; line-height: 1.8; max-width: 750px; margin: 20px auto; font-weight: 200; }
+        .tag { color: var(--gold); font-weight: 800; letter-spacing: 8px; font-size: 12px; margin-bottom: 30px; text-transform: uppercase; }
+        h1 { font-family: 'Outfit'; font-size: clamp(60px, 12vw, 150px); font-weight: 900; line-height: 0.85; margin: 0; letter-spacing: -5px; }
+        h2 { font-family: 'Outfit'; font-size: 65px; font-weight: 400; margin-bottom: 25px; }
+        .desc { color: var(--text-dim); font-size: 20px; line-height: 1.8; max-width: 750px; margin: 30px auto; font-weight: 200; }
 
-        /* ===== 無邊際圖片滾動 ===== */
-        .marquee { width: 100vw; overflow: hidden; margin: 60px 0; background: rgba(255,255,255,0.02); padding: 50px 0; border-y: 1px solid var(--border); }
-        .marquee-inner { display: flex; width: max-content; gap: 40px; animation: slide 30s linear infinite; }
-        .marquee-inner img { width: 550px; border-radius: 30px; border: 1px solid var(--border); transition: 0.5s; }
-        .marquee-inner img:hover { transform: scale(1.05); border-color: var(--gold); }
-        @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        /* ===== INFINITE MARQUEE SHOWCASE ===== */
+        .marquee-container { width: 100vw; overflow: hidden; padding: 80px 0; background: rgba(255,255,255,0.02); margin: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .marquee-inner { display: flex; width: max-content; gap: 50px; animation: marqueeScroll 40s linear infinite; }
+        .marquee-inner img { width: 600px; border-radius: 40px; border: 1px solid var(--border); transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); }
+        .marquee-inner img:hover { transform: scale(1.05); border-color: var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        /* ===== 功能特色：高端卡片 ===== */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; margin-top: 50px; }
-        .card { 
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 40px; 
-            padding: 60px 40px; transition: 0.5s; text-align: left;
-        }
-        .card:hover { border-color: var(--gold); background: rgba(255, 204, 0, 0.02); transform: translateY(-10px); }
-        .card h3 { font-size: 40px; margin: 0 0 15px; font-family: 'Outfit'; color: var(--gold); }
-        .card p { font-size: 16px; margin: 0; text-align: left; }
+        /* ===== INDEPENDENT TECH SECTIONS ===== */
+        .tech-split { width: 100%; max-width: 1200px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; text-align: left; }
+        .huge-number { font-size: 200px; font-family: 'Outfit'; font-weight: 900; line-height: 1; color: transparent; -webkit-text-stroke: 1px var(--gold); opacity: 0.4; }
+        .stat-box { display: flex; flex-direction: column; align-items: center; }
+        .stat-label { font-size: 45px; font-weight: 900; margin-top: -50px; text-shadow: 0 0 20px rgba(0,0,0,1); }
 
-        /* ===== Q&A 重新設計：獨立高端介面 ===== */
-        .qa-container { width: 100%; max-width: 850px; margin-top: 50px; }
-        .qa-item { 
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border); 
-            border-radius: 24px; margin-bottom: 15px; transition: 0.4s; cursor: pointer;
-        }
-        .qa-item:hover { border-color: rgba(255,204,0,0.5); }
-        .qa-trigger { padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 600; }
-        .qa-answer { max-height: 0; overflow: hidden; padding: 0 40px; color: var(--text-dim); line-height: 1.8; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
-        .qa-item.active .qa-answer { max-height: 300px; padding-bottom: 40px; opacity: 1; }
-        .qa-item.active { background: rgba(255,255,255,0.05); border-color: var(--gold); }
-        .plus { font-size: 24px; color: var(--gold); transition: 0.3s; }
-        .qa-item.active .plus { transform: rotate(45deg); }
+        /* ===== Q&A INTERFACE ===== */
+        .qa-wrapper { width: 100%; max-width: 900px; margin-top: 60px; }
+        .qa-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 30px; margin-bottom: 20px; transition: 0.4s; overflow: hidden; cursor: pointer; }
+        .qa-card:hover { border-color: var(--gold); background: rgba(255,255,255,0.05); }
+        .qa-question { padding: 35px 45px; font-size: 22px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .qa-answer { max-height: 0; padding: 0 45px; color: var(--text-dim); line-height: 1.8; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
+        .qa-card.active .qa-answer { max-height: 300px; padding-bottom: 40px; opacity: 1; }
+        .icon-plus { font-size: 28px; color: var(--gold); transition: 0.4s; }
+        .qa-card.active .icon-plus { transform: rotate(45deg); }
 
-        .btn-main { 
-            background: #fff; color: #000; padding: 22px 65px; border-radius: 100px; 
-            text-decoration: none; font-weight: 800; font-size: 18px; display: inline-block; 
-            margin-top: 50px; transition: 0.4s; box-shadow: 0 10px 40px rgba(255,255,255,0.1);
-        }
-        .btn-main:hover { transform: scale(1.05); background: var(--gold); box-shadow: 0 15px 50px var(--gold-glow); }
+        /* CTA BUTTON */
+        .btn-premium { background: #fff; color: #000; padding: 22px 65px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 18px; transition: 0.4s; margin-top: 40px; display: inline-block; }
+        .btn-premium:hover { transform: translateY(-5px) scale(1.05); background: var(--gold); box-shadow: 0 15px 40px var(--gold-glow); }
 
-        footer { padding: 120px 0; border-top: 1px solid var(--border); opacity: 0.2; font-size: 12px; letter-spacing: 5px; }
+        footer { padding: 120px; border-top: 1px solid var(--border); opacity: 0.3; font-size: 12px; letter-spacing: 8px; }
 
-        @media (max-width: 900px) {
-            .grid { grid-template-columns: 1fr; }
+        @media (max-width: 1100px) {
+            .tech-split { grid-template-columns: 1fr; text-align: center; gap: 50px; }
             .nav-center { display: none; }
+            .marquee-inner img { width: 400px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-gradient"></div>
-    <div class="ambient-light"></div>
-    <canvas id="particleCanvas"></canvas>
+    <div class="ambient-glow"></div>
+    <canvas id="starCanvas"></canvas>
 
     <div class="nav-wrapper">
         <nav>
-            <a href="#" class="logo">
+            <a href="#" class="nav-left">
                 <img src="Spectra V3.png" alt="Logo">
                 <span class="logo-text">SPECTRA</span>
             </a>
             <div class="nav-center">
                 <a href="#hero">Home</a>
-                <a href="#showcase">Gallery</a>
-                <a href="#tech">Features</a>
+                <a href="#unc">UNC Core</a>
+                <a href="#security">Security</a>
                 <a href="#qa">Support</a>
             </div>
-            <div class="nav-right">V3.0 • OPERATIONAL</div>
+            <div class="nav-right">V3.0 OPERATIONAL</div>
         </nav>
     </div>
 
     <section id="hero" class="reveal active">
-        <span class="tag">Next Generation Standard</span>
-        <h1 style="background: linear-gradient(180deg, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">EVOLVED.<br><span style="color: var(--gold); -webkit-text-fill-color: var(--gold);">UNRIVALED.</span></h1>
-        <p>Spectra V3 is a masterpiece of execution engineering. Combining aesthetic purity with raw technical power, we provide the most stable keyless environment for the 2026 gaming landscape.</p>
-        <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-main">INITIALIZE DOWNLOAD</a>
+        <span class="tag">Flagship Standard</span>
+        <h1>PURE<br><span style="color: var(--gold);">POWER.</span></h1>
+        <p class="desc">Spectra V3 is the pinnacle of execution technology. Built for the elite, refined for the 2026 landscape. Experience a minimalist interface powered by a maximalist engine.</p>
+        <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-premium">INITIALIZE ACCESS</a>
     </section>
 
-    <div class="marquee" id="showcase">
+    <div class="marquee-container" id="showcase">
         <div class="marquee-inner">
-            <img src="UI.png" alt="UI 1">
-            <img src="UI2.png" alt="UI 2">
-            <img src="UI3.png" alt="UI 3">
-            <img src="UI.png" alt="UI 1">
-            <img src="UI2.png" alt="UI 2">
-            <img src="UI3.png" alt="UI 3">
+            <img src="UI.png" alt="Interface View 1">
+            <img src="UI2.png" alt="Interface View 2">
+            <img src="UI3.png" alt="Interface View 3">
+            <img src="UI.png" alt="Interface View 1">
+            <img src="UI2.png" alt="Interface View 2">
+            <img src="UI3.png" alt="Interface View 3">
         </div>
     </div>
 
-    <section id="tech" class="reveal">
-        <span class="tag">Core Capabilities</span>
-        <h2>Built for Precision.</h2>
-        <p>Explore the industry-leading features that make Spectra V3 the benchmark of high-performance execution.</p>
-        <div class="grid">
-            <div class="card">
-                <h3>99%</h3>
-                <span>UNC Compatibility</span>
-                <p>Support for the most complex script libraries including Drawing, Websockets, and custom API hooks.</p>
+    <section id="unc" class="reveal">
+        <div class="tech-split">
+            <div class="stat-box">
+                <div class="huge-number">99%</div>
+                <div class="stat-label">UNC SCORE</div>
             </div>
-            <div class="card">
-                <h3>0%</h3>
-                <span>Detection Rate</span>
-                <p>Utilizing proprietary kernel-level bypasses to ensure your presence remains invisible to modern anti-cheats.</p>
-            </div>
-            <div class="card" style="border-color: #fff;">
-                <h3>∞</h3>
-                <span>Keyless Power</span>
-                <p>A friction-less experience. No keys, no ads, no interruptions. Just pure, immediate execution.</p>
+            <div>
+                <span class="tag">01 Compatibility</span>
+                <h2>Universal Access.</h2>
+                <p class="desc" style="margin: 0;">Our custom environment supports nearly every high-end library. From Drawing libraries to secure websockets, if you can write it, Spectra can run it with zero friction.</p>
             </div>
         </div>
     </section>
 
-    <section class="reveal">
-        <span class="tag">Security Infrastructure</span>
-        <h2>Stealth by Design.</h2>
-        <p>Our infrastructure is updated 24/7. When game updates drop, Spectra evolves within minutes to keep your accounts protected and your scripts running.</p>
-        <div style="display: flex; gap: 60px; margin-top: 40px; border: 1px solid var(--border); padding: 40px 80px; border-radius: 100px; background: rgba(255,255,255,0.01);">
-            <div><div style="font-size: 32px; font-weight: 800;">sUNC</div><div style="color: var(--gold); font-size: 14px; font-weight: 700;">98% SUPPORT</div></div>
-            <div style="width: 1px; background: var(--border);"></div>
-            <div><div style="font-size: 32px; font-weight: 800;">ENCRYPTION</div><div style="color: var(--gold); font-size: 14px; font-weight: 700;">MIL-SPEC</div></div>
+    <section id="sunc" class="reveal">
+        <div class="tech-split" style="direction: rtl;">
+            <div class="stat-box" style="direction: ltr;">
+                <div class="huge-number" style="-webkit-text-stroke: 1px #fff; opacity: 0.2;">98%</div>
+                <div class="stat-label">sUNC SUPPORT</div>
+            </div>
+            <div style="direction: ltr;">
+                <span class="tag">02 Performance</span>
+                <h2>Optimized Core.</h2>
+                <p class="desc" style="margin: 0;">Execution is only half the battle. Spectra's sUNC implementation ensures your scripts consume 40% less CPU resources, allowing for unmatched stability during heavy multitasking.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="security" class="reveal">
+        <div class="tech-split">
+            <div class="stat-box">
+                <div class="huge-number" style="-webkit-text-stroke: 1px var(--gold); opacity: 0.7;">0%</div>
+                <div class="stat-label" style="color: var(--gold);">DETECTION</div>
+            </div>
+            <div>
+                <span class="tag">03 Security</span>
+                <h2>Invisible Stealth.</h2>
+                <p class="desc" style="margin: 0;">Security is our obsession. Utilizing proprietary kernel-level bypasses, Spectra V3 maintains a flawless 0% detection record, keeping your presence invisible to modern anti-cheats.</p>
+            </div>
         </div>
     </section>
 
     <section id="qa" class="reveal">
-        <span class="tag">Intelligence Hub</span>
-        <h2>Questions & Answers</h2>
-        <div class="qa-container">
-            <div class="qa-item">
-                <div class="qa-trigger">Is Spectra V3 safe for my account? <div class="plus">+</div></div>
-                <div class="qa-answer">Absolutely. Spectra V3 employs a sophisticated bypass that avoids detection at the kernel level. We have maintained a flawless safety record through 2026.</div>
+        <span class="tag">Knowledge Base</span>
+        <h2>Intelligence Hub</h2>
+        <div class="qa-wrapper">
+            <div class="qa-card">
+                <div class="qa-question">Why choose Spectra V3? <div class="icon-plus">+</div></div>
+                <div class="qa-answer">Spectra V3 provides a premium, completely keyless experience. With 99% UNC compatibility and 24/7 security monitoring, it remains the industry benchmark for execution.</div>
             </div>
-            <div class="qa-item">
-                <div class="qa-trigger">Why does it show as a virus? <div class="plus">+</div></div>
-                <div class="qa-answer">Spectra uses DLL injection to interface with game memory. Modern antivirus software flags this behavior as a "False Positive". We recommend adding Spectra to your exclusion list.</div>
+            <div class="qa-card">
+                <div class="qa-question">Is the software safe to use? <div class="icon-plus">+</div></div>
+                <div class="qa-answer">Yes. Spectra uses DLL injection to interface with game memory. While antiviruses may flag this as a "False Positive," the software is clean and designed with user privacy in mind.</div>
             </div>
-            <div class="qa-item">
-                <div class="qa-trigger">How is it keyless? <div class="plus">+</div></div>
-                <div class="qa-answer">We value user time over ad revenue. Spectra V3 is funded through premium donations and community support, allowing us to keep the main experience keyless for everyone.</div>
+            <div class="qa-card">
+                <div class="qa-question">How are updates handled? <div class="icon-plus">+</div></div>
+                <div class="qa-answer">Spectra features a native auto-updater. Every launch triggers a check against our secure servers to ensure you are running the most stable and protected version available.</div>
             </div>
-            <div class="qa-item">
-                <div class="qa-trigger">What should I do if it fails to attach? <div class="plus">+</div></div>
-                <div class="qa-answer">Ensure your antivirus is disabled, you have the latest VC++ Redistributables installed, and you are running the game in windowed mode for best compatibility.</div>
+            <div class="qa-card">
+                <div class="qa-question">Facing attachment issues? <div class="icon-plus">+</div></div>
+                <div class="qa-answer">Ensure you have the latest VC++ Redistributables installed and your antivirus is disabled. For persistent issues, our dedicated Discord support is available 24/7.</div>
             </div>
         </div>
     </section>
 
-    <footer>© 2026 SPECTRA TECHNOLOGIES • REDEFINING THE POSSIBLE</footer>
+    <footer>© 2026 SPECTRA TECHNOLOGIES • BEYOND THE FUTURE</footer>
 
     <script>
-        // --- 高端動態光點 ---
-        const canvas = document.getElementById('particleCanvas');
+        // --- STARFIELD PARTICLE SYSTEM ---
+        const canvas = document.getElementById('starCanvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        function initParticles() {
+        let stars = [];
+        function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            particles = Array(80).fill().map(() => ({
+            stars = Array(150).fill().map(() => ({
                 x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                s: Math.random() * 1.5,
-                sx: (Math.random() - 0.5) * 0.2, sy: (Math.random() - 0.5) * 0.2,
-                o: Math.random()
+                s: Math.random() * 1.5, o: Math.random(),
+                sx: (Math.random()-0.5)*0.3, sy: (Math.random()-0.5)*0.3
             }));
         }
-        function drawParticles() {
+        function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.x += p.sx; p.y += p.sy;
-                if(p.x < 0 || p.x > canvas.width) p.sx *= -1;
-                if(p.y < 0 || p.y > canvas.height) p.sy *= -1;
-                ctx.fillStyle = `rgba(255, 204, 0, ${p.o})`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+            stars.forEach(s => {
+                s.x += s.sx; s.y += s.sy;
+                if(s.x<0 || s.x>canvas.width) s.sx *= -1;
+                if(s.y<0 || s.y>canvas.height) s.sy *= -1;
+                ctx.fillStyle = `rgba(255, 204, 0, ${s.o})`;
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill();
             });
-            requestAnimationFrame(drawParticles);
+            requestAnimationFrame(draw);
         }
-        window.addEventListener('resize', initParticles);
-        initParticles(); drawParticles();
+        window.addEventListener('resize', init);
+        init(); draw();
 
-        // --- Q&A 互動邏輯 ---
-        document.querySelectorAll('.qa-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                document.querySelectorAll('.qa-item').forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
+        // --- Q&A INTERACTION ---
+        document.querySelectorAll('.qa-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const isActive = card.classList.contains('active');
+                document.querySelectorAll('.qa-card').forEach(c => c.classList.remove('active'));
+                if (!isActive) card.classList.add('active');
             });
         });
 
-        // --- 捲動揭幕動畫 ---
+        // --- SCROLL REVEAL ANIMATION ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });

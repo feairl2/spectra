@@ -2,332 +2,257 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spectra | The Poweful Roblox Executor</title>
-    <meta name="description" content="Enjoy keyless 98% sUNC Poweful Executor">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Spectra Executor">
-    <meta property="og:description" content="Roblox executors specializing in high UNC/sUNC">
-    <meta property="og:type" content="website">
-    
-    <link rel="canonical" href="https://fearilteam.vercel.app/">
-    <link rel="icon" href="Spectra V3.png" type="image/png">
-    <link rel="apple-touch-icon" href="Spectra V3.png">
-    
+    <title>Spectra V3 | Premium Roblox Execution Environment</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f0f11; 
-            --bg-sub: #16161a;
-            --fg: #f5f5f7;
-            --muted: #a1a1a6;
-            --border: rgba(255, 255, 255, 0.08);
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
             --accent: #ffffff;
-            --discord: #5865F2;
-            --green: #22c55e;
-            --red: #ef4444;
+            --accent-dim: rgba(255, 255, 255, 0.6);
+            --border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(255, 255, 255, 0.05);
         }
 
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         
         body {
             margin: 0;
             background: var(--bg);
-            color: var(--fg);
-            font-family: 'Inter', -apple-system, sans-serif;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* ===== NAVIGATION ===== */
+        /* --- 高級動態背景 --- */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        /* --- 導航列 --- */
         nav {
             position: fixed;
-            top: 0; width: 100%;
-            z-index: 1000;
-            background: rgba(15, 15, 17, 0.75);
-            backdrop-filter: blur(20px);
+            top: 0; width: 100%; z-index: 1000;
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border);
+            padding: 20px 0;
         }
 
         .nav-inner {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
-            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 40px;
         }
 
-        .nav-left { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            text-decoration: none; 
-        }
+        .logo { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 24px; letter-spacing: -1px; }
 
-        .nav-left img { width: 28px; height: 28px; object-fit: contain; }
-        .logo-text { font-weight: 800; font-size: 22px; letter-spacing: -0.8px; color: var(--fg); }
-
-        /* 修改後的靜態綠色發光燈 */
-        .status-dot-nav {
-            width: 12px;
-            height: 11.5px;
-            border-radius: 50%;
-            margin-left: 6px;
-            background-color: var(--green);
-            box-shadow: 0 0 10px var(--green), 0 0 5px rgba(34, 197, 94, 0.5);
-            flex-shrink: 0;
-            display: none; /* 初始隱藏，由 JS 控制顯示 */
-        }
-
-        /* 只有在狀態為 true 時才顯示（或您可以設定為永遠顯示） */
-        .dot-active {
-            display: inline-block;
-        }
-
-        .nav-links { display: flex; gap: 32px; align-items: center; }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--muted);
-            font-size: 14px;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-        .nav-links a:hover { color: var(--fg); }
-
-        .btn-download-nav {
-            background: var(--fg);
-            color: var(--bg) !important;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: 700;
-        }
-
-        /* ===== HERO ===== */
+        /* --- Hero 區塊 --- */
         .hero {
-            padding: 220px 24px 80px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            background: radial-gradient(circle at 50% -20%, #22222a 0%, #0f0f11 60%);
+            padding: 0 20px;
         }
 
         .hero h1 {
-            font-size: clamp(54px, 12vw, 110px);
+            font-family: 'Plus Jakarta Sans';
+            font-size: clamp(60px, 10vw, 120px);
             font-weight: 800;
-            letter-spacing: -0.06em;
             margin: 0;
-            line-height: 0.85;
-            background: linear-gradient(180deg, #fff 40%, #888 100%);
+            line-height: 0.9;
+            background: linear-gradient(to bottom, #fff 50%, #666);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            color: var(--muted);
-            font-size: clamp(18px, 3.5vw, 24px);
-            margin: 32px auto 48px;
-            max-width: 720px;
+        .hero p { color: var(--accent-dim); font-size: 20px; max-width: 600px; margin: 30px 0; }
+
+        /* --- 重點設計：分區特色區塊 --- */
+        .feature-section {
+            max-width: 1300px;
+            margin: 100px auto;
+            padding: 0 40px;
         }
 
-        .hero-btns { display: flex; gap: 16px; justify-content: center; align-items: center; }
-        .btn-hero {
-            display: inline-block; background: var(--fg); color: var(--bg);
-            padding: 20px 48px; border-radius: 8px; text-decoration: none;
-            font-weight: 700; font-size: 17px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn-hero:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.1); }
-        .btn-discord { background: rgba(255,255,255,0.05); color: var(--fg); border: 1px solid var(--border); }
-        .btn-discord:hover { background: var(--discord); color: white; border-color: var(--discord); }
-
-        /* ===== INFINITE MARQUEE ===== */
-        .marquee-container {
-            width: 100%;
-            overflow: hidden;
-            padding: 40px 0 120px;
-            position: relative;
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
         }
 
-        .marquee-content {
-            display: flex;
-            width: max-content;
-            animation: scroll 40s linear infinite;
+        .section-title h2 {
+            font-family: 'Plus Jakarta Sans';
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 10px;
         }
 
-        .marquee-content:hover {
-            animation-play-state: paused;
-        }
-
-        .marquee-item {
-            flex-shrink: 0;
-            width: 550px;
-            margin: 0 20px;
-            border-radius: 12px;
+        .section-title .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             border: 1px solid var(--border);
+        }
+
+        /* 網格佈局 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-box {
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             overflow: hidden;
-            background: var(--bg-sub);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
 
-        .marquee-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            opacity: 0.95;
+        .feature-box:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.3);
         }
 
-        @keyframes scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
+        .feature-box::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.1), transparent);
+            opacity: 0; transition: 0.5s;
         }
 
-        /* ===== STATS ===== */
-        .stats-section { max-width: 1200px; margin: 0 auto 120px; padding: 0 24px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 20px; padding: 60px 40px; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .stat-card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.05); }
-        .stat-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block; }
-        .stat-value { font-size: 72px; font-weight: 800; margin-bottom: 16px; display: block; letter-spacing: -3px; }
-        .stat-desc { color: var(--muted); font-size: 16px; line-height: 1.6; }
+        .feature-box:hover::before { opacity: 1; }
 
-        /* ===== Q&A ===== */
-        .qa-section { max-width: 850px; margin: 150px auto; padding: 0 24px; }
-        .qa-header { text-align: center; margin-bottom: 60px; }
-        .qa-header h2 { font-size: 48px; font-weight: 800; letter-spacing: -2px; }
-        .qa-item { border-bottom: 1px solid var(--border); margin-bottom: 8px; }
-        .qa-q { padding: 32px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 18px; transition: 0.3s; }
-        .qa-a { max-height: 0; overflow: hidden; color: var(--muted); line-height: 1.8; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        .qa-item.active .qa-a { max-height: 500px; padding-bottom: 32px; }
-        .icon { width: 20px; height: 20px; position: relative; transition: 0.4s; color: var(--muted); }
-        .icon::before, .icon::after { content: ""; position: absolute; background: currentColor; top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
-        .icon::after { transform: translateY(-50%) rotate(90deg); }
-        .qa-item.active .icon { transform: rotate(45deg); color: var(--fg); }
-        .qa-item.active .qa-q { color: var(--fg); }
+        .f-icon { font-size: 40px; margin-bottom: 30px; display: block; }
+        .f-number { font-size: 64px; font-weight: 800; display: block; margin-bottom: 10px; font-family: 'Plus Jakarta Sans'; }
+        .f-title { font-size: 22px; font-weight: 600; margin-bottom: 15px; display: block; color: #fff; }
+        .f-desc { color: var(--accent-dim); font-size: 16px; font-weight: 300; }
 
-        footer { padding: 100px 24px; text-align: center; border-top: 1px solid var(--border); opacity: 0.6; }
+        /* 特殊邊框動畫 */
+        .btn-premium {
+            background: #fff;
+            color: #000;
+            padding: 18px 45px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            display: inline-block;
+        }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.show { opacity: 1; transform: translateY(0); }
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        }
+
+        /* 響應式 */
+        @media (max-width: 992px) {
+            .features-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 70px; }
+        }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="nav-inner">
-        <a href="#" class="nav-left">
-            <img src="Spectra V3.png" alt="Spectra Logo">
-            <span class="logo-text">Spectra</span>
-            <div id="statusDot" class="status-dot-nav"></div>
-        </a>
-        <div class="nav-links">
-            <a href="#features">Specifications</a>
-            <a href="#qa">Q&A</a>
-            <a href="https://discord.gg/6fErG5CGDg" target="_blank">Discord</a> 
-            <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-download-nav">Download</a>
+    <div class="bg-glow">
+        <div class="blob" style="top: 10%; left: 10%;"></div>
+        <div class="blob" style="bottom: 10%; right: 10%; animation-delay: -5s;"></div>
+    </div>
+
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">SPECTRA.</div>
+            <div style="display: flex; gap: 30px; font-size: 14px; font-weight: 600;">
+                <a href="#" style="color: #fff; text-decoration: none;">SYSTEM</a>
+                <a href="#" style="color: var(--accent-dim); text-decoration: none;">DOCS</a>
+                <a href="#" style="color: var(--accent-dim); text-decoration: none;">COMMUNITY</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<section class="hero reveal">
-    <h1>Spectra V3</h1>
-    <p>Powerful Keyless High-performance And Secure Executor.</p>
-    <div class="hero-btns"> 
-        <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-hero">Get Spectra Now</a>
-        <a href="https://discord.gg/6fErG5CGDg" target="_blank" class="btn-hero btn-discord">Join Discord</a> 
-    </div>
-</section>
-
-<div class="marquee-container reveal">
-    <div class="marquee-content">
-        <div class="marquee-item"><img src="UI.png" alt="Spectra UI 1"></div>
-        <div class="marquee-item"><img src="UI2.png" alt="Spectra UI 2"></div>
-        <div class="marquee-item"><img src="UI3.png" alt="Spectra UI 3"></div>
-        <div class="marquee-item"><img src="UI.png" alt="Spectra UI 1"></div>
-        <div class="marquee-item"><img src="UI2.png" alt="Spectra UI 2"></div>
-        <div class="marquee-item"><img src="UI3.png" alt="Spectra UI 3"></div>
-    </div>
-</div>
-
-<section id="features" class="stats-section reveal">
-    <div class="stats-grid">
-        <div class="stat-card">
-            <span class="stat-label">Safety Status</span>
-            <span class="stat-value">0%</span>
-            <p class="stat-desc">Zero detection record in 2026. Spectra uses high-tier stealth injection to stay undetected during operations.</p>
+    <section class="hero">
+        <div class="badge" style="margin-bottom: 20px; letter-spacing: 4px; opacity: 0.6;">VERSION 3.0 AVAILABLE</div>
+        <h1>Redefining <br> Execution.</h1>
+        <p>Experience the next generation of Roblox utility. Unmatched stability meets elite-tier performance.</p>
+        <div style="margin-top: 20px;">
+            <a href="#" class="btn-premium">Download Now</a>
         </div>
-        <div class="stat-card">
-            <span class="stat-label">UNC SUPPORT</span>
-            <span class="stat-value">99%</span>
-            <p class="stat-desc">Extensive script compatibility. This executor handles almost all standard library functions seamlessly.</p>
+    </section>
+
+    <section class="feature-section">
+        <div class="section-title">
+            <span class="badge">Performance Metrics</span>
+            <h2>Engineered for Excellence</h2>
         </div>
-        <div class="stat-card">
-            <span class="stat-label">sUNC Support</span>
-            <span class="stat-value">98%</span>
-            <p class="stat-desc">Optimized for sophisticated script logic. Run the most advanced community tools without compatibility issues.</p>
+
+        <div class="features-grid">
+            <div class="feature-box">
+                <span class="f-icon">🛡️</span>
+                <span class="f-title">Security Core</span>
+                <span class="f-number">0%</span>
+                <p class="f-desc">Our proprietary stealth injection layer ensures a zero-detection rate throughout 2026. Total peace of mind.</p>
+            </div>
+
+            <div class="feature-box">
+                <span class="f-icon">🧩</span>
+                <span class="f-title">UNC Support</span>
+                <span class="f-number">99%</span>
+                <p class="f-desc">Industry-leading Universal Naming Convention support. If it exists, Spectra can execute it without hesitation.</p>
+            </div>
+
+            <div class="feature-box">
+                <span class="f-icon">⚡</span>
+                <span class="f-title">Execution Speed</span>
+                <span class="f-number">98%</span>
+                <p class="f-desc">Sophisticated sUNC optimization. High-frequency script calls are handled with millisecond precision.</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section id="qa" class="qa-section reveal">
-    <div class="qa-header"><h2>Questions & Answers</h2></div>
-    <div class="qa-item">
-        <div class="qa-q">Why is this executor flagged by antivirus? <div class="icon"></div></div>
-        <div class="qa-a">Script executors interact with active memory to run code, which is often flagged as a false positive. Whitelisting the Spectra folder is completely safe.</div>
-    </div>
-    <div class="qa-item">
-        <div class="qa-q">How does sUNC benefit advanced users? <div class="icon"></div></div>
-        <div class="qa-a">Sophisticated UNC ensures complex scripts relying on deep environment calls run without errors.</div>
-    </div>
-    <div class="qa-item">
-        <div class="qa-q">Is my account protected while using Spectra? <div class="icon"></div></div>
-        <div class="qa-a">Yes. Our 2026 stealth injection core is designed specifically to bypass modern detection systems.</div>
-    </div>
-    <div class="qa-item">
-        <div class="qa-q">Spectra cannot be injected? <div class="icon"></div></div>
-        <div class="qa-a">Please check your antivirus protection logs and unquarantine the injector.</div>
-    </div>
-    <div class="qa-item">
-        <div class="qa-q">Does Spectra update automatically? <div class="icon"></div></div>
-        <div class="qa-a">No, please check our official Discord for the latest download version.</div>
-    </div>
-</section>
+    <footer style="padding: 100px 0; text-align: center; border-top: 1px solid var(--border); margin-top: 100px;">
+        <p style="opacity: 0.4; font-size: 12px; letter-spacing: 2px;">© 2026 SPECTRA TECHNOLOGIES. ALL RIGHTS RESERVED.</p>
+    </footer>
 
-<footer><p>&copy; 2026 Spectra Project. Professional Executor Technology.</p></footer>
-
-<script>
-    // 讀取狀態並顯示綠燈
-    async function updateStatus() {
-        const dot = document.getElementById('statusDot');
-        try {
-            const resp = await fetch('state.txt?t=' + Date.now());
-            const status = (await resp.text()).trim().toLowerCase();
-            // 只要狀態為 true，就顯示發光的綠色圓點
-            if (status === 'true') {
-                dot.classList.add('dot-active');
-            } else {
-                dot.classList.remove('dot-active');
-            }
-        } catch (e) {
-            // 出錯時預設不顯示或您可以自訂
-            dot.classList.remove('dot-active');
-        }
-    }
-    updateStatus();
-    setInterval(updateStatus, 30000);
-
-    // Q&A 邏輯
-    document.querySelectorAll('.qa-q').forEach(q => {
-        q.onclick = () => {
-            const item = q.parentElement;
-            const isActive = item.classList.contains('active');
-            document.querySelectorAll('.qa-item').forEach(el => el.classList.remove('active'));
-            if (!isActive) item.classList.add('active');
-        };
-    });
-
-    // 揭幕動畫
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
-
+    <script>
+        // 簡單的滑鼠跟隨效果
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.querySelector('.bg-glow').style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+        });
+    </script>
 </body>
 </html>

@@ -2,14 +2,13 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Spectra V3 | Premier Execution</title>
+    <title>Spectra V3 | Stellar Performance</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #050505;
             --gold: #ffcc00;
-            --gold-glow: rgba(255, 204, 0, 0.3);
             --border: rgba(255, 255, 255, 0.08);
             --text-muted: #949494;
         }
@@ -17,127 +16,119 @@
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* ===== 背景光點畫布 ===== */
-        #particleCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-        }
+        /* 背景光點 */
+        #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 
-        /* ===== 懸浮膠囊導航欄 (Logo左, 選單中) ===== */
-        .nav-wrapper {
-            position: fixed;
-            top: 30px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            z-index: 1000;
-        }
-
+        /* 導航欄 */
+        .nav-wrapper { position: fixed; top: 30px; width: 100%; display: flex; justify-content: center; z-index: 1000; }
         nav {
-            width: 90%;
-            max-width: 1000px;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            padding: 10px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            width: 90%; max-width: 1000px; background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 100px;
+            padding: 10px 30px; display: flex; align-items: center; justify-content: space-between;
         }
-
         .nav-left { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff; flex: 1; }
         .nav-left img { width: 28px; height: 28px; filter: drop-shadow(0 0 5px var(--gold)); }
-        .logo-text { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
-
         .nav-center { display: flex; gap: 30px; flex: 2; justify-content: center; }
-        .nav-center a { 
-            text-decoration: none; color: var(--text-muted); font-size: 13px; font-weight: 600; 
-            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .nav-center a { text-decoration: none; color: var(--text-muted); font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
         .nav-center a:hover { color: var(--gold); }
+        .nav-right { flex: 1; text-align: right; color: var(--gold); font-weight: 800; font-size: 11px; }
 
-        .nav-right { flex: 1; display: flex; justify-content: flex-end; font-size: 11px; font-weight: 800; color: var(--gold); opacity: 0.8; }
-
-        /* ===== 居中佈局設計 ===== */
-        section { 
-            max-width: 900px; /* 縮小寬度使其在中央更緊湊 */
-            margin: 0 auto; 
-            padding: 150px 20px; 
-            min-height: 90vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center;
-            text-align: center; /* 文字全部居中 */
-            align-items: center;
-        }
-
-        .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        .tag { color: var(--gold); font-weight: 700; letter-spacing: 5px; font-size: 11px; margin-bottom: 25px; display: block; opacity: 0.8; }
+        /* 通用佈局 */
+        section { max-width: 1000px; margin: 0 auto; padding: 120px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .tag { color: var(--gold); font-weight: 700; letter-spacing: 5px; font-size: 11px; margin-bottom: 20px; display: block; }
         h1 { font-family: 'Plus Jakarta Sans'; font-size: clamp(45px, 8vw, 90px); font-weight: 800; line-height: 1; margin: 0; }
-        h2 { font-family: 'Plus Jakarta Sans'; font-size: 42px; margin-bottom: 20px; }
         p { color: var(--text-muted); font-size: 17px; line-height: 1.8; max-width: 600px; margin: 20px auto; }
 
-        /* 技術數據 (居中對齊) */
-        .tech-grid { 
-            display: flex; 
-            justify-content: center; 
-            gap: 80px; 
-            margin-top: 50px; 
+        /* ===== 無限動態圖片滾動區塊 ===== */
+        .marquee-container {
+            width: 100vw;
+            overflow: hidden;
+            background: rgba(255,255,255,0.02);
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 50px 0;
+            position: relative;
+        }
+        .marquee-content {
+            display: flex;
+            width: calc(450px * 6 + 40px * 6); /* 圖片寬度 * 數量 */
+            animation: scroll 20s linear infinite;
+            gap: 40px;
+        }
+        .marquee-content img {
+            width: 450px; /* 圖片加大 */
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: 0.4s;
+        }
+        .marquee-content img:hover { transform: scale(1.05); border-color: var(--gold); }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-450px * 3 - 40px * 3)); }
+        }
+
+        /* ===== 專門設計的 Q&A 介面 ===== */
+        .qa-section {
+            background: linear-gradient(to bottom, transparent, rgba(255,204,0,0.03), transparent);
             width: 100%;
+            padding: 100px 0;
         }
-        .tech-card h3 { font-size: 60px; margin: 0; color: var(--gold); font-family: 'Space Grotesk'; }
-        .tech-card span { color: var(--text-muted); font-size: 14px; font-weight: 700; letter-spacing: 1px; }
-
-        /* UI 展示 (居中格線) */
-        .ui-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 20px; 
-            margin-top: 60px; 
+        .qa-grid {
+            max-width: 800px;
             width: 100%;
+            display: grid;
+            gap: 15px;
         }
-        .ui-card { 
-            background: rgba(255,255,255,0.02); 
-            border: 1px solid var(--border); 
-            border-radius: 24px; 
-            padding: 12px; 
-            transition: 0.4s ease;
+        .qa-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            text-align: left;
+            transition: 0.3s;
+            overflow: hidden;
         }
-        .ui-card:hover { transform: translateY(-8px); border-color: var(--gold); background: rgba(255, 204, 0, 0.02); }
-        .ui-card img { width: 100%; border-radius: 16px; margin-bottom: 10px; filter: grayscale(0.2); transition: 0.4s; }
-        .ui-card:hover img { filter: grayscale(0); }
+        .qa-box:hover { border-color: var(--gold); background: rgba(255,255,255,0.05); }
+        .qa-header {
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .qa-body {
+            max-height: 0;
+            padding: 0 25px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        .qa-box.active .qa-body {
+            max-height: 200px;
+            padding-bottom: 25px;
+        }
+        .qa-icon {
+            width: 30px; height: 30px;
+            background: rgba(255,204,0,0.1);
+            color: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .qa-box.active .qa-icon { transform: rotate(45deg); background: var(--gold); color: #000; }
 
-        /* Q&A 區塊 (居中手風琴) */
-        .qa-list { width: 100%; max-width: 700px; margin-top: 40px; text-align: left; }
-        .qa-item { border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-        .qa-btn { 
-            width: 100%; background: none; border: none; padding: 25px 0; 
-            color: #fff; font-size: 18px; font-weight: 700; cursor: pointer; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .qa-ans { max-height: 0; overflow: hidden; color: var(--text-muted); line-height: 1.8; transition: 0.3s ease-out; }
-        .qa-item.active .qa-ans { max-height: 150px; padding-bottom: 25px; }
+        .btn-main { background: #fff; color: #000; padding: 18px 45px; border-radius: 100px; text-decoration: none; font-weight: 800; margin-top: 30px; display: inline-block; transition: 0.3s; }
+        .btn-main:hover { transform: scale(1.05); }
 
-        .btn-cta { 
-            background: #fff; color: #000; padding: 18px 50px; border-radius: 100px; 
-            text-decoration: none; font-weight: 800; font-size: 16px; 
-            margin-top: 40px; transition: 0.3s; 
-        }
-        .btn-cta:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,255,255,0.2); }
+        footer { padding: 80px; opacity: 0.3; font-size: 11px; letter-spacing: 2px; }
 
-        footer { padding: 80px 0; opacity: 0.3; font-size: 11px; letter-spacing: 2px; }
-
-        @media (max-width: 768px) {
-            .tech-grid { flex-direction: column; gap: 40px; }
-            .ui-grid { grid-template-columns: 1fr; }
-            .nav-center { display: none; }
-        }
     </style>
 </head>
 <body>
@@ -152,69 +143,63 @@
             </a>
             <div class="nav-center">
                 <a href="#home">Home</a>
+                <a href="#showcase">Gallery</a>
                 <a href="#tech">Compatibility</a>
-                <a href="#security">Security</a>
                 <a href="#qa">Support</a>
             </div>
-            <div class="nav-right">STABLE V3.0</div>
+            <div class="nav-right">SYSTEM ONLINE</div>
         </nav>
     </div>
 
-    <section id="home" class="reveal">
-        <span class="tag">ESTABLISHED 2026</span>
-        <h1>PURE PERFORMANCE.<br><span style="color: var(--gold);">ELITE EXECUTION.</span></h1>
-        <p>The most reliable keyless environment for your gaming needs. Minimalist design, maximalist power.</p>
-        <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-cta">DOWNLOAD NOW</a>
+    <section id="home">
+        <span class="tag">EVOLUTION 2026</span>
+        <h1>FAST. CLEAN.<br><span style="color: var(--gold);">KEYLESS.</span></h1>
+        <p>The premier execution standard. Experience a minimalist interface powered by a maximalist engine.</p>
+        <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-main">INITIALIZE DOWNLOAD</a>
     </section>
 
-    <section id="tech" class="reveal">
-        <span class="tag">TECHNICAL SPECS</span>
-        <h2>Unrivaled Compatibility.</h2>
-        <p>Supporting 99% of the Universal Naming Convention. From complex drawing libraries to secure websocket hooks, Spectra handles it with ease.</p>
-        <div class="tech-grid">
-            <div class="tech-card"><h3>99%</h3><span>UNC SCORE</span></div>
-            <div class="tech-card"><h3>98%</h3><span>sUNC COMPATIBILITY</span></div>
+    <div class="marquee-container" id="showcase">
+        <span class="tag" style="text-align: center; display: block;">INTERFACE PREVIEW</span>
+        <div class="marquee-content">
+            <img src="UI.png" alt="UI 1">
+            <img src="UI2.png" alt="UI 2">
+            <img src="UI3.png" alt="UI 3">
+            <img src="UI.png" alt="UI 1">
+            <img src="UI2.png" alt="UI 2">
+            <img src="UI3.png" alt="UI 3">
+        </div>
+    </div>
+
+    <section id="tech">
+        <span class="tag">TECHNICAL METRICS</span>
+        <h2>UNC 99% & sUNC 98%.</h2>
+        <p>Our custom environment is optimized for every high-end script. Stability is not an option; it's a foundation.</p>
+        <div style="display: flex; gap: 50px; margin-top: 30px;">
+            <div style="text-align: center;"><div style="font-size: 50px; color: var(--gold); font-weight: 800;">0%</div><span style="font-size: 12px; font-weight: 700;">DETECTION</span></div>
+            <div style="text-align: center;"><div style="font-size: 50px; color: #fff; font-weight: 800;">24/7</div><span style="font-size: 12px; font-weight: 700;">UPTIME</span></div>
         </div>
     </section>
 
-    <section id="security" class="reveal">
-        <span class="tag">STEALTH SYSTEM</span>
-        <h2>Always Undetected.</h2>
-        <p>Our proprietary kernel-level bypass ensures your presence remains invisible. With a 0% detection history, we prioritize your account safety.</p>
-        <div class="tech-grid">
-            <div class="tech-card"><h3>0%</h3><span>DETECTION RATE</span></div>
-            <div class="tech-card"><h3>24/7</h3><span>MONITORING</span></div>
-        </div>
-    </section>
-
-    <section class="reveal">
-        <span class="tag">VISUAL INTERFACE</span>
-        <h2>Designed for Speed.</h2>
-        <div class="ui-grid">
-            <div class="ui-card"><img src="UI.png"><span>Main Console</span></div>
-            <div class="ui-card"><img src="UI2.png"><span>Library Hub</span></div>
-            <div class="ui-card"><img src="UI3.png"><span>System Config</span></div>
-        </div>
-    </section>
-
-    <section id="qa" class="reveal">
-        <span class="tag">HELP CENTER</span>
-        <h2>Common Inquiries.</h2>
-        <div class="qa-list">
-            <div class="qa-item">
-                <button class="qa-btn">Is Spectra V3 safe to use? <span>↓</span></button>
-                <div class="qa-ans">Absolutely. Our core is built on stealth technology. Any antivirus alerts are due to the DLL injection process, which is standard for all executors.</div>
+    <div class="qa-section" id="qa">
+        <section>
+            <span class="tag">SUPPORT CENTER</span>
+            <h2 style="margin-bottom: 50px;">Frequently Asked.</h2>
+            <div class="qa-grid">
+                <div class="qa-box">
+                    <div class="qa-header">Is Spectra V3 really keyless? <div class="qa-icon">+</div></div>
+                    <div class="qa-body">Yes. We believe in a seamless experience. Spectra V3 requires no keys, allowing you to jump straight into execution.</div>
+                </div>
+                <div class="qa-box">
+                    <div class="qa-header">How do I whitelist Spectra? <div class="qa-icon">+</div></div>
+                    <div class="qa-body">Add the entire Spectra folder to your Antivirus exclusions. Our software is clean, but DLL injection is often flagged as a false positive.</div>
+                </div>
+                <div class="qa-item qa-box">
+                    <div class="qa-header">What are UNC and sUNC scores? <div class="qa-icon">+</div></div>
+                    <div class="qa-body">These scores represent the compatibility of our executor with standard script libraries. A 99% score ensures nearly all community scripts run perfectly.</div>
+                </div>
             </div>
-            <div class="qa-item">
-                <button class="qa-btn">Do I need a key? <span>↓</span></button>
-                <div class="qa-ans">No. Spectra V3 is proud to be a completely keyless executor, saving you time and hassle every session.</div>
-            </div>
-            <div class="qa-item">
-                <button class="qa-btn">How often is it updated? <span>↓</span></button>
-                <div class="qa-ans">Updates are automatically pushed within hours of major game patches to ensure constant availability.</div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <footer>© 2026 SPECTRA PROJECT. ALL SYSTEMS GO.</footer>
 
@@ -223,62 +208,38 @@
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
         function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             particles = [];
-            for (let i = 0; i < 120; i++) {
+            for (let i = 0; i < 100; i++) {
                 particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speedX: (Math.random() - 0.5) * 0.3,
-                    speedY: (Math.random() - 0.5) * 0.3,
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    size: Math.random() * 2, speedX: (Math.random() - 0.5) * 0.2, speedY: (Math.random() - 0.5) * 0.2,
                     opacity: Math.random()
                 });
             }
         }
-
         function animate() {
-            ctx.fillStyle = '#050505';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
-                p.x += p.speedX;
-                p.y += p.speedY;
-                
-                // 邊界回彈
+                p.x += p.speedX; p.y += p.speedY;
                 if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 204, 0, ${p.opacity})`;
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 204, 0, ${p.opacity})`; ctx.fill();
             });
             requestAnimationFrame(animate);
         }
-
         window.addEventListener('resize', init);
-        init();
-        animate();
+        init(); animate();
 
-        // --- Q&A 互動 ---
-        document.querySelectorAll('.qa-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const item = btn.parentElement;
-                item.classList.toggle('active');
+        // --- Q&A 展開邏輯 ---
+        document.querySelectorAll('.qa-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const box = header.parentElement;
+                box.classList.toggle('active');
             });
         });
-
-        // --- 捲動揭幕 ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>

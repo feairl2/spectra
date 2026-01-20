@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spectra V3 | Stellar Performance Executor</title>
+    <title>Spectra V3 | Stellar Performance</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     
@@ -10,353 +10,258 @@
         :root {
             --bg: #050505;
             --gold: #ffcc00;
-            --gold-bright: #ffea00;
-            --gold-dim: rgba(255, 204, 0, 0.4);
-            --gold-glow: rgba(255, 204, 0, 0.1);
-            --border: rgba(255, 255, 255, 0.08);
+            --gold-glow: rgba(255, 204, 0, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
             --text-muted: #88888b;
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-        
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: #fff;
-            font-family: 'Inter', -apple-system, sans-serif;
-            overflow-x: hidden;
-            line-height: 1.5;
-        }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* ===== 高級太空背景系統 ===== */
-        .universe {
+        /* ===== 極致太空背景與流星畫布 ===== */
+        .universe-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
         }
+        canvas { display: block; }
 
-        .star-layer {
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background-image: 
-                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1.5px 1.5px at 100px 150px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 200px 300px, var(--gold-dim), rgba(0,0,0,0));
-            background-repeat: repeat;
-            background-size: 400px 400px;
-            opacity: 0.4;
-            transform: translateZ(0);
-        }
-
-        /* 流星樣式 */
-        .shooting-star {
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(-45deg, #fff, rgba(0, 0, 255, 0));
-            filter: drop-shadow(0 0 6px #fff);
-            animation: tail 3s ease-in-out infinite, shooting 3s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes tail { 0% { width: 0; } 30% { width: 100px; } 100% { width: 0; } }
-        @keyframes shooting { 
-            0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; } 
-            10% { opacity: 1; }
-            100% { transform: translateX(-1000px) translateY(1000px) rotate(-45deg); opacity: 0; } 
-        }
-
-        /* ===== 導航列 ===== */
-        nav {
+        /* ===== 懸浮膠囊導航欄 ===== */
+        .nav-wrapper {
             position: fixed;
-            top: 0; width: 100%; z-index: 1000;
+            top: 25px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        nav {
+            width: 90%;
+            max-width: 1100px;
+            background: rgba(10, 10, 10, 0.6);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 20px 0;
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 100px; /* 圓角膠囊 */
+            padding: 12px 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        .nav-inner {
-            max-width: 1300px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
-        }
-
-        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
-        .logo-box img { width: 32px; height: 32px; filter: drop-shadow(0 0 5px var(--gold)); }
+        .nav-left { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; flex: 1; }
+        .nav-left img { width: 30px; height: 30px; filter: drop-shadow(0 0 5px var(--gold)); }
         .logo-text { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 22px; letter-spacing: -1px; }
 
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .nav-links a:hover { color: var(--gold); }
+        .nav-center { display: flex; gap: 30px; flex: 2; justify-content: center; }
+        .nav-center a { 
+            text-decoration: none; color: var(--text-muted); font-size: 13px; font-weight: 600; 
+            transition: 0.3s; text-transform: uppercase; letter-spacing: 1.5px; 
+        }
+        .nav-center a:hover { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
 
-        /* ===== 區塊共通樣式 ===== */
-        section {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 120px 40px;
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .nav-right { flex: 1; display: flex; justify-content: flex-end; }
+        .status-btn { 
+            display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700;
+            color: var(--gold); border: 1px solid var(--gold); padding: 6px 16px; border-radius: 50px;
         }
 
-        .reveal { opacity: 0; transform: translateY(50px); transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* ===== 主頁區塊佈局 ===== */
+        section { max-width: 1200px; margin: 0 auto; padding: 150px 40px; min-height: 90vh; display: flex; flex-direction: column; justify-content: center; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        .tag {
-            color: var(--gold);
-            font-family: 'Space Grotesk';
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-size: 12px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        /* ===== Hero 區塊 ===== */
         .hero { text-align: center; height: 100vh; }
-        .hero h1 {
-            font-family: 'Plus Jakarta Sans';
-            font-size: clamp(60px, 12vw, 130px);
-            font-weight: 800;
-            line-height: 0.85;
-            margin: 0;
-            background: linear-gradient(180deg, #fff 40%, var(--gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .hero h1 { 
+            font-family: 'Plus Jakarta Sans'; font-size: clamp(60px, 10vw, 120px); font-weight: 800; 
+            margin: 0; line-height: 0.85; background: linear-gradient(to bottom, #fff, var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .hero p { color: var(--text-muted); font-size: 18px; margin: 30px auto; max-width: 600px; }
 
-        .hero p { color: var(--text-muted); font-size: 20px; max-width: 600px; margin: 40px auto; }
-
-        .cta-btn {
-            background: var(--gold);
-            color: #000;
-            padding: 20px 50px;
-            border-radius: 12px;
-            font-weight: 800;
-            text-decoration: none;
-            font-size: 18px;
+        .btn-main { 
+            background: var(--gold); color: #000; padding: 18px 50px; border-radius: 12px; 
+            text-decoration: none; font-weight: 800; font-size: 18px; transition: 0.3s;
             box-shadow: 0 10px 30px var(--gold-glow);
-            transition: 0.4s;
-            display: inline-block;
         }
-        .cta-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 40px var(--gold-dim); }
+        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 15px 40px var(--gold); }
 
-        /* ===== 技術指標區塊 (UNC / Security) ===== */
-        .content-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            gap: 80px;
-        }
+        /* 技術展示區 */
+        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 100px; }
+        .tag { color: var(--gold); font-weight: 700; letter-spacing: 4px; font-size: 12px; margin-bottom: 20px; display: block; }
+        .spec-grid h2 { font-family: 'Plus Jakarta Sans'; font-size: 55px; margin: 0 0 20px; }
+        .big-data { font-size: 140px; font-weight: 800; color: rgba(255,255,255,0.03); position: relative; }
+        .big-data span { position: absolute; left: 0; color: var(--gold); text-shadow: 0 0 30px var(--gold-glow); }
 
-        .stat-display {
-            font-family: 'Plus Jakarta Sans';
-            font-size: 180px;
-            font-weight: 800;
-            color: rgba(255, 204, 0, 0.05);
-            position: relative;
-            line-height: 1;
-        }
+        /* UI 展示區 */
+        .ui-showcase { text-align: center; }
+        .ui-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 50px; }
+        .ui-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; transition: 0.4s; }
+        .ui-item:hover { border-color: var(--gold); transform: translateY(-10px); background: rgba(255, 204, 0, 0.03); }
+        .ui-item img { width: 100%; border-radius: 12px; filter: brightness(0.8); transition: 0.4s; }
+        .ui-item:hover img { filter: brightness(1.1); }
+        .ui-item h3 { color: var(--gold); margin: 15px 0 5px; font-size: 18px; }
+        .ui-item p { color: var(--text-muted); font-size: 13px; }
 
-        .stat-value {
-            position: absolute;
-            top: 50%; left: 0;
-            transform: translateY(-50%);
-            font-size: 100px;
-            color: #fff;
-            text-shadow: 0 0 30px var(--gold-glow);
-        }
-
-        .content-split h2 { font-family: 'Plus Jakarta Sans'; font-size: 60px; margin: 0 0 20px; }
-        .content-split p { font-size: 18px; color: var(--text-muted); line-height: 1.8; }
-
-        /* ===== UI 展示區塊 ===== */
-        .ui-section { text-align: center; }
-        .ui-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-top: 60px;
-        }
-
-        .ui-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 15px;
-            transition: 0.5s;
-        }
-
-        .ui-card img {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            filter: brightness(0.7);
-            transition: 0.5s;
-        }
-
-        .ui-card:hover {
-            border-color: var(--gold);
-            background: rgba(255, 204, 0, 0.02);
-            transform: translateY(-10px);
-        }
-
-        .ui-card:hover img { filter: brightness(1.1); }
-        .ui-card h3 { font-size: 18px; margin-bottom: 10px; color: var(--gold); }
-        .ui-card p { font-size: 14px; color: var(--text-muted); margin: 0; }
-
-        /* ===== 頁尾 ===== */
-        footer {
-            padding: 100px 0;
-            text-align: center;
-            border-top: 1px solid var(--border);
-            margin-top: 100px;
-        }
-
-        @media (max-width: 968px) {
-            .content-split { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-            .ui-grid { grid-template-columns: 1fr; }
-            .stat-display { font-size: 120px; }
-            .stat-value { left: 50%; transform: translate(-50%, -50%); }
-        }
+        footer { text-align: center; padding: 80px 0; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted); }
     </style>
 </head>
 <body>
 
-    <div class="universe">
-        <div class="star-layer" id="stars"></div>
-        <div id="meteor-container"></div>
+    <div class="universe-container">
+        <canvas id="starCanvas"></canvas>
     </div>
 
-    <nav>
-        <div class="nav-inner">
-            <a href="#" class="logo-box">
-                <img src="Spectra V3.png" alt="Spectra Logo">
+    <div class="nav-wrapper">
+        <nav>
+            <a href="#" class="nav-left">
+                <img src="Spectra V3.png" alt="Logo">
                 <span class="logo-text">SPECTRA</span>
             </a>
-            <div class="nav-links">
-                <a href="#unc">SPECIFICATIONS</a>
-                <a href="#ui">INTERFACE</a>
-                <a href="qa.html">Q&A</a>
-                <a href="https://discord.gg/6fErG5CGDg" style="color: var(--gold);">COMMUNITY</a>
+            <div class="nav-center">
+                <a href="#" class="active">Main</a>
+                <a href="#unc">UNC Spec</a>
+                <a href="qa.html">Q&A Support</a>
             </div>
-        </div>
-    </nav>
+            <div class="nav-right">
+                <div class="status-btn">ONLINE</div>
+            </div>
+        </nav>
+    </div>
 
     <section class="hero reveal">
-        <span class="tag">Beyond the Horizon</span>
-        <h1>STELAR <br> POWER.</h1>
-        <p>The next evolution in Roblox execution technology. Undetectable, keyless, and precision-engineered for 2026.</p>
+        <span class="tag">Next-Gen Executor</span>
+        <h1>UNIVERSE<br>STABILITY.</h1>
+        <p>Spectra V3 is a high-performance, keyless executor designed for the 2026 environment. Smooth as a shooting star.</p>
         <div>
-            <a href="https://work.ink/26Yy/SpectraExecutor" class="cta-btn">GET SPECTRA V3</a>
+            <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-main">GET SPECTRA NOW</a>
         </div>
     </section>
 
-    <section id="unc" class="content-split reveal">
-        <div class="stat-display">
-            UNC
-            <div class="stat-value">99%</div>
-        </div>
+    <section id="unc" class="spec-grid reveal">
+        <div class="big-data">UNC<span>99%</span></div>
         <div>
             <span class="tag">01. Compatibility</span>
-            <h2>Pure Performance.</h2>
-            <p>Spectra's core engine is built on the most comprehensive library in the industry. Whether it's complex 3D rendering or deep data hooks, we maintain a 99.8% script success rate.</p>
+            <h2>Run Anything.</h2>
+            <p>Our custom environment ensures that 99.8% of high-end scripts execute without error. From Drawing libs to sophisticated API hooks.</p>
         </div>
     </section>
 
-    <section id="security" class="content-split reveal" style="direction: rtl;">
-        <div style="direction: ltr;">
-            <div class="stat-display">
-                DET
-                <div class="stat-value">0%</div>
+    <section class="ui-showcase reveal">
+        <span class="tag">Interface</span>
+        <h2>Premium Design.</h2>
+        <div class="ui-container">
+            <div class="ui-item">
+                <img src="UI.png" alt="UI 1">
+                <h3>Executor Core</h3>
+                <p>Advanced script editor.</p>
             </div>
-        </div>
-        <div style="direction: ltr;">
-            <span class="tag">02. Security</span>
-            <h2>Bypass the Future.</h2>
-            <p>Our 2026 StealthCore bypasses the most aggressive anti-cheat detections. With kernel-link technology, your account stays secure while you push boundaries.</p>
-        </div>
-    </section>
-
-    <section id="ui" class="ui-section reveal">
-        <span class="tag">Interface Design</span>
-        <h2 style="font-size: 50px; font-family: 'Plus Jakarta Sans';">Crafted for Professionals.</h2>
-        <div class="ui-grid">
-            <div class="ui-card">
-                <img src="UI.png" alt="Main Dashboard">
-                <h3>Main Terminal</h3>
-                <p>Clean, intuitive, and responsive. Control every aspect of your scripts.</p>
-            </div>
-            <div class="ui-card">
-                <img src="UI2.png" alt="Script Hub">
+            <div class="ui-item">
+                <img src="UI2.png" alt="UI 2">
                 <h3>Script Hub</h3>
-                <p>Access thousands of community tools with one-click injection.</p>
+                <p>Global community tools.</p>
             </div>
-            <div class="ui-card">
-                <img src="UI3.png" alt="Settings">
-                <h3>System Core</h3>
-                <p>Fine-tune performance and security settings for your specific machine.</p>
+            <div class="ui-item">
+                <img src="UI3.png" alt="UI 3">
+                <h3>Settings</h3>
+                <p>Custom security bypasses.</p>
             </div>
         </div>
     </section>
 
     <footer>
-        <img src="Spectra V3.png" style="width: 40px; margin-bottom: 20px;">
-        <p style="font-family: 'Space Grotesk'; font-weight: 700; letter-spacing: 2px;">SPECTRA TECHNOLOGIES 2026</p>
-        <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">NOT AFFILIATED WITH ROBLOX CORPORATION. USE RESPONSIBLY.</p>
+        <p>© 2026 SPECTRA PROJECT. ALL SYSTEMS OPERATIONAL.</p>
     </footer>
 
     <script>
-        // 1. 捲動揭幕動畫
-        const observerOptions = { threshold: 0.1 };
+        // --- 極致流星背景系統 (Canvas) ---
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, stars = [], meteors = [];
+
+        function init() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 1.5,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        class Meteor {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width + 300;
+                this.y = Math.random() * height - 300;
+                this.len = Math.random() * 80 + 50;
+                this.speed = Math.random() * 10 + 5;
+                this.opacity = 1;
+            }
+            draw() {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - this.len, this.y + this.len);
+                ctx.stroke();
+
+                // 金色光輝尾跡
+                ctx.strokeStyle = `rgba(255, 204, 0, ${this.opacity * 0.3})`;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - this.len * 1.5, this.y + this.len * 1.5);
+                ctx.stroke();
+            }
+            update() {
+                this.x -= this.speed;
+                this.y += this.speed;
+                if (this.x < -200 || this.y > height + 200) { this.reset(); }
+            }
+        }
+
+        for (let i = 0; i < 15; i++) { meteors.push(new Meteor()); }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // 畫靜態星空
+            ctx.fillStyle = "#fff";
+            stars.forEach(s => {
+                ctx.globalAlpha = s.opacity;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+
+            // 畫動態流星
+            meteors.forEach(m => { m.update(); m.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        animate();
+
+        // --- 捲動揭幕 ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('active');
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // 2. 背景視差效果
-        document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 50;
-            const y = (window.innerHeight / 2 - e.pageY) / 50;
-            document.getElementById('stars').style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
-        });
-
-        // 3. 流星生成系統
-        function createMeteor() {
-            const container = document.getElementById('meteor-container');
-            const meteor = document.createElement('div');
-            meteor.className = 'shooting-star';
-            
-            // 隨機位置與延遲
-            const startX = Math.random() * window.innerWidth + 500;
-            const startY = Math.random() * window.innerHeight - 300;
-            
-            meteor.style.left = startX + 'px';
-            meteor.style.top = startY + 'px';
-            
-            container.appendChild(meteor);
-
-            // 動畫結束後刪除，防止佔用記憶體
-            setTimeout(() => {
-                meteor.remove();
-            }, 3000);
-        }
-
-        // 每 2.5 秒生成一顆新流星
-        setInterval(createMeteor, 2500);
-
-        // 4. 點擊導航平滑捲動
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
     </script>
 </body>
 </html>

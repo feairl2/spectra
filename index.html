@@ -2,165 +2,144 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Spectra V3 | Stellar Performance</title>
+    <title>Spectra V3 | Defined by Excellence</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Outfit:wght@100;400;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
+            --bg: #000000;
             --gold: #ffcc00;
-            --border: rgba(255, 255, 255, 0.08);
-            --text-muted: #949494;
+            --gold-glow: rgba(255, 204, 0, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(15, 15, 15, 0.6);
+            --text-dim: #949494;
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        /* 背景光點 */
-        #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        /* ===== 背景動態系統 ===== */
+        .bg-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+        }
+        .ambient-light {
+            position: fixed; width: 800px; height: 800px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 204, 0, 0.04) 0%, transparent 70%);
+            z-index: -1; filter: blur(100px); animation: move 25s infinite alternate;
+        }
+        @keyframes move { 
+            0% { transform: translate(-20%, -20%); } 
+            100% { transform: translate(40%, 30%); } 
+        }
 
-        /* 導航欄 */
-        .nav-wrapper { position: fixed; top: 30px; width: 100%; display: flex; justify-content: center; z-index: 1000; }
+        #particleCanvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; }
+
+        /* ===== 導航欄：高端懸浮膠囊 ===== */
+        .nav-wrapper { position: fixed; top: 30px; width: 100%; display: flex; justify-content: center; z-index: 2000; padding: 0 20px; }
         nav {
-            width: 90%; max-width: 1000px; background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 100px;
-            padding: 10px 30px; display: flex; align-items: center; justify-content: space-between;
+            width: 100%; max-width: 1100px; padding: 12px 40px;
+            background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border); border-radius: 100px;
+            display: flex; align-items: center; justify-content: space-between;
         }
-        .nav-left { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff; flex: 1; }
-        .nav-left img { width: 28px; height: 28px; filter: drop-shadow(0 0 5px var(--gold)); }
-        .nav-center { display: flex; gap: 30px; flex: 2; justify-content: center; }
-        .nav-center a { text-decoration: none; color: var(--text-muted); font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; flex: 1; }
+        .logo img { width: 32px; filter: drop-shadow(0 0 5px var(--gold)); }
+        .logo-text { font-family: 'Outfit'; font-weight: 900; font-size: 24px; letter-spacing: -1px; }
+
+        .nav-center { display: flex; gap: 35px; flex: 2; justify-content: center; }
+        .nav-center a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
         .nav-center a:hover { color: var(--gold); }
-        .nav-right { flex: 1; text-align: right; color: var(--gold); font-weight: 800; font-size: 11px; }
 
-        /* 通用佈局 */
-        section { max-width: 1000px; margin: 0 auto; padding: 120px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .tag { color: var(--gold); font-weight: 700; letter-spacing: 5px; font-size: 11px; margin-bottom: 20px; display: block; }
-        h1 { font-family: 'Plus Jakarta Sans'; font-size: clamp(45px, 8vw, 90px); font-weight: 800; line-height: 1; margin: 0; }
-        p { color: var(--text-muted); font-size: 17px; line-height: 1.8; max-width: 600px; margin: 20px auto; }
+        .nav-right { flex: 1; text-align: right; color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: 1px; }
 
-        /* ===== 無限動態圖片滾動區塊 ===== */
-        .marquee-container {
-            width: 100vw;
-            overflow: hidden;
-            background: rgba(255,255,255,0.02);
-            padding: 60px 0;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            margin: 50px 0;
-            position: relative;
-        }
-        .marquee-content {
-            display: flex;
-            width: calc(450px * 6 + 40px * 6); /* 圖片寬度 * 數量 */
-            animation: scroll 20s linear infinite;
-            gap: 40px;
-        }
-        .marquee-content img {
-            width: 450px; /* 圖片加大 */
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transition: 0.4s;
-        }
-        .marquee-content img:hover { transform: scale(1.05); border-color: var(--gold); }
+        /* ===== Section 通用樣式 ===== */
+        section { max-width: 1200px; margin: 0 auto; padding: 120px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(-450px * 3 - 40px * 3)); }
-        }
+        .tag { color: var(--gold); font-weight: 800; letter-spacing: 6px; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; }
+        h1 { font-family: 'Outfit'; font-size: clamp(60px, 12vw, 130px); font-weight: 900; line-height: 0.85; margin: 0; letter-spacing: -4px; }
+        h2 { font-family: 'Outfit'; font-size: 60px; font-weight: 400; margin: 0 0 20px; }
+        p { color: var(--text-dim); font-size: 19px; line-height: 1.8; max-width: 750px; margin: 20px auto; font-weight: 200; }
 
-        /* ===== 專門設計的 Q&A 介面 ===== */
-        .qa-section {
-            background: linear-gradient(to bottom, transparent, rgba(255,204,0,0.03), transparent);
-            width: 100%;
-            padding: 100px 0;
-        }
-        .qa-grid {
-            max-width: 800px;
-            width: 100%;
-            display: grid;
-            gap: 15px;
-        }
-        .qa-box {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            text-align: left;
-            transition: 0.3s;
-            overflow: hidden;
-        }
-        .qa-box:hover { border-color: var(--gold); background: rgba(255,255,255,0.05); }
-        .qa-header {
-            padding: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 18px;
-        }
-        .qa-body {
-            max-height: 0;
-            padding: 0 25px;
-            color: var(--text-muted);
-            line-height: 1.8;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-        }
-        .qa-box.active .qa-body {
-            max-height: 200px;
-            padding-bottom: 25px;
-        }
-        .qa-icon {
-            width: 30px; height: 30px;
-            background: rgba(255,204,0,0.1);
-            color: var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
-        .qa-box.active .qa-icon { transform: rotate(45deg); background: var(--gold); color: #000; }
+        /* ===== 無邊際圖片滾動 ===== */
+        .marquee { width: 100vw; overflow: hidden; margin: 60px 0; background: rgba(255,255,255,0.02); padding: 50px 0; border-y: 1px solid var(--border); }
+        .marquee-inner { display: flex; width: max-content; gap: 40px; animation: slide 30s linear infinite; }
+        .marquee-inner img { width: 550px; border-radius: 30px; border: 1px solid var(--border); transition: 0.5s; }
+        .marquee-inner img:hover { transform: scale(1.05); border-color: var(--gold); }
+        @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        .btn-main { background: #fff; color: #000; padding: 18px 45px; border-radius: 100px; text-decoration: none; font-weight: 800; margin-top: 30px; display: inline-block; transition: 0.3s; }
-        .btn-main:hover { transform: scale(1.05); }
+        /* ===== 功能特色：高端卡片 ===== */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; margin-top: 50px; }
+        .card { 
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 40px; 
+            padding: 60px 40px; transition: 0.5s; text-align: left;
+        }
+        .card:hover { border-color: var(--gold); background: rgba(255, 204, 0, 0.02); transform: translateY(-10px); }
+        .card h3 { font-size: 40px; margin: 0 0 15px; font-family: 'Outfit'; color: var(--gold); }
+        .card p { font-size: 16px; margin: 0; text-align: left; }
 
-        footer { padding: 80px; opacity: 0.3; font-size: 11px; letter-spacing: 2px; }
+        /* ===== Q&A 重新設計：獨立高端介面 ===== */
+        .qa-container { width: 100%; max-width: 850px; margin-top: 50px; }
+        .qa-item { 
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border); 
+            border-radius: 24px; margin-bottom: 15px; transition: 0.4s; cursor: pointer;
+        }
+        .qa-item:hover { border-color: rgba(255,204,0,0.5); }
+        .qa-trigger { padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 600; }
+        .qa-answer { max-height: 0; overflow: hidden; padding: 0 40px; color: var(--text-dim); line-height: 1.8; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; }
+        .qa-item.active .qa-answer { max-height: 300px; padding-bottom: 40px; opacity: 1; }
+        .qa-item.active { background: rgba(255,255,255,0.05); border-color: var(--gold); }
+        .plus { font-size: 24px; color: var(--gold); transition: 0.3s; }
+        .qa-item.active .plus { transform: rotate(45deg); }
 
+        .btn-main { 
+            background: #fff; color: #000; padding: 22px 65px; border-radius: 100px; 
+            text-decoration: none; font-weight: 800; font-size: 18px; display: inline-block; 
+            margin-top: 50px; transition: 0.4s; box-shadow: 0 10px 40px rgba(255,255,255,0.1);
+        }
+        .btn-main:hover { transform: scale(1.05); background: var(--gold); box-shadow: 0 15px 50px var(--gold-glow); }
+
+        footer { padding: 120px 0; border-top: 1px solid var(--border); opacity: 0.2; font-size: 12px; letter-spacing: 5px; }
+
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+            .nav-center { display: none; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="bg-gradient"></div>
+    <div class="ambient-light"></div>
     <canvas id="particleCanvas"></canvas>
 
     <div class="nav-wrapper">
         <nav>
-            <a href="#" class="nav-left">
+            <a href="#" class="logo">
                 <img src="Spectra V3.png" alt="Logo">
                 <span class="logo-text">SPECTRA</span>
             </a>
             <div class="nav-center">
-                <a href="#home">Home</a>
+                <a href="#hero">Home</a>
                 <a href="#showcase">Gallery</a>
-                <a href="#tech">Compatibility</a>
+                <a href="#tech">Features</a>
                 <a href="#qa">Support</a>
             </div>
-            <div class="nav-right">SYSTEM ONLINE</div>
+            <div class="nav-right">V3.0 • OPERATIONAL</div>
         </nav>
     </div>
 
-    <section id="home">
-        <span class="tag">EVOLUTION 2026</span>
-        <h1>FAST. CLEAN.<br><span style="color: var(--gold);">KEYLESS.</span></h1>
-        <p>The premier execution standard. Experience a minimalist interface powered by a maximalist engine.</p>
+    <section id="hero" class="reveal active">
+        <span class="tag">Next Generation Standard</span>
+        <h1 style="background: linear-gradient(180deg, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">EVOLVED.<br><span style="color: var(--gold); -webkit-text-fill-color: var(--gold);">UNRIVALED.</span></h1>
+        <p>Spectra V3 is a masterpiece of execution engineering. Combining aesthetic purity with raw technical power, we provide the most stable keyless environment for the 2026 gaming landscape.</p>
         <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-main">INITIALIZE DOWNLOAD</a>
     </section>
 
-    <div class="marquee-container" id="showcase">
-        <span class="tag" style="text-align: center; display: block;">INTERFACE PREVIEW</span>
-        <div class="marquee-content">
+    <div class="marquee" id="showcase">
+        <div class="marquee-inner">
             <img src="UI.png" alt="UI 1">
             <img src="UI2.png" alt="UI 2">
             <img src="UI3.png" alt="UI 3">
@@ -170,76 +149,107 @@
         </div>
     </div>
 
-    <section id="tech">
-        <span class="tag">TECHNICAL METRICS</span>
-        <h2>UNC 99% & sUNC 98%.</h2>
-        <p>Our custom environment is optimized for every high-end script. Stability is not an option; it's a foundation.</p>
-        <div style="display: flex; gap: 50px; margin-top: 30px;">
-            <div style="text-align: center;"><div style="font-size: 50px; color: var(--gold); font-weight: 800;">0%</div><span style="font-size: 12px; font-weight: 700;">DETECTION</span></div>
-            <div style="text-align: center;"><div style="font-size: 50px; color: #fff; font-weight: 800;">24/7</div><span style="font-size: 12px; font-weight: 700;">UPTIME</span></div>
+    <section id="tech" class="reveal">
+        <span class="tag">Core Capabilities</span>
+        <h2>Built for Precision.</h2>
+        <p>Explore the industry-leading features that make Spectra V3 the benchmark of high-performance execution.</p>
+        <div class="grid">
+            <div class="card">
+                <h3>99%</h3>
+                <span>UNC Compatibility</span>
+                <p>Support for the most complex script libraries including Drawing, Websockets, and custom API hooks.</p>
+            </div>
+            <div class="card">
+                <h3>0%</h3>
+                <span>Detection Rate</span>
+                <p>Utilizing proprietary kernel-level bypasses to ensure your presence remains invisible to modern anti-cheats.</p>
+            </div>
+            <div class="card" style="border-color: #fff;">
+                <h3>∞</h3>
+                <span>Keyless Power</span>
+                <p>A friction-less experience. No keys, no ads, no interruptions. Just pure, immediate execution.</p>
+            </div>
         </div>
     </section>
 
-    <div class="qa-section" id="qa">
-        <section>
-            <span class="tag">SUPPORT CENTER</span>
-            <h2 style="margin-bottom: 50px;">Frequently Asked.</h2>
-            <div class="qa-grid">
-                <div class="qa-box">
-                    <div class="qa-header">Is Spectra V3 really keyless? <div class="qa-icon">+</div></div>
-                    <div class="qa-body">Yes. We believe in a seamless experience. Spectra V3 requires no keys, allowing you to jump straight into execution.</div>
-                </div>
-                <div class="qa-box">
-                    <div class="qa-header">How do I whitelist Spectra? <div class="qa-icon">+</div></div>
-                    <div class="qa-body">Add the entire Spectra folder to your Antivirus exclusions. Our software is clean, but DLL injection is often flagged as a false positive.</div>
-                </div>
-                <div class="qa-item qa-box">
-                    <div class="qa-header">What are UNC and sUNC scores? <div class="qa-icon">+</div></div>
-                    <div class="qa-body">These scores represent the compatibility of our executor with standard script libraries. A 99% score ensures nearly all community scripts run perfectly.</div>
-                </div>
-            </div>
-        </section>
-    </div>
+    <section class="reveal">
+        <span class="tag">Security Infrastructure</span>
+        <h2>Stealth by Design.</h2>
+        <p>Our infrastructure is updated 24/7. When game updates drop, Spectra evolves within minutes to keep your accounts protected and your scripts running.</p>
+        <div style="display: flex; gap: 60px; margin-top: 40px; border: 1px solid var(--border); padding: 40px 80px; border-radius: 100px; background: rgba(255,255,255,0.01);">
+            <div><div style="font-size: 32px; font-weight: 800;">sUNC</div><div style="color: var(--gold); font-size: 14px; font-weight: 700;">98% SUPPORT</div></div>
+            <div style="width: 1px; background: var(--border);"></div>
+            <div><div style="font-size: 32px; font-weight: 800;">ENCRYPTION</div><div style="color: var(--gold); font-size: 14px; font-weight: 700;">MIL-SPEC</div></div>
+        </div>
+    </section>
 
-    <footer>© 2026 SPECTRA PROJECT. ALL SYSTEMS GO.</footer>
+    <section id="qa" class="reveal">
+        <span class="tag">Intelligence Hub</span>
+        <h2>Questions & Answers</h2>
+        <div class="qa-container">
+            <div class="qa-item">
+                <div class="qa-trigger">Is Spectra V3 safe for my account? <div class="plus">+</div></div>
+                <div class="qa-answer">Absolutely. Spectra V3 employs a sophisticated bypass that avoids detection at the kernel level. We have maintained a flawless safety record through 2026.</div>
+            </div>
+            <div class="qa-item">
+                <div class="qa-trigger">Why does it show as a virus? <div class="plus">+</div></div>
+                <div class="qa-answer">Spectra uses DLL injection to interface with game memory. Modern antivirus software flags this behavior as a "False Positive". We recommend adding Spectra to your exclusion list.</div>
+            </div>
+            <div class="qa-item">
+                <div class="qa-trigger">How is it keyless? <div class="plus">+</div></div>
+                <div class="qa-answer">We value user time over ad revenue. Spectra V3 is funded through premium donations and community support, allowing us to keep the main experience keyless for everyone.</div>
+            </div>
+            <div class="qa-item">
+                <div class="qa-trigger">What should I do if it fails to attach? <div class="plus">+</div></div>
+                <div class="qa-answer">Ensure your antivirus is disabled, you have the latest VC++ Redistributables installed, and you are running the game in windowed mode for best compatibility.</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>© 2026 SPECTRA TECHNOLOGIES • REDEFINING THE POSSIBLE</footer>
 
     <script>
-        // --- 呼吸感光點系統 ---
+        // --- 高端動態光點 ---
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        function init() {
+        function initParticles() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < 100; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                    size: Math.random() * 2, speedX: (Math.random() - 0.5) * 0.2, speedY: (Math.random() - 0.5) * 0.2,
-                    opacity: Math.random()
-                });
-            }
+            particles = Array(80).fill().map(() => ({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                s: Math.random() * 1.5,
+                sx: (Math.random() - 0.5) * 0.2, sy: (Math.random() - 0.5) * 0.2,
+                o: Math.random()
+            }));
         }
-        function animate() {
-            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
-                p.x += p.speedX; p.y += p.speedY;
-                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 204, 0, ${p.opacity})`; ctx.fill();
+                p.x += p.sx; p.y += p.sy;
+                if(p.x < 0 || p.x > canvas.width) p.sx *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.sy *= -1;
+                ctx.fillStyle = `rgba(255, 204, 0, ${p.o})`;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(drawParticles);
         }
-        window.addEventListener('resize', init);
-        init(); animate();
+        window.addEventListener('resize', initParticles);
+        initParticles(); drawParticles();
 
-        // --- Q&A 展開邏輯 ---
-        document.querySelectorAll('.qa-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const box = header.parentElement;
-                box.classList.toggle('active');
+        // --- Q&A 互動邏輯 ---
+        document.querySelectorAll('.qa-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.qa-item').forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
             });
         });
+
+        // --- 捲動揭幕動畫 ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>

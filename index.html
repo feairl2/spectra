@@ -2,256 +2,360 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spectra V3 | Premium Roblox Execution Environment</title>
+    <title>Spectra V3 | Stellar Performance Executor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --bg: #050505;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --accent: #ffffff;
-            --accent-dim: rgba(255, 255, 255, 0.6);
-            --border: rgba(255, 255, 255, 0.1);
-            --glow: rgba(255, 255, 255, 0.05);
+            --gold: #ffcc00;
+            --gold-bright: #ffea00;
+            --gold-dim: rgba(255, 204, 0, 0.4);
+            --gold-glow: rgba(255, 204, 0, 0.1);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-muted: #88888b;
         }
 
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
         
         body {
             margin: 0;
             background: var(--bg);
             color: #fff;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             overflow-x: hidden;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
-        /* --- 高級動態背景 --- */
-        .bg-glow {
+        /* ===== 高級太空背景系統 ===== */
+        .universe {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            overflow: hidden;
             background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
         }
 
-        .blob {
+        .star-layer {
             position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: float 20s infinite alternate;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 100px 150px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 200px 300px, var(--gold-dim), rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 400px 400px;
+            opacity: 0.4;
+            transform: translateZ(0);
         }
 
-        @keyframes float {
-            from { transform: translate(-10%, -10%); }
-            to { transform: translate(20%, 20%); }
+        /* 流星樣式 */
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(-45deg, #fff, rgba(0, 0, 255, 0));
+            filter: drop-shadow(0 0 6px #fff);
+            animation: tail 3s ease-in-out infinite, shooting 3s ease-in-out infinite;
+            opacity: 0;
         }
 
-        /* --- 導航列 --- */
+        @keyframes tail { 0% { width: 0; } 30% { width: 100px; } 100% { width: 0; } }
+        @keyframes shooting { 
+            0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; } 
+            10% { opacity: 1; }
+            100% { transform: translateX(-1000px) translateY(1000px) rotate(-45deg); opacity: 0; } 
+        }
+
+        /* ===== 導航列 ===== */
         nav {
             position: fixed;
             top: 0; width: 100%; z-index: 1000;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 20px 0;
         }
 
         .nav-inner {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
+            max-width: 1300px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
         }
 
-        .logo { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 24px; letter-spacing: -1px; }
+        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+        .logo-box img { width: 32px; height: 32px; filter: drop-shadow(0 0 5px var(--gold)); }
+        .logo-text { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 22px; letter-spacing: -1px; }
 
-        /* --- Hero 區塊 --- */
-        .hero {
-            height: 100vh;
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+
+        /* ===== 區塊共通樣式 ===== */
+        section {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 120px 40px;
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
         }
 
+        .reveal { opacity: 0; transform: translateY(50px); transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .tag {
+            color: var(--gold);
+            font-family: 'Space Grotesk';
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 12px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* ===== Hero 區塊 ===== */
+        .hero { text-align: center; height: 100vh; }
         .hero h1 {
             font-family: 'Plus Jakarta Sans';
-            font-size: clamp(60px, 10vw, 120px);
+            font-size: clamp(60px, 12vw, 130px);
             font-weight: 800;
+            line-height: 0.85;
             margin: 0;
-            line-height: 0.9;
-            background: linear-gradient(to bottom, #fff 50%, #666);
+            background: linear-gradient(180deg, #fff 40%, var(--gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p { color: var(--accent-dim); font-size: 20px; max-width: 600px; margin: 30px 0; }
+        .hero p { color: var(--text-muted); font-size: 20px; max-width: 600px; margin: 40px auto; }
 
-        /* --- 重點設計：分區特色區塊 --- */
-        .feature-section {
-            max-width: 1300px;
-            margin: 100px auto;
-            padding: 0 40px;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .section-title h2 {
-            font-family: 'Plus Jakarta Sans';
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .section-title .badge {
-            background: rgba(255,255,255,0.1);
-            padding: 6px 16px;
-            border-radius: 100px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border: 1px solid var(--border);
-        }
-
-        /* 網格佈局 */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .feature-box {
-            position: relative;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 50px;
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            overflow: hidden;
-        }
-
-        .feature-box:hover {
-            background: rgba(255,255,255,0.06);
-            transform: translateY(-10px);
-            border-color: rgba(255,255,255,0.3);
-        }
-
-        .feature-box::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at top left, rgba(255,255,255,0.1), transparent);
-            opacity: 0; transition: 0.5s;
-        }
-
-        .feature-box:hover::before { opacity: 1; }
-
-        .f-icon { font-size: 40px; margin-bottom: 30px; display: block; }
-        .f-number { font-size: 64px; font-weight: 800; display: block; margin-bottom: 10px; font-family: 'Plus Jakarta Sans'; }
-        .f-title { font-size: 22px; font-weight: 600; margin-bottom: 15px; display: block; color: #fff; }
-        .f-desc { color: var(--accent-dim); font-size: 16px; font-weight: 300; }
-
-        /* 特殊邊框動畫 */
-        .btn-premium {
-            background: #fff;
+        .cta-btn {
+            background: var(--gold);
             color: #000;
-            padding: 18px 45px;
+            padding: 20px 50px;
             border-radius: 12px;
+            font-weight: 800;
             text-decoration: none;
-            font-weight: 700;
-            transition: 0.3s;
+            font-size: 18px;
+            box-shadow: 0 10px 30px var(--gold-glow);
+            transition: 0.4s;
             display: inline-block;
         }
+        .cta-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 40px var(--gold-dim); }
 
-        .btn-premium:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        /* ===== 技術指標區塊 (UNC / Security) ===== */
+        .content-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 80px;
         }
 
-        /* 響應式 */
-        @media (max-width: 992px) {
-            .features-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 70px; }
+        .stat-display {
+            font-family: 'Plus Jakarta Sans';
+            font-size: 180px;
+            font-weight: 800;
+            color: rgba(255, 204, 0, 0.05);
+            position: relative;
+            line-height: 1;
+        }
+
+        .stat-value {
+            position: absolute;
+            top: 50%; left: 0;
+            transform: translateY(-50%);
+            font-size: 100px;
+            color: #fff;
+            text-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        .content-split h2 { font-family: 'Plus Jakarta Sans'; font-size: 60px; margin: 0 0 20px; }
+        .content-split p { font-size: 18px; color: var(--text-muted); line-height: 1.8; }
+
+        /* ===== UI 展示區塊 ===== */
+        .ui-section { text-align: center; }
+        .ui-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 60px;
+        }
+
+        .ui-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 15px;
+            transition: 0.5s;
+        }
+
+        .ui-card img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            filter: brightness(0.7);
+            transition: 0.5s;
+        }
+
+        .ui-card:hover {
+            border-color: var(--gold);
+            background: rgba(255, 204, 0, 0.02);
+            transform: translateY(-10px);
+        }
+
+        .ui-card:hover img { filter: brightness(1.1); }
+        .ui-card h3 { font-size: 18px; margin-bottom: 10px; color: var(--gold); }
+        .ui-card p { font-size: 14px; color: var(--text-muted); margin: 0; }
+
+        /* ===== 頁尾 ===== */
+        footer {
+            padding: 100px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            margin-top: 100px;
+        }
+
+        @media (max-width: 968px) {
+            .content-split { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .ui-grid { grid-template-columns: 1fr; }
+            .stat-display { font-size: 120px; }
+            .stat-value { left: 50%; transform: translate(-50%, -50%); }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow">
-        <div class="blob" style="top: 10%; left: 10%;"></div>
-        <div class="blob" style="bottom: 10%; right: 10%; animation-delay: -5s;"></div>
+    <div class="universe">
+        <div class="star-layer" id="stars"></div>
+        <div id="meteor-container"></div>
     </div>
 
     <nav>
         <div class="nav-inner">
-            <div class="logo">SPECTRA.</div>
-            <div style="display: flex; gap: 30px; font-size: 14px; font-weight: 600;">
-                <a href="#" style="color: #fff; text-decoration: none;">SYSTEM</a>
-                <a href="#" style="color: var(--accent-dim); text-decoration: none;">DOCS</a>
-                <a href="#" style="color: var(--accent-dim); text-decoration: none;">COMMUNITY</a>
+            <a href="#" class="logo-box">
+                <img src="Spectra V3.png" alt="Spectra Logo">
+                <span class="logo-text">SPECTRA</span>
+            </a>
+            <div class="nav-links">
+                <a href="#unc">SPECIFICATIONS</a>
+                <a href="#ui">INTERFACE</a>
+                <a href="qa.html">Q&A</a>
+                <a href="https://discord.gg/6fErG5CGDg" style="color: var(--gold);">COMMUNITY</a>
             </div>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="badge" style="margin-bottom: 20px; letter-spacing: 4px; opacity: 0.6;">VERSION 3.0 AVAILABLE</div>
-        <h1>Redefining <br> Execution.</h1>
-        <p>Experience the next generation of Roblox utility. Unmatched stability meets elite-tier performance.</p>
-        <div style="margin-top: 20px;">
-            <a href="#" class="btn-premium">Download Now</a>
+    <section class="hero reveal">
+        <span class="tag">Beyond the Horizon</span>
+        <h1>STELAR <br> POWER.</h1>
+        <p>The next evolution in Roblox execution technology. Undetectable, keyless, and precision-engineered for 2026.</p>
+        <div>
+            <a href="https://work.ink/26Yy/SpectraExecutor" class="cta-btn">GET SPECTRA V3</a>
         </div>
     </section>
 
-    <section class="feature-section">
-        <div class="section-title">
-            <span class="badge">Performance Metrics</span>
-            <h2>Engineered for Excellence</h2>
+    <section id="unc" class="content-split reveal">
+        <div class="stat-display">
+            UNC
+            <div class="stat-value">99%</div>
         </div>
+        <div>
+            <span class="tag">01. Compatibility</span>
+            <h2>Pure Performance.</h2>
+            <p>Spectra's core engine is built on the most comprehensive library in the industry. Whether it's complex 3D rendering or deep data hooks, we maintain a 99.8% script success rate.</p>
+        </div>
+    </section>
 
-        <div class="features-grid">
-            <div class="feature-box">
-                <span class="f-icon">🛡️</span>
-                <span class="f-title">Security Core</span>
-                <span class="f-number">0%</span>
-                <p class="f-desc">Our proprietary stealth injection layer ensures a zero-detection rate throughout 2026. Total peace of mind.</p>
+    <section id="security" class="content-split reveal" style="direction: rtl;">
+        <div style="direction: ltr;">
+            <div class="stat-display">
+                DET
+                <div class="stat-value">0%</div>
             </div>
+        </div>
+        <div style="direction: ltr;">
+            <span class="tag">02. Security</span>
+            <h2>Bypass the Future.</h2>
+            <p>Our 2026 StealthCore bypasses the most aggressive anti-cheat detections. With kernel-link technology, your account stays secure while you push boundaries.</p>
+        </div>
+    </section>
 
-            <div class="feature-box">
-                <span class="f-icon">🧩</span>
-                <span class="f-title">UNC Support</span>
-                <span class="f-number">99%</span>
-                <p class="f-desc">Industry-leading Universal Naming Convention support. If it exists, Spectra can execute it without hesitation.</p>
+    <section id="ui" class="ui-section reveal">
+        <span class="tag">Interface Design</span>
+        <h2 style="font-size: 50px; font-family: 'Plus Jakarta Sans';">Crafted for Professionals.</h2>
+        <div class="ui-grid">
+            <div class="ui-card">
+                <img src="UI.png" alt="Main Dashboard">
+                <h3>Main Terminal</h3>
+                <p>Clean, intuitive, and responsive. Control every aspect of your scripts.</p>
             </div>
-
-            <div class="feature-box">
-                <span class="f-icon">⚡</span>
-                <span class="f-title">Execution Speed</span>
-                <span class="f-number">98%</span>
-                <p class="f-desc">Sophisticated sUNC optimization. High-frequency script calls are handled with millisecond precision.</p>
+            <div class="ui-card">
+                <img src="UI2.png" alt="Script Hub">
+                <h3>Script Hub</h3>
+                <p>Access thousands of community tools with one-click injection.</p>
+            </div>
+            <div class="ui-card">
+                <img src="UI3.png" alt="Settings">
+                <h3>System Core</h3>
+                <p>Fine-tune performance and security settings for your specific machine.</p>
             </div>
         </div>
     </section>
 
-    <footer style="padding: 100px 0; text-align: center; border-top: 1px solid var(--border); margin-top: 100px;">
-        <p style="opacity: 0.4; font-size: 12px; letter-spacing: 2px;">© 2026 SPECTRA TECHNOLOGIES. ALL RIGHTS RESERVED.</p>
+    <footer>
+        <img src="Spectra V3.png" style="width: 40px; margin-bottom: 20px;">
+        <p style="font-family: 'Space Grotesk'; font-weight: 700; letter-spacing: 2px;">SPECTRA TECHNOLOGIES 2026</p>
+        <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">NOT AFFILIATED WITH ROBLOX CORPORATION. USE RESPONSIBLY.</p>
     </footer>
 
     <script>
-        // 簡單的滑鼠跟隨效果
+        // 1. 捲動揭幕動畫
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 2. 背景視差效果
         document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            document.querySelector('.bg-glow').style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            document.getElementById('stars').style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
+        });
+
+        // 3. 流星生成系統
+        function createMeteor() {
+            const container = document.getElementById('meteor-container');
+            const meteor = document.createElement('div');
+            meteor.className = 'shooting-star';
+            
+            // 隨機位置與延遲
+            const startX = Math.random() * window.innerWidth + 500;
+            const startY = Math.random() * window.innerHeight - 300;
+            
+            meteor.style.left = startX + 'px';
+            meteor.style.top = startY + 'px';
+            
+            container.appendChild(meteor);
+
+            // 動畫結束後刪除，防止佔用記憶體
+            setTimeout(() => {
+                meteor.remove();
+            }, 3000);
+        }
+
+        // 每 2.5 秒生成一顆新流星
+        setInterval(createMeteor, 2500);
+
+        // 4. 點擊導航平滑捲動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>

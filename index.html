@@ -10,6 +10,7 @@
         :root {
             --bg: #030303;
             --gold: #ffcc00;
+            --discord: #5865F2;
             --border: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
             --text-dim: #999999;
@@ -73,6 +74,32 @@
         .tag { color: var(--gold); font-weight: 800; letter-spacing: 8px; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; }
         .desc { color: var(--text-dim); font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto; font-weight: 300; }
 
+        /* 按鈕系統 */
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn-main { 
+            background: #fff; color: #000; padding: 22px 50px; border-radius: 100px; 
+            text-decoration: none; font-weight: 800; font-size: 19px; transition: 0.4s; 
+            display: inline-block; 
+        }
+        .btn-main:hover { transform: translateY(-5px); background: var(--gold); box-shadow: 0 15px 45px rgba(255, 204, 0, 0.3); }
+
+        .btn-discord {
+            background: rgba(255, 255, 255, 0.05); color: #fff; padding: 22px 50px; border-radius: 100px; 
+            text-decoration: none; font-weight: 800; font-size: 19px; border: 1px solid var(--border); transition: 0.4s; 
+            display: inline-block;
+        }
+        .btn-discord:hover { 
+            transform: translateY(-5px); background: var(--discord); border-color: var(--discord);
+            box-shadow: 0 15px 45px rgba(88, 101, 242, 0.3); 
+        }
+
         /* 統一技術數據板塊 */
         .tech-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; align-items: center; gap: 50px; }
         .huge-data { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; }
@@ -103,14 +130,16 @@
         .qa-icon { color: var(--gold); font-size: 24px; transition: 0.4s; }
         .qa-item.active .qa-icon { transform: rotate(45deg); }
 
-        .btn-main { background: #fff; color: #000; padding: 22px 70px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 19px; transition: 0.4s; display: inline-block; margin-top: 40px; }
-        .btn-main:hover { transform: translateY(-5px); background: var(--gold); box-shadow: 0 15px 45px rgba(255, 204, 0, 0.3); }
-
         footer { padding: 120px 0; border-top: 1px solid var(--border); opacity: 0.4; text-align: center; font-size: 11px; letter-spacing: 8px; }
 
         @media (max-width: 1000px) {
             .nav-links { display: none; }
             .huge-data h3 { font-size: 140px; }
+        }
+
+        @media (max-width: 600px) {
+            .btn-group { flex-direction: column; align-items: center; gap: 15px; }
+            .btn-main, .btn-discord { width: 100%; max-width: 280px; text-align: center; }
         }
     </style>
 </head>
@@ -139,8 +168,9 @@
         <span class="tag fade-up delay-1">Next-Gen Architecture</span>
         <h1 class="fade-up delay-2">Do Things<br><span class="fade-up delay-3" style="color: var(--gold); display: inline-block;">You Couldn't Do Before</span></h1>
         <p class="desc fade-up delay-4">Redefining the boundaries of execution. Spectra V3 offers a seamless, professional environment where stability meets raw technical power.</p>
-        <div class="fade-up delay-5">
+        <div class="btn-group fade-up delay-5">
             <a href="https://work.ink/26Yy/Spectra" class="btn-main">Get Spectra</a>
+            <a href="https://discord.gg/7sq3xaHSWc" class="btn-discord">Discord Server</a>
         </div>
     </section>
 

@@ -25,12 +25,13 @@
         .bg-system { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
         #particleCanvas { width: 100%; height: 100%; opacity: 0.35; }
 
-        /* 導航欄 - 初始隱藏 */
+        /* 導航欄 - 現代化淡入 */
         .nav-wrapper { 
             position: fixed; top: 30px; width: 100%; display: flex; justify-content: center; z-index: 2000; padding: 0 20px; 
-            opacity: 0; transform: translateY(-20px); transition: var(--transition); transition-delay: 2.5s;
+            opacity: 0; transform: translateY(-10px);
+            animation: modernFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 1.2s;
         }
-        .nav-wrapper.show { opacity: 1; transform: translateY(0); }
         
         nav {
             width: 100%; max-width: 1100px; padding: 14px 40px;
@@ -56,43 +57,45 @@
         .nav-links a:hover { color: var(--gold); }
         .nav-status { font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
 
-        /* 通用板塊 */
+        /* --- 核心開場動畫設計 --- */
         section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 120px 40px; text-align: center; }
-        .reveal { opacity: 0; transform: translateY(50px); transition: var(--transition); }
+        
+        .reveal { opacity: 0; transform: translateY(40px); transition: var(--transition); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* 開場動畫專用標題樣式 */
-        .typewriter-container { display: flex; flex-direction: column; align-items: center; min-height: 250px; }
-        
+        /* 主標題交錯淡入 */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: modernFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
         h1 { 
             font-family: 'Outfit'; font-size: clamp(65px, 12vw, 130px); font-weight: 900; 
             line-height: 0.85; margin-bottom: 30px; letter-spacing: -5px;
-            position: relative; display: inline-block;
         }
 
-        /* 游標樣式 */
-        .cursor {
-            display: inline-block;
-            width: 12px; height: 1.1em;
-            background: var(--gold);
-            margin-left: 10px;
-            vertical-align: middle;
-            animation: blink 0.8s infinite;
-        }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        /* 動態延遲控制 */
+        .delay-1 { animation-delay: 0.2s; } /* Tag */
+        .delay-2 { animation-delay: 0.4s; } /* STELAR */
+        .delay-3 { animation-delay: 0.55s; } /* EXCELLENCE */
+        .delay-4 { animation-delay: 0.8s; } /* Desc */
+        .delay-5 { animation-delay: 1s; } /* Button */
 
-        .tag { color: var(--gold); font-weight: 800; letter-spacing: 8px; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; opacity: 0; transition: 1s; }
-        .desc { color: var(--text-dim); font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto; font-weight: 300; opacity: 0; transition: 1s; }
-        .btn-main { opacity: 0; transition: 1s; }
+        @keyframes modernFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* 其他原有樣式保持不變 */
-        .marquee { width: 100vw; overflow: hidden; padding: 80px 0; background: rgba(255,255,255,0.015); margin: 60px 0; border-y: 1px solid var(--border); }
+        .tag { color: var(--gold); font-weight: 800; letter-spacing: 8px; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; }
+        .desc { color: var(--text-dim); font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto; font-weight: 300; }
+        
+        .marquee { width: 100vw; overflow: hidden; padding: 80px 0; background: rgba(255,255,255,0.015); margin: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .marquee-inner { display: flex; width: max-content; gap: 40px; animation: scroll 50s linear infinite; }
         .marquee-inner img { width: 600px; border-radius: 10px; border: 1px solid var(--border); transition: 0.6s; }
         @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         .tech-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; align-items: center; gap: 40px; }
-        .huge-data { display: flex; flex-direction: column; align-items: center; }
         .huge-data h3 { 
             font-size: clamp(140px, 20vw, 200px); font-family: 'Outfit'; font-weight: 900; line-height: 0.9;
             background: linear-gradient(180deg, #fff 20%, var(--gold) 100%);
@@ -126,7 +129,7 @@
 
     <div class="bg-system"><canvas id="particleCanvas"></canvas></div>
 
-    <div class="nav-wrapper" id="navBar">
+    <div class="nav-wrapper">
         <nav>
             <a href="#" class="nav-left">
                 <img src="Spectra V3.png" alt="Logo" class="logo-icon">
@@ -144,12 +147,12 @@
     </div>
 
     <section id="hero">
-        <span class="tag" id="heroTag">Next-Gen Architecture</span>
-        <div class="typewriter-container">
-            <h1 id="typewriter"></h1>
+        <span class="tag fade-up delay-1">Next-Gen Architecture</span>
+        <h1 class="fade-up delay-2">STELAR<br><span class="fade-up delay-3" style="color: var(--gold); display: inline-block;">EXCELLENCE</span></h1>
+        <p class="desc fade-up delay-4">Redefining the boundaries of execution. Spectra V3 offers a seamless, professional environment where stability meets raw technical power.</p>
+        <div class="fade-up delay-5">
+            <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-main">Get Spectra</a>
         </div>
-        <p class="desc" id="heroDesc">Redefining the boundaries of execution. Spectra V3 offers a seamless, professional environment where stability meets raw technical power.</p>
-        <a href="https://work.ink/26Yy/SpectraExecutor" class="btn-main" id="heroBtn">Get Spectra</a>
     </section>
 
     <div class="marquee reveal">
@@ -166,9 +169,9 @@
                 <div class="label">UNC Score</div>
             </div>
             <div class="tech-content">
-                <span class="tag" style="opacity: 1;">Compatibility</span>
+                <span class="tag">Compatibility</span>
                 <h2>Universal Logic.</h2>
-                <p class="desc" style="opacity: 1;">The highest standard of script compatibility. From advanced Drawing APIs to custom Websockets, Spectra V3 ensures your tools run without compromise.</p>
+                <p class="desc">The highest standard of script compatibility. From advanced Drawing APIs to custom Websockets, Spectra V3 ensures your tools run without compromise.</p>
             </div>
         </div>
     </section>
@@ -180,9 +183,9 @@
                 <div class="label">sUNC Level</div>
             </div>
             <div class="tech-content">
-                <span class="tag" style="opacity: 1;">Efficiency</span>
+                <span class="tag">Efficiency</span>
                 <h2>Surgical Precision.</h2>
-                <p class="desc" style="opacity: 1;">Spectra's sUNC implementation drastically reduces memory overhead, allowing high-intensity scripts to run smoothly on any configuration.</p>
+                <p class="desc">Spectra's sUNC implementation drastically reduces memory overhead, allowing high-intensity scripts to run smoothly on any configuration.</p>
             </div>
         </div>
     </section>
@@ -194,21 +197,22 @@
                 <div class="label" style="color:var(--gold)">Detected</div>
             </div>
             <div class="tech-content">
-                <span class="tag" style="opacity: 1;">Safety</span>
+                <span class="tag">Safety</span>
                 <h2>Invisible Stealth.</h2>
-                <p class="desc" style="opacity: 1;">Security is our core. Using proprietary ring-level bypasses, Spectra V3 maintains a flawless detection record throughout the 2026 landscape.</p>
+                <p class="desc">Security is our core. Using proprietary ring-level bypasses, Spectra V3 maintains a flawless detection record throughout the 2026 landscape.</p>
             </div>
         </div>
     </section>
 
     <section id="faq" class="reveal">
-        <span class="tag" style="opacity: 1;">Support Center</span>
+        <span class="tag">Support Center</span>
         <h2 style="font-size: clamp(40px, 8vw, 70px); font-weight: 900;">Intelligence Hub</h2>
         <div class="qa-grid">
             <div class="qa-item"><div class="qa-head">Is it truly keyless? <span class="qa-icon">+</span></div><div class="qa-body">Yes. Spectra V3 is funded by premium contributors, keeping the experience 100% keyless for everyone.</div></div>
             <div class="qa-item"><div class="qa-head">Why the Antivirus flag? <span class="qa-icon">+</span></div><div class="qa-body">We use memory injection which is often flagged as a "False Positive". Our code is clean and safe to exclusion.</div></div>
-            <div class="qa-item"><div class="qa-head">How to update? <span class="qa-icon">+</span></div><div class="qa-body">Spectra checks for updates immediately upon startup and notifies you to download them if found.</div></div>
+            <div class="qa-item"><div class="qa-head">How to update? <span class="qa-icon">+</span></div><div class="qa-body">We prioritize stability over automated risks. Please download the latest build manually from our official channels.</div></div>
             <div class="qa-item"><div class="qa-head">System requirements? <span class="qa-icon">+</span></div><div class="qa-body">Any 64-bit Windows with latest VC++ Redistributables. Optimized for both high and low-end PCs.</div></div>
+            <div class="qa-item"><div class="qa-head">Multiple instances? <span class="qa-icon">+</span></div><div class="qa-body">Absolutely. Our injection engine supports multi-account usage with minimal performance impact.</div></div>
             <div class="qa-item"><div class="qa-head">Risk of ban? <span class="qa-icon">+</span></div><div class="qa-body">While no tool is 100% risk-free, our stealth technology ensures we stay undetected by modern heuristics.</div></div>
         </div>
     </section>
@@ -216,7 +220,7 @@
     <footer>© 2026 SPECTRA TECHNOLOGIES • STELLAR EXCELLENCE</footer>
 
     <script>
-        // 背景粒子系統
+        // 背景粒子
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -241,82 +245,7 @@
         window.addEventListener('resize', init);
         init(); draw();
 
-        // 現代化打字機開場動畫
-        const textElement = document.getElementById('typewriter');
-        const lines = ["STELAR", "EXCELLENCE"];
-        let currentLine = 0;
-        let currentChar = 0;
-        let isGold = false;
-
-        function startOpeningAnimation() {
-            // 先顯示上方小標籤
-            setTimeout(() => { document.getElementById('heroTag').style.opacity = '1'; }, 500);
-            
-            // 開始打字
-            setTimeout(type, 1000);
-        }
-
-        function type() {
-            if (currentLine < lines.length) {
-                if (currentChar === 0 && currentLine === 1) {
-                    textElement.innerHTML += "<br>";
-                    isGold = true; // 第二行變金色
-                }
-
-                let targetLine = lines[currentLine];
-                let char = targetLine.charAt(currentChar);
-                
-                if (isGold) {
-                    // 檢查是否已經有金色容器，沒有就建一個
-                    let goldSpan = textElement.querySelector('.gold-text');
-                    if (!goldSpan) {
-                        goldSpan = document.createElement('span');
-                        goldSpan.className = 'gold-text';
-                        goldSpan.style.color = 'var(--gold)';
-                        textElement.appendChild(goldSpan);
-                    }
-                    goldSpan.textContent += char;
-                } else {
-                    textElement.innerHTML += char;
-                }
-
-                // 移除舊游標，加上新游標
-                let oldCursor = document.querySelector('.cursor');
-                if (oldCursor) oldCursor.remove();
-                
-                let cursor = document.createElement('span');
-                cursor.className = 'cursor';
-                textElement.appendChild(cursor);
-
-                currentChar++;
-
-                if (currentChar < targetLine.length) {
-                    // 模擬人類打字速度波動
-                    setTimeout(type, Math.random() * 50 + 50);
-                } else {
-                    currentLine++;
-                    currentChar = 0;
-                    setTimeout(type, 300); // 換行停頓
-                }
-            } else {
-                // 動態結束：淡入剩餘 UI
-                finishAnimation();
-            }
-        }
-
-        function finishAnimation() {
-            document.getElementById('heroDesc').style.opacity = '1';
-            document.getElementById('heroBtn').style.opacity = '1';
-            document.getElementById('navBar').classList.add('show');
-            // 保持游標閃爍一會後消失
-            setTimeout(() => {
-                document.querySelector('.cursor').style.display = 'none';
-            }, 2000);
-        }
-
-        window.onload = startOpeningAnimation;
-
-        // 常規滾動監測
+        // FAQ 控制
         document.querySelectorAll('.qa-item').forEach(item => {
             item.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
@@ -325,6 +254,7 @@
             });
         });
 
+        // 滾動顯示
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });

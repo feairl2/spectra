@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spectra</title>
+    <title>Spectra | Next-Gen Architecture</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Outfit:wght@100;400;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="Spectra V3.png">
@@ -56,7 +56,7 @@
         .nav-links a:hover { color: var(--gold); }
         .nav-status { font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
 
-        /* 開場動畫 */
+        /* 通用板塊樣式 */
         section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 120px 40px; text-align: center; }
         .reveal { opacity: 0; transform: translateY(40px); transition: var(--transition); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -75,32 +75,100 @@
         .desc { color: var(--text-dim); font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto; font-weight: 300; }
 
         /* 按鈕系統 */
-        .btn-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-
-        .btn-main { 
-            background: #fff; color: #000; padding: 22px 50px; border-radius: 100px; 
-            text-decoration: none; font-weight: 800; font-size: 19px; transition: 0.4s; 
-            display: inline-block; 
-        }
+        .btn-group { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+        .btn-main { background: #fff; color: #000; padding: 22px 50px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 19px; transition: 0.4s; display: inline-block; }
         .btn-main:hover { transform: translateY(-5px); background: var(--gold); box-shadow: 0 15px 45px rgba(255, 204, 0, 0.3); }
+        .btn-discord { background: rgba(255, 255, 255, 0.05); color: #fff; padding: 22px 50px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 19px; border: 1px solid var(--border); transition: 0.4s; display: inline-block; }
+        .btn-discord:hover { transform: translateY(-5px); background: var(--discord); border-color: var(--discord); box-shadow: 0 15px 45px rgba(88, 101, 242, 0.3); }
 
-        .btn-discord {
-            background: rgba(255, 255, 255, 0.05); color: #fff; padding: 22px 50px; border-radius: 100px; 
-            text-decoration: none; font-weight: 800; font-size: 19px; border: 1px solid var(--border); transition: 0.4s; 
-            display: inline-block;
+        /* --- 新增：淡入淡出幻燈片樣式 --- */
+        .slider-section { width: 100%; padding: 60px 0; overflow: hidden; }
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            height: 550px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .btn-discord:hover { 
-            transform: translateY(-5px); background: var(--discord); border-color: var(--discord);
-            box-shadow: 0 15px 45px rgba(88, 101, 242, 0.3); 
+        .slider-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            z-index: 1;
+        }
+        .slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+        /* 控制按鈕 */
+        .slider-ctrl {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .slider-ctrl:hover { background: var(--gold); color: black; border-color: var(--gold); }
+        .prev-btn { left: -70px; }
+        .next-btn { right: -70px; }
 
-        /* 統一技術數據板塊 */
+        /* 指示圓點 */
+        .slider-dots {
+            position: absolute;
+            bottom: -40px;
+            display: flex;
+            gap: 12px;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .dot.active { background: var(--gold); transform: scale(1.3); }
+
+        /* 響應式調整 */
+        @media (max-width: 1150px) {
+            .slider-container { max-width: 85%; }
+            .prev-btn { left: 10px; }
+            .next-btn { right: 10px; }
+        }
+        @media (max-width: 600px) {
+            .slider-container { height: 300px; }
+        }
+        /* --- 幻燈片樣式結束 --- */
+
+        /* 技術數據板塊 */
         .tech-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; align-items: center; gap: 50px; }
         .huge-data { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; }
         .huge-data h3 { 
@@ -112,13 +180,6 @@
         }
         .huge-data .label { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin-top: 5px; letter-spacing: 4px; }
         .tech-content h2 { font-size: clamp(40px, 6vw, 75px); font-weight: 800; margin-bottom: 20px; letter-spacing: -2px; }
-
-        /* Marquee */
-        .marquee { width: 100vw; overflow: hidden; padding: 100px 0; background: rgba(255,255,255,0.01); margin: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-        .marquee-inner { display: flex; width: max-content; gap: 40px; animation: scroll 60s linear infinite; }
-        .marquee-inner img { width: 650px; border-radius: 12px; border: 1px solid var(--border); filter: grayscale(20%); transition: 0.6s; }
-        .marquee-inner img:hover { filter: grayscale(0%); border-color: var(--gold); }
-        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         /* FAQ */
         .qa-grid { width: 100%; max-width: 950px; margin-top: 60px; text-align: left; }
@@ -135,11 +196,6 @@
         @media (max-width: 1000px) {
             .nav-links { display: none; }
             .huge-data h3 { font-size: 140px; }
-        }
-
-        @media (max-width: 600px) {
-            .btn-group { flex-direction: column; align-items: center; gap: 15px; }
-            .btn-main, .btn-discord { width: 100%; max-width: 280px; text-align: center; }
         }
     </style>
 </head>
@@ -174,10 +230,20 @@
         </div>
     </section>
 
-    <div class="marquee reveal">
-        <div class="marquee-inner">
-            <img src="UI.png" alt="1"><img src="UI2.png" alt="2"><img src="UI3.png" alt="3">
-            <img src="UI.png" alt="1"><img src="UI2.png" alt="2"><img src="UI3.png" alt="3">
+    <div class="slider-section reveal">
+        <div class="slider-container">
+            <button class="slider-ctrl prev-btn" id="prevBtn">&#10094;</button>
+            
+            <div class="slider-inner" id="sliderInner">
+                <img src="UI.png" alt="Spectra UI 1" class="slide active">
+                <img src="UI2.png" alt="Spectra UI 2" class="slide">
+                <img src="UI3.png" alt="Spectra UI 3" class="slide">
+            </div>
+
+            <button class="slider-ctrl next-btn" id="nextBtn">&#10095;</button>
+
+            <div class="slider-dots" id="dotsContainer">
+                </div>
         </div>
     </div>
 
@@ -238,6 +304,7 @@
     <footer>© 2026 SPECTRA TECHNOLOGIES • STELLAR EXCELLENCE</footer>
 
     <script>
+        // --- 背景粒子系統 ---
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -262,6 +329,7 @@
         window.addEventListener('resize', init);
         init(); draw();
 
+        // --- FAQ 收納效果 ---
         document.querySelectorAll('.qa-item').forEach(item => {
             item.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
@@ -270,10 +338,66 @@
             });
         });
 
+        // --- 滾動顯現效果 ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 幻燈片淡入淡出邏輯 ---
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+        let slideInterval;
+
+        // 生成圓點
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        });
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                dots[i].classList.remove('active');
+            });
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateSlider();
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000); // 5秒自動換一張
+        }
+
+        nextBtn.addEventListener('click', () => { nextSlide(); resetTimer(); });
+        prevBtn.addEventListener('click', () => { prevSlide(); resetTimer(); });
+
+        // 啟動自動輪播
+        slideInterval = setInterval(nextSlide, 5000);
+
     </script>
 </body>
 </html>

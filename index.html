@@ -15,188 +15,132 @@
             --text-main: #ffffff;
             --text-dim: #999999;
             --glass: rgba(10, 10, 10, 0.85);
-            --transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: 0.7s cubic-bezier(0.45, 0, 0.55, 1);
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        /* 背景流動系統 */
+        /* 背景 */
         .bg-system { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
         #particleCanvas { width: 100%; height: 100%; opacity: 0.35; }
 
-        /* 導航欄 */
+        /* 導航 */
         .nav-wrapper { 
             position: fixed; top: 30px; width: 100%; display: flex; justify-content: center; z-index: 2000; padding: 0 20px; 
-            opacity: 0; transform: translateY(-10px);
-            animation: modernFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 1.2s;
+            opacity: 0; transform: translateY(-10px); animation: modernFade 1s forwards 1.2s;
         }
-        
         nav {
             width: 100%; max-width: 1100px; padding: 14px 40px;
-            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border); border-radius: 100px;
+            background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--border); border-radius: 100px;
             display: flex; align-items: center; justify-content: space-between;
         }
         .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; color: #fff; }
-        .logo-icon {
-            width: 38px; height: 38px; object-fit: contain;
-            filter: drop-shadow(0 0 8px var(--gold));
-            animation: logo-glow 3s infinite ease-in-out;
-        }
-        @keyframes logo-glow {
-            0%, 100% { filter: drop-shadow(0 0 5px var(--gold)); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 18px var(--gold)); transform: scale(1.08); }
-        }
+        .logo-icon { width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 0 8px var(--gold)); }
         .logo-text { font-family: 'Outfit'; font-weight: 900; font-size: 26px; letter-spacing: -1.5px; }
         .nav-links { display: flex; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
+        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 700; text-transform: uppercase; transition: 0.3s; }
         .nav-links a:hover { color: var(--gold); }
-        .nav-status { font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
 
-        /* 通用板塊樣式 */
+        /* Hero */
         section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 120px 40px; text-align: center; }
-        .reveal { opacity: 0; transform: translateY(40px); transition: var(--transition); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
-        .fade-up { opacity: 0; transform: translateY(30px); animation: modernFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes modernFade { to { opacity: 1; transform: translateY(0); } }
-
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.55s; }
-        .delay-4 { animation-delay: 0.8s; }
-        .delay-5 { animation-delay: 1s; }
-
         h1 { font-family: 'Outfit'; font-size: clamp(65px, 12vw, 130px); font-weight: 900; line-height: 0.85; margin-bottom: 30px; letter-spacing: -5px; }
         .tag { color: var(--gold); font-weight: 800; letter-spacing: 8px; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; }
-        .desc { color: var(--text-dim); font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto; font-weight: 300; }
+        .desc { color: var(--text-dim); font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto; }
 
-        /* 按鈕系統 */
-        .btn-group { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
-        .btn-main { background: #fff; color: #000; padding: 22px 50px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 19px; transition: 0.4s; display: inline-block; }
-        .btn-main:hover { transform: translateY(-5px); background: var(--gold); box-shadow: 0 15px 45px rgba(255, 204, 0, 0.3); }
-        .btn-discord { background: rgba(255, 255, 255, 0.05); color: #fff; padding: 22px 50px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 19px; border: 1px solid var(--border); transition: 0.4s; display: inline-block; }
-        .btn-discord:hover { transform: translateY(-5px); background: var(--discord); border-color: var(--discord); box-shadow: 0 15px 45px rgba(88, 101, 242, 0.3); }
+        @keyframes modernFade { to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 新增：淡入淡出幻燈片樣式 --- */
-        .slider-section { width: 100%; padding: 60px 0; overflow: hidden; }
-        .slider-container {
+        /* --- Netflix Style Slider --- */
+        .slider-wrapper {
+            width: 100vw;
             position: relative;
+            margin: 60px 0;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .slider-container {
+            display: flex;
             width: 100%;
-            max-width: 1000px;
-            height: 550px;
-            margin: 0 auto;
+            transition: transform var(--transition);
+            will-change: transform;
+        }
+
+        .slide {
+            min-width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 0 5vw;
+            transition: transform 0.5s ease;
         }
-        .slider-inner {
-            position: relative;
+
+        .slide img {
             width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            overflow: hidden;
+            max-width: 1100px;
+            aspect-ratio: 16 / 9;
+            object-fit: contain;
+            border-radius: 15px;
             border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1.2s ease-in-out;
-            z-index: 1;
-        }
-        .slide.active {
-            opacity: 1;
-            z-index: 2;
-        }
-        /* 控制按鈕 */
+
+        /* 左右控制 */
         .slider-ctrl {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            border: 1px solid var(--border);
+            top: 0;
+            bottom: 0;
+            width: 8vw;
+            background: rgba(0,0,0,0.01);
+            border: none;
             color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            font-size: 40px;
             cursor: pointer;
-            z-index: 100;
-            font-size: 20px;
+            z-index: 10;
+            transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.3s;
-            backdrop-filter: blur(10px);
         }
-        .slider-ctrl:hover { background: var(--gold); color: black; border-color: var(--gold); }
-        .prev-btn { left: -70px; }
-        .next-btn { right: -70px; }
 
-        /* 指示圓點 */
+        .slider-ctrl:hover {
+            background: rgba(0,0,0,0.6);
+            color: var(--gold);
+        }
+
+        .prev-btn { left: 0; }
+        .next-btn { right: 0; }
+
         .slider-dots {
-            position: absolute;
-            bottom: -40px;
             display: flex;
-            gap: 12px;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
         }
         .dot {
-            width: 10px;
-            height: 10px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            cursor: pointer;
+            width: 40px;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
             transition: 0.3s;
+            cursor: pointer;
         }
-        .dot.active { background: var(--gold); transform: scale(1.3); }
+        .dot.active { background: var(--gold); }
 
-        /* 響應式調整 */
-        @media (max-width: 1150px) {
-            .slider-container { max-width: 85%; }
-            .prev-btn { left: 10px; }
-            .next-btn { right: 10px; }
-        }
-        @media (max-width: 600px) {
-            .slider-container { height: 300px; }
-        }
-        /* --- 幻燈片樣式結束 --- */
-
-        /* 技術數據板塊 */
-        .tech-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; align-items: center; gap: 50px; }
-        .huge-data { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; }
+        /* 技術數據 */
         .huge-data h3 { 
             font-size: clamp(140px, 20vw, 220px); font-family: 'Outfit'; font-weight: 900; line-height: 0.8;
-            background: linear-gradient(180deg, #ffffff 30%, var(--gold) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 40px rgba(255, 204, 0, 0.25));
-            letter-spacing: -5px;
+            background: linear-gradient(180deg, #ffffff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .huge-data .label { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin-top: 5px; letter-spacing: 4px; }
-        .tech-content h2 { font-size: clamp(40px, 6vw, 75px); font-weight: 800; margin-bottom: 20px; letter-spacing: -2px; }
-
-        /* FAQ */
         .qa-grid { width: 100%; max-width: 950px; margin-top: 60px; text-align: left; }
-        .qa-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 25px; margin-bottom: 18px; cursor: pointer; transition: 0.4s; }
-        .qa-item:hover { border-color: var(--gold); background: rgba(255,255,255,0.03); }
-        .qa-head { padding: 30px 45px; display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 700; }
-        .qa-body { max-height: 0; padding: 0 45px; color: var(--text-dim); line-height: 1.8; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; overflow: hidden; }
-        .qa-item.active .qa-body { max-height: 400px; padding-bottom: 35px; opacity: 1; }
-        .qa-icon { color: var(--gold); font-size: 24px; transition: 0.4s; }
-        .qa-item.active .qa-icon { transform: rotate(45deg); }
+        .qa-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; margin-bottom: 15px; cursor: pointer; }
+        .qa-head { padding: 25px 35px; display: flex; justify-content: space-between; font-weight: 700; }
+        .qa-body { max-height: 0; padding: 0 35px; color: var(--text-dim); overflow: hidden; transition: 0.4s; }
+        .qa-item.active .qa-body { max-height: 200px; padding-bottom: 25px; }
 
-        footer { padding: 120px 0; border-top: 1px solid var(--border); opacity: 0.4; text-align: center; font-size: 11px; letter-spacing: 8px; }
-
-        @media (max-width: 1000px) {
-            .nav-links { display: none; }
-            .huge-data h3 { font-size: 140px; }
-        }
+        footer { padding: 80px 0; border-top: 1px solid var(--border); opacity: 0.4; text-align: center; font-size: 11px; letter-spacing: 5px; }
     </style>
 </head>
 <body>
@@ -212,116 +156,65 @@
             <div class="nav-links">
                 <a href="#hero">Home</a>
                 <a href="#unc">UNC</a>
-                <a href="#sunc">sUNC</a>
                 <a href="#security">Security</a>
                 <a href="#faq">FAQ</a>
             </div>
-            <div class="nav-status">V3.0 Working</div>
+            <div class="nav-status" style="color: var(--gold); font-weight: 800;">V3.0 Working</div>
         </nav>
     </div>
 
     <section id="hero">
-        <span class="tag fade-up delay-1">Next-Gen Architecture</span>
-        <h1 class="fade-up delay-2">Do Things<br><span class="fade-up delay-3" style="color: var(--gold); display: inline-block;">You Couldn't Do Before</span></h1>
-        <p class="desc fade-up delay-4">Redefining the boundaries of execution. Spectra V3 offers a seamless, professional environment where stability meets raw technical power.</p>
-        <div class="btn-group fade-up delay-5">
-            <a href="https://work.ink/26Yy/Spectra" class="btn-main">Get Spectra</a>
-            <a href="https://discord.gg/7sq3xaHSWc" class="btn-discord">Discord Server</a>
-        </div>
+        <span class="tag">Next-Gen Architecture</span>
+        <h1>Do Things<br><span style="color: var(--gold);">You Couldn't Do Before</span></h1>
+        <p class="desc">Redefining the boundaries of execution. Spectra V3 offers stability meeting raw technical power.</p>
     </section>
 
-    <div class="slider-section reveal">
-        <div class="slider-container">
-            <button class="slider-ctrl prev-btn" id="prevBtn">&#10094;</button>
-            
-            <div class="slider-inner" id="sliderInner">
-                <img src="UI.png" alt="Spectra UI 1" class="slide active">
-                <img src="UI2.png" alt="Spectra UI 2" class="slide">
-                <img src="UI3.png" alt="Spectra UI 3" class="slide">
-            </div>
-
-            <button class="slider-ctrl next-btn" id="nextBtn">&#10095;</button>
-
-            <div class="slider-dots" id="dotsContainer">
-                </div>
+    <div class="slider-wrapper reveal">
+        <button class="slider-ctrl prev-btn" id="prevBtn">&#10094;</button>
+        <button class="slider-ctrl next-btn" id="nextBtn">&#10095;</button>
+        
+        <div class="slider-container" id="sliderContainer">
+            <div class="slide"><img src="UI.png" alt="UI 1"></div>
+            <div class="slide"><img src="UI2.png" alt="UI 2"></div>
+            <div class="slide"><img src="UI3.png" alt="UI 3"></div>
         </div>
+
+        <div class="slider-dots" id="dotsContainer"></div>
     </div>
 
     <section id="unc" class="reveal">
-        <div class="tech-container">
-            <div class="huge-data">
-                <h3>99%</h3>
-                <div class="label">UNC</div>
-            </div>
-            <div class="tech-content">
-                <span class="tag">Compatibility</span>
-                <h2>Universal Logic.</h2>
-                <p class="desc">The highest standard of script compatibility. From advanced Drawing APIs to custom Websockets, Spectra V3 ensures your tools run without compromise.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="sunc" class="reveal">
-        <div class="tech-container">
-            <div class="huge-data">
-                <h3>98%</h3>
-                <div class="label">sUNC</div>
-            </div>
-            <div class="tech-content">
-                <span class="tag">Efficiency</span>
-                <h2>Surgical Precision.</h2>
-                <p class="desc">This means that Spectra can execute the vast majority of Roblox scripts, including complex logic.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="security" class="reveal">
-        <div class="tech-container">
-            <div class="huge-data">
-                <h3>0%</h3>
-                <div class="label">Undetected</div>
-            </div>
-            <div class="tech-content">
-                <span class="tag">Safety</span>
-                <h2>Invisible Stealth.</h2>
-                <p class="desc">Security is our core. Using proprietary ring-level bypasses, Spectra V3 maintains a flawless detection record throughout the 2026 landscape.</p>
-            </div>
-        </div>
+        <div class="huge-data"><h3>99%</h3><div class="label" style="letter-spacing: 5px;">UNC COMPATIBILITY</div></div>
     </section>
 
     <section id="faq" class="reveal">
-        <span class="tag">Support Center</span>
-        <h2 style="font-size: clamp(40px, 8vw, 70px); font-weight: 900;">Q & A</h2>
+        <h2 style="font-size: 50px; font-family: 'Outfit'; margin-bottom: 40px;">Q & A</h2>
         <div class="qa-grid">
-            <div class="qa-item"><div class="qa-head">Is it truly keyless? <span class="qa-icon">+</span></div><div class="qa-body">Yes. Spectra V3 is funded by premium contributors, keeping the experience 100% keyless for everyone.</div></div>
-            <div class="qa-item"><div class="qa-head">Why the Antivirus flag? <span class="qa-icon">+</span></div><div class="qa-body">We use memory injection which is often flagged as a "False Positive". Our code is clean and safe to exclusion.</div></div>
-            <div class="qa-item"><div class="qa-head">How to update? <span class="qa-icon">+</span></div><div class="qa-body">When an update is required, Spectra will prompt you to update upon startup.</div></div>
-            <div class="qa-item"><div class="qa-head">System requirements? <span class="qa-icon">+</span></div><div class="qa-body">Any 64-bit Windows with latest VC++ Redistributables. Optimized for both high and low-end PCs.</div></div>
-            <div class="qa-item"><div class="qa-head">Risk of ban? <span class="qa-icon">+</span></div><div class="qa-body">While no tool is 100% risk-free, our stealth technology ensures we stay undetected by modern heuristics.</div></div>
+            <div class="qa-item"><div class="qa-head">Is it truly keyless? <span>+</span></div><div class="qa-body">Yes. Spectra V3 is funded by premium contributors, keeping it 100% keyless for everyone.</div></div>
+            <div class="qa-item"><div class="qa-head">Risk of ban? <span>+</span></div><div class="qa-body">Our stealth technology ensures we stay undetected by modern heuristics.</div></div>
         </div>
     </section>
 
     <footer>© 2026 SPECTRA TECHNOLOGIES • STELLAR EXCELLENCE</footer>
 
     <script>
-        // --- 背景粒子系統 ---
+        // 粒子背景
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            particles = Array(120).fill().map(() => ({
+            particles = Array(100).fill().map(() => ({
                 x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                s: Math.random() * 2, o: Math.random(), sx: (Math.random()-0.5)*0.3, sy: (Math.random()-0.5)*0.3
+                sx: (Math.random()-0.5)*0.2, sy: (Math.random()-0.5)*0.2, s: Math.random()*2
             }));
         }
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(255, 204, 0, 0.5)";
             particles.forEach(p => {
                 p.x += p.sx; p.y += p.sy;
                 if(p.x<0 || p.x>canvas.width) p.sx *= -1;
                 if(p.y<0 || p.y>canvas.height) p.sy *= -1;
-                ctx.fillStyle = `rgba(255, 204, 0, ${p.o})`;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(draw);
@@ -329,75 +222,96 @@
         window.addEventListener('resize', init);
         init(); draw();
 
-        // --- FAQ 收納效果 ---
-        document.querySelectorAll('.qa-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                document.querySelectorAll('.qa-item').forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
-            });
-        });
-
-        // --- 滾動顯現效果 ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // --- 幻燈片淡入淡出邏輯 ---
+        // Netflix Slider 邏輯
+        const container = document.getElementById('sliderContainer');
         const slides = document.querySelectorAll('.slide');
         const dotsContainer = document.getElementById('dotsContainer');
-        const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        let currentIndex = 0;
-        let slideInterval;
+        const prevBtn = document.getElementById('prevBtn');
 
-        // 生成圓點
+        let index = 1; // 從 1 開始因為前面會補克隆
+        let isMoving = false;
+
+        // 1. 克隆首尾實現無縫
+        const firstClone = slides[0].cloneNode(true);
+        const lastClone = slides[slides.length - 1].cloneNode(true);
+        container.appendChild(firstClone);
+        container.insertBefore(lastClone, slides[0]);
+
+        // 2. 初始化位置
+        const allSlides = document.querySelectorAll('.slide');
+        container.style.transform = `translateX(-${index * 100}vw)`;
+
+        // 3. 生成圓點
         slides.forEach((_, i) => {
             const dot = document.createElement('div');
             dot.classList.add('dot');
             if(i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(i));
+            dot.onclick = () => goToSlide(i + 1);
             dotsContainer.appendChild(dot);
         });
-        const dots = document.querySelectorAll('.dot');
 
-        function updateSlider() {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                dots[i].classList.remove('active');
-            });
-            slides[currentIndex].classList.add('active');
-            dots[currentIndex].classList.add('active');
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach(d => d.classList.remove('active'));
+            let dotIndex = index - 1;
+            if (index > slides.length) dotIndex = 0;
+            if (index < 1) dotIndex = slides.length - 1;
+            dots[dotIndex].classList.add('active');
         }
 
+        function moveSlider() {
+            container.style.transition = `transform var(--transition)`;
+            container.style.transform = `translateX(-${index * 100}vw)`;
+            updateDots();
+        }
+
+        container.addEventListener('transitionend', () => {
+            isMoving = false;
+            if (allSlides[index] === firstClone) {
+                container.style.transition = 'none';
+                index = 1;
+                container.style.transform = `translateX(-${index * 100}vw)`;
+            }
+            if (allSlides[index] === lastClone) {
+                container.style.transition = 'none';
+                index = allSlides.length - 2;
+                container.style.transform = `translateX(-${index * 100}vw)`;
+            }
+        });
+
         function nextSlide() {
-            currentIndex = (currentIndex + 1) % slides.length;
-            updateSlider();
+            if (isMoving) return;
+            isMoving = true;
+            index++;
+            moveSlider();
         }
 
         function prevSlide() {
-            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-            updateSlider();
+            if (isMoving) return;
+            isMoving = true;
+            index--;
+            moveSlider();
         }
 
-        function goToSlide(index) {
-            currentIndex = index;
-            updateSlider();
-            resetTimer();
+        function goToSlide(n) {
+            if (isMoving) return;
+            index = n;
+            moveSlider();
         }
 
-        function resetTimer() {
-            clearInterval(slideInterval);
-            slideInterval = setInterval(nextSlide, 5000); // 5秒自動換一張
-        }
+        nextBtn.onclick = nextSlide;
+        prevBtn.onclick = prevSlide;
 
-        nextBtn.addEventListener('click', () => { nextSlide(); resetTimer(); });
-        prevBtn.addEventListener('click', () => { prevSlide(); resetTimer(); });
+        // 自動播放
+        let auto = setInterval(nextSlide, 5000);
+        document.querySelector('.slider-wrapper').onmouseenter = () => clearInterval(auto);
+        document.querySelector('.slider-wrapper').onmouseleave = () => auto = setInterval(nextSlide, 5000);
 
-        // 啟動自動輪播
-        slideInterval = setInterval(nextSlide, 5000);
-
+        // FAQ & Reveal
+        document.querySelectorAll('.qa-item').forEach(i => i.onclick = () => i.classList.toggle('active'));
+        const observer = new IntersectionObserver(es => es.forEach(e => {if(e.isIntersecting) e.target.classList.add('active')}), {threshold:0.1});
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>

@@ -2,362 +2,291 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spectra | Next-Gen Architecture</title>
+    <title>SPECTRA | THE PINNACLE OF EXECUTION</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&family=Outfit:wght@100;400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="Spectra.png">
     <style>
         :root {
-            --bg: #030303;
-            --gold: #ffcc00;
-            --discord: #5865F2;
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --primary: #FFD600;
             --border: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --text-dim: #999999;
-            --glass: rgba(10, 10, 10, 0.85);
-            --transition: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            --text-dim: #9aa0a6;
+            --transition: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { background: var(--bg); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
-
-        /* 背景粒子 */
-        .bg-system { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        #particleCanvas { width: 100%; height: 100%; opacity: 0.35; }
-
-        /* 導航欄 */
-        .nav-wrapper { 
-            position: fixed; top: 30px; width: 100%; display: flex; justify-content: center; z-index: 2000; padding: 0 20px; 
-            opacity: 0; transform: translateY(-10px);
-            animation: modernFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 1.2s;
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        nav {
-            width: 100%; max-width: 1100px; padding: 14px 40px;
-            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border); border-radius: 100px;
+
+        /* --- 智慧位移光暈 --- */
+        #smart-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 214, 0, 0.15) 0%, rgba(255, 214, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(80px);
+            transition: all 1.8s var(--transition); /* 極其絲滑的位移 */
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+        }
+
+        /* --- Google Style Header --- */
+        header {
+            position: fixed; top: 0; width: 100%; height: 72px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
+            padding: 0 6%; z-index: 1000;
         }
-        .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; color: #fff; }
-        .logo-icon { width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 0 8px var(--gold)); animation: logo-glow 3s infinite ease-in-out; }
-        @keyframes logo-glow { 0%, 100% { filter: drop-shadow(0 0 5px var(--gold)); transform: scale(1); } 50% { filter: drop-shadow(0 0 18px var(--gold)); transform: scale(1.08); } }
-        .logo-text { font-family: 'Outfit'; font-weight: 900; font-size: 26px; letter-spacing: -1.5px; }
-        .nav-links { display: flex; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--gold); }
-        .nav-status { font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
+        .header-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+        .header-logo img { width: 30px; }
+        .header-logo span { font-size: 20px; font-weight: 500; letter-spacing: -0.5px; }
 
-        /* Section 通用樣式 */
-        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 120px 40px; text-align: center; }
-        .reveal { opacity: 0; transform: translateY(40px); transition: var(--transition); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .fade-up { opacity: 0; transform: translateY(30px); animation: modernFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes modernFade { to { opacity: 1; transform: translateY(0); } }
-        .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.55s; } .delay-4 { animation-delay: 0.8s; } .delay-5 { animation-delay: 1s; }
+        nav { display: flex; gap: 32px; }
+        nav a { text-decoration: none; color: var(--text-dim); font-size: 14px; font-weight: 500; transition: 0.3s; }
+        nav a:hover { color: var(--primary); }
 
-        h1 { font-family: 'Outfit'; font-size: clamp(65px, 12vw, 130px); font-weight: 900; line-height: 0.85; margin-bottom: 30px; letter-spacing: -5px; }
-        .tag { color: var(--gold); font-weight: 800; letter-spacing: 8px; font-size: 12px; margin-bottom: 25px; text-transform: uppercase; }
-        .desc { color: var(--text-dim); font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto; font-weight: 300; }
-
-        /* 按鈕系統 */
-        .btn-group { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
-        .btn-main { background: #fff; color: #000; padding: 22px 50px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 19px; transition: 0.4s; display: inline-block; }
-        .btn-main:hover { transform: translateY(-5px); background: var(--gold); box-shadow: 0 15px 45px rgba(255, 204, 0, 0.3); }
-        .btn-discord { background: rgba(255, 255, 255, 0.05); color: #fff; padding: 22px 50px; border-radius: 100px; text-decoration: none; font-weight: 800; font-size: 19px; border: 1px solid var(--border); transition: 0.4s; display: inline-block; }
-        .btn-discord:hover { transform: translateY(-5px); background: var(--discord); border-color: var(--discord); box-shadow: 0 15px 45px rgba(88, 101, 242, 0.3); }
-
-        /* --- 核心修正：高度自適應幻燈片 --- */
-        .slider-section { width: 100%; padding: 60px 0; }
-        .slider-container {
-            position: relative;
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            text-align: center;
+            padding: 0 20px;
         }
-        .slider-viewport {
-            position: relative;
-            width: 100%;
-            /* 關鍵：過渡高度變化 */
-            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
+        .hero h1 { 
+            font-size: clamp(48px, 10vw, 90px); 
+            font-weight: 900; 
+            letter-spacing: -3px; 
+            line-height: 1;
+            margin-bottom: 24px;
         }
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: auto; /* 保持圖片原始比例 */
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out;
-            z-index: 1;
-            display: block;
-        }
-        .slide.active {
-            opacity: 1;
-            z-index: 2;
+        .hero h1 span { color: var(--primary); }
+        .hero p { 
+            font-size: 20px; 
+            color: var(--text-dim); 
+            max-width: 700px; 
+            margin-bottom: 48px;
+            font-weight: 300;
         }
 
-        .slider-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+        /* --- Centered Buttons --- */
+        .btn-group { display: flex; gap: 16px; justify-content: center; }
+        .btn {
+            padding: 16px 40px; font-size: 15px; font-weight: 700;
+            border-radius: 8px; text-decoration: none; position: relative;
+            transition: 0.3s var(--transition); overflow: hidden;
+        }
+        .btn-primary { background: var(--primary); color: #000; }
+        .btn-primary:hover { 
+            transform: translateY(-5px) scale(1.02); 
+            box-shadow: 0 20px 40px rgba(255, 214, 0, 0.2); 
+        }
+        .btn-secondary { border: 1px solid var(--border); color: #fff; }
+        .btn-secondary:hover { border-color: var(--primary); background: rgba(255,214,0,0.05); }
+
+        /* --- Slider --- */
+        .slider-section { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
+        .viewport { 
+            border: 1px solid var(--border); border-radius: 24px; /* 現代大圓角 */
+            overflow: hidden; background: #050505;
+            transition: height 0.5s var(--transition);
+        }
+        .slide { width: 100%; display: none; }
+        .slide.active { display: block; animation: fadeIn 1s var(--transition); }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        /* --- Specs Section (圓角現代化) --- */
+        .specs-section { 
+            max-width: 1200px; margin: 100px auto; padding: 0 40px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
+        }
+        .spec-card { 
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
-            color: white;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 100;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-            backdrop-filter: blur(10px);
+            padding: 60px 40px; 
+            border-radius: 32px; /* 現代化大圓角 */
+            transition: all 0.5s var(--transition);
         }
-        .slider-btn:hover { background: var(--gold); color: black; border-color: var(--gold); }
-        .prev-btn { left: -80px; }
-        .next-btn { right: -80px; }
-
-        .slider-dots { margin-top: 30px; display: flex; gap: 12px; }
-        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer; transition: 0.3s; }
-        .dot.active { background: var(--gold); transform: scale(1.5); }
-
-        @media (max-width: 1200px) {
-            .slider-container { max-width: 85%; }
-            .prev-btn { left: -30px; }
-            .next-btn { right: -30px; }
+        .spec-card:hover { 
+            border-color: var(--primary); 
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-10px);
         }
-        /* --- 修正結束 --- */
+        .spec-label { color: var(--primary); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block; }
+        .spec-card h2 { font-size: 64px; margin-bottom: 10px; font-weight: 800; }
+        .spec-card p { color: var(--text-dim); font-size: 15px; }
 
-        .tech-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; align-items: center; gap: 50px; }
-        .huge-data h3 { 
-            font-size: clamp(140px, 20vw, 220px); font-family: 'Outfit'; font-weight: 900; line-height: 0.8;
-            background: linear-gradient(180deg, #ffffff 30%, var(--gold) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 40px rgba(255, 204, 0, 0.25)); letter-spacing: -5px;
+        /* --- FAQ --- */
+        .faq { max-width: 850px; margin: 150px auto; padding: 0 40px; }
+        .faq h2 { font-size: 36px; margin-bottom: 50px; text-align: center; }
+        .faq-item { border-bottom: 1px solid var(--border); cursor: pointer; padding: 30px 0; }
+        .faq-q { display: flex; justify-content: space-between; font-size: 18px; font-weight: 500; }
+        .faq-a { max-height: 0; overflow: hidden; transition: 0.5s var(--transition); color: var(--text-dim); }
+        .faq-item.active .faq-a { max-height: 200px; margin-top: 20px; }
+
+        footer { 
+            padding: 100px 40px; text-align: center; border-top: 1px solid var(--border); 
+            color: var(--text-dim); font-size: 12px;
         }
-        .huge-data .label { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin-top: 5px; letter-spacing: 4px; }
-        .tech-content h2 { font-size: clamp(40px, 6vw, 75px); font-weight: 800; margin-bottom: 20px; letter-spacing: -2px; }
 
-        .qa-grid { width: 100%; max-width: 950px; margin-top: 60px; text-align: left; }
-        .qa-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 25px; margin-bottom: 18px; cursor: pointer; transition: 0.4s; }
-        .qa-item.active { border-color: var(--gold); }
-        .qa-head { padding: 30px 45px; display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 700; }
-        .qa-body { max-height: 0; padding: 0 45px; color: var(--text-dim); line-height: 1.8; transition: 0.5s; opacity: 0; overflow: hidden; }
-        .qa-item.active .qa-body { max-height: 400px; padding-bottom: 35px; opacity: 1; }
-        .qa-icon { color: var(--gold); font-size: 24px; transition: 0.4s; }
-        .qa-item.active .qa-icon { transform: rotate(45deg); }
-
-        footer { padding: 120px 0; border-top: 1px solid var(--border); opacity: 0.4; text-align: center; font-size: 11px; letter-spacing: 8px; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1.2s var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
-    <div class="bg-system"><canvas id="particleCanvas"></canvas></div>
+    <div id="smart-glow"></div>
 
-    <div class="nav-wrapper">
+    <header>
+        <a href="#" class="header-logo">
+            <img src="Spectra.png" alt="Spectra">
+            <span>Spectra</span>
+        </a>
         <nav>
-            <a href="#" class="nav-left">
-                <img src="Spectra.png" alt="Logo" class="logo-icon">
-                <span class="logo-text">SPECTRA</span>
-            </a>
-            <div class="nav-links">
-                <a href="#hero">Home</a>
-                <a href="#unc">UNC</a>
-                <a href="#sunc">sUNC</a>
-                <a href="#security">Security</a>
-                <a href="#faq">FAQ</a>
-            </div>
-            <div class="nav-status">V3.0 Working</div>
+            <a href="#hero">Overview</a>
+            <a href="#specs">Specifications</a>
+            <a href="#faq">Support</a>
         </nav>
-    </div>
+        <div style="font-size: 11px; font-weight: 800; color: var(--primary); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 4px;">V3.0 STABLE</div>
+    </header>
 
-    <section id="hero">
-        <span class="tag fade-up delay-1">Next-Gen Architecture</span>
-        <h1 class="fade-up delay-2">Do Things<br><span class="fade-up delay-3" style="color: var(--gold); display: inline-block;">You Couldn't Do Before</span></h1>
-        <p class="desc fade-up delay-4">Redefining the boundaries of execution. Spectra V3 offers a seamless, professional environment where stability meets raw technical power.</p>
-        <div class="btn-group fade-up delay-5">
-            <a href="https://work.ink/26Yy/Spectra" class="btn-main">Get Spectra</a>
-            <a href="https://discord.gg/7sq3xaHSWc" class="btn-discord">Discord Server</a>
+    <section class="hero" id="hero">
+        <div class="reveal">
+            <h1>Shine like <span>Spectra</span></h1>
+            <p>Spectra V3 is the next-generation keyless architecture built for high-performance processing and industry-leading security.</p>
+            <div class="btn-group">
+                <a href="https://work.ink/26Yy/Spectra" class="btn btn-primary">Get Spectra</a>
+                <a href="https://discord.gg/7sq3xaHSWc" class="btn btn-secondary">Join Discord</a>
+            </div>
         </div>
     </section>
 
     <div class="slider-section reveal">
-        <div class="slider-container">
-            <button class="slider-btn prev-btn" id="prevBtn">&#10094;</button>
-            <div class="slider-viewport" id="sliderViewport">
-                <img src="UI.png" alt="UI 1" class="slide active">
-                <img src="UI2.png" alt="UI 2" class="slide">
-                <img src="UI3.png" alt="UI 3" class="slide">
-            </div>
-            <button class="slider-btn next-btn" id="nextBtn">&#10095;</button>
-            <div class="slider-dots" id="dotsContainer"></div>
+        <div class="viewport" id="viewport">
+            <img src="UI.png" class="slide active">
+            <img src="UI2.png" class="slide">
+            <img src="UI3.png" class="slide">
         </div>
     </div>
 
-    <section id="unc" class="reveal">
-        <div class="tech-container">
-            <div class="huge-data"><h3>99%</h3><div class="label">UNC</div></div>
-            <div class="tech-content">
-                <span class="tag">Compatibility</span>
-                <h2>Universal Logic.</h2>
-                <p class="desc">The highest standard of script compatibility. From advanced Drawing APIs to custom Websockets, Spectra V3 ensures your tools run without compromise.</p>
+    <section id="specs" class="specs-section">
+        <div class="spec-card reveal">
+            <span class="spec-label">Standard</span>
+            <h2>99%</h2>
+            <h3 style="margin-bottom:10px">UNC Score</h3>
+            <p>Universal compatibility across all modern script APIs and execution environments.</p>
+        </div>
+        <div class="spec-card reveal" style="transition-delay: 0.1s;">
+            <span class="spec-label">Optimized</span>
+            <h2>98%</h2>
+            <h3 style="margin-bottom:10px">sUNC Score</h3>
+            <p>Spectra-exclusive logic layer for lightning-fast drawing and data handling.</p>
+        </div>
+        <div class="spec-card reveal" style="transition-delay: 0.2s;">
+            <span class="spec-label">Security</span>
+            <h2>0%</h2>
+            <h3 style="margin-bottom:10px">Detection</h3>
+            <p>Ring-level stealth technology protecting your environment from heuristics.</p>
+        </div>
+    </section>
+
+    <section class="faq" id="faq">
+        <h2 class="reveal">Support Center</h2>
+        <div class="reveal">
+            <div class="faq-item">
+                <div class="faq-q">Is Spectra truly keyless? <span>+</span></div>
+                <div class="faq-a">Yes. Spectra V3 is 100% keyless. We are supported by community contributors to keep the experience seamless.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">What is the difference between UNC and sUNC? <span>+</span></div>
+                <div class="faq-a">UNC is the global standard for compatibility. sUNC is Spectra's proprietary optimization for higher performance.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">How do I update? <span>+</span></div>
+                <div class="faq-a">The client includes an auto-updater. It will automatically download the latest build when you launch it.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">Why is it flagged as a virus? <span>+</span></div>
+                <div class="faq-a">Memory injection is often flagged as a "False Positive". Our code is verified, safe, and clean.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">Is there a ban risk? <span>+</span></div>
+                <div class="faq-a">While no tool is 100% safe, our stealth bypasses are designed to evade modern detection systems.</div>
             </div>
         </div>
     </section>
 
-    <section id="sunc" class="reveal">
-        <div class="tech-container">
-            <div class="huge-data"><h3>98%</h3><div class="label">sUNC</div></div>
-            <div class="tech-content">
-                <span class="tag">Efficiency</span>
-                <h2>Surgical Precision.</h2>
-                <p class="desc">Spectra can execute the vast majority of scripts with specialized efficiency.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="security" class="reveal">
-        <div class="tech-container">
-            <div class="huge-data"><h3>0%</h3><div class="label">Detection</div></div>
-            <div class="tech-content">
-                <span class="tag">Safety</span>
-                <h2>Invisible Stealth.</h2>
-                <p class="desc">Security is our core. Using proprietary ring-level bypasses, Spectra V3 maintains a flawless detection record.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="reveal">
-        <span class="tag">Support Center</span>
-        <h2 style="font-size: clamp(40px, 8vw, 70px); font-weight: 900;">Q & A</h2>
-        <div class="qa-grid">
-            <div class="qa-item"><div class="qa-head">Is it truly keyless? <span class="qa-icon">+</span></div><div class="qa-body">Yes. Spectra V3 is funded by premium contributors, keeping the experience 100% keyless for everyone.</div></div>
-            <div class="qa-item"><div class="qa-head">How to update? <span class="qa-icon">+</span></div><div class="qa-body">Spectra will prompt you for updates when it starts.</div></div>
-            <div class="qa-item"><div class="qa-head">Why can't it be injected? <span class="qa-icon">+</span></div><div class="qa-body">Please disable your antivirus software and restore the quarantined injection files.</div></div>
-            <div class="qa-item"><div class="qa-head">Why the Antivirus flag? <span class="qa-icon">+</span></div><div class="qa-body">We use memory injection which is often flagged as a "False Positive". Our code is clean and safe.</div></div>
-            <div class="qa-item"><div class="qa-head">Risk of ban? <span class="qa-icon">+</span></div><div class="qa-body">While no tool is 100% risk-free, our stealth technology ensures we stay undetected by modern heuristics.</div></div>
-        </div>
-    </section>
-
-    <footer>© 2026 SPECTRA TECHNOLOGIES • STELLAR EXCELLENCE</footer>
+    <footer>
+        &copy; 2026 Spectra Technologies. Professional Architecture.
+    </footer>
 
     <script>
-        // 背景粒子系統
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function init() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            particles = Array(120).fill().map(() => ({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                s: Math.random() * 2, o: Math.random(), sx: (Math.random()-0.5)*0.3, sy: (Math.random()-0.5)*0.3
-            }));
-        }
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.x += p.sx; p.y += p.sy;
-                if(p.x<0 || p.x>canvas.width) p.sx *= -1;
-                if(p.y<0 || p.y>canvas.height) p.sy *= -1;
-                ctx.fillStyle = `rgba(255, 204, 0, ${p.o})`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(draw);
-        }
-        window.addEventListener('resize', init);
-        init(); draw();
+        // --- 智慧光暈追蹤系統 ---
+        const glow = document.getElementById('smart-glow');
+        const sections = [
+            { id: 'hero', x: '80%', y: '30%' },
+            { id: 'specs', x: '20%', y: '60%' },
+            { id: 'faq', x: '50%', y: '80%' }
+        ];
 
-        // FAQ 控制
-        document.querySelectorAll('.qa-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                document.querySelectorAll('.qa-item').forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
+        window.addEventListener('scroll', () => {
+            let currentSection = '';
+            sections.forEach(sec => {
+                const el = document.getElementById(sec.id);
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    glow.style.left = sec.x;
+                    glow.style.top = sec.y;
+                }
             });
         });
 
-        // 滾動 Reveal
+        // FAQ
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Reveal
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- 核心：動態高度自適應幻燈片邏輯 ---
+        // Slider
         const slides = document.querySelectorAll('.slide');
-        const viewport = document.getElementById('sliderViewport');
-        const dotsContainer = document.getElementById('dotsContainer');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        let currentIndex = 0;
-        let slideInterval;
-
-        // 生成點點
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            if(i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => { goToSlide(i); resetAutoPlay(); });
-            dotsContainer.appendChild(dot);
-        });
-        const dots = document.querySelectorAll('.dot');
-
+        const viewport = document.getElementById('viewport');
+        let current = 0;
         function updateSlider() {
-            const activeSlide = slides[currentIndex];
-            
-            // 移除所有 active 狀態
-            slides.forEach((s, i) => {
-                s.classList.remove('active');
-                dots[i].classList.remove('active');
-            });
-
-            // 激活當前圖片與點點
-            activeSlide.classList.add('active');
-            dots[currentIndex].classList.add('active');
-
-            // 核心高度適應邏輯
-            const adjustHeight = () => {
-                const height = activeSlide.offsetHeight;
-                if (height > 0) {
-                    viewport.style.height = height + 'px';
-                }
-            };
-
-            // 如果圖片已加載則直接調整，否則等待加載
-            if (activeSlide.complete) {
-                adjustHeight();
-            } else {
-                activeSlide.onload = adjustHeight;
-            }
+            slides.forEach(s => s.classList.remove('active'));
+            slides[current].classList.add('active');
+            const setH = () => { viewport.style.height = slides[current].offsetHeight + 'px'; };
+            if (slides[current].complete) setH(); else slides[current].onload = setH;
+            current = (current + 1) % slides.length;
         }
-
-        // 當視窗縮放時，重新計算高度
-        window.addEventListener('resize', () => {
-            viewport.style.height = slides[currentIndex].offsetHeight + 'px';
-        });
-
-        function nextSlide() { currentIndex = (currentIndex + 1) % slides.length; updateSlider(); }
-        function prevSlide() { currentIndex = (currentIndex - 1 + slides.length) % slides.length; updateSlider(); }
-        function goToSlide(index) { currentIndex = index; updateSlider(); }
-        function resetAutoPlay() { clearInterval(slideInterval); slideInterval = setInterval(nextSlide, 5000); }
-
-        nextBtn.addEventListener('click', () => { nextSlide(); resetAutoPlay(); });
-        prevBtn.addEventListener('click', () => { prevSlide(); resetAutoPlay(); });
-
-        // 啟動：確保圖片加載後能讀取到第一張的高度
+        setInterval(updateSlider, 5000);
         window.addEventListener('load', updateSlider);
-        // 初始化自動播放
-        resetAutoPlay();
-
+        window.addEventListener('resize', updateSlider);
     </script>
 </body>
 </html>

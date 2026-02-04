@@ -17,6 +17,32 @@
             --transition: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        ::-webkit-scrollbar {
+    width: 8px; /* 寬度建議保持在 8px-10px，兼顧視覺與操作 */
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg); /* 軌道與背景顏色一致，營造無邊框感 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+    background-color: rgba(255, 255, 255, 0.1); /* 備用色 */
+    border-radius: 10px;
+    border: 2px solid var(--bg); /* 透過 border 營造出 padding 的縮排效果 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary); /* 懸停時變為純黃色，增加反饋感 */
+    box-shadow: 0 0 10px var(--primary);
+}
+
+/* 針對 Firefox 的美化 (支援度較有限) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--bg);
+}
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { 

@@ -83,10 +83,13 @@
         .header-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
         .header-logo img { width: 30px; }
         .header-logo span { font-size: 20px; font-weight: 500; letter-spacing: -0.5px; }
+        header > div:last-child {
+    justify-self: end;
+}
 
         nav { display: flex; gap: 32px; }
         nav a { text-decoration: none; color: var(--text-dim); font-size: 14px; font-weight: 500; transition: 0.3s; }
-        nav a:hover { color: var(--primary); }
+        nav a:hover { color: var(--primary); } justify-self: center;
 
         /* --- Hero Section --- */
         .hero {

@@ -37,7 +37,6 @@
     box-shadow: 0 0 10px var(--primary);
 }
 
-/* 針對 Firefox 的美化 (支援度較有限) */
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--primary) var(--bg);
@@ -52,6 +51,30 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
+
+        .stat-container {
+    font-family: 'Arial', sans-serif;
+    color: #2a9d8f; /* 或者是你主題的主色調 */
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* 簡單的淡入動畫 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stat-container {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
 
         /* --- 智慧位移光暈 --- */
         #smart-glow {
@@ -282,6 +305,10 @@
             <h3 style="margin-bottom:10px">Detection</h3>
             <p>Ring-level stealth technology protecting your environment from heuristics.</p>
         </div>
+        <div class="stat-container">
+    <span class="counter" data-target="15">0</span><span>k+</span>
+    <p>下載次數</p>
+</div>
     </section>
 
     <section class="faq" id="faq">

@@ -18,31 +18,31 @@
         }
 
         ::-webkit-scrollbar {
-    width: 8px; /* 寬度建議保持在 8px-10px，兼顧視覺與操作 */
-}
+            width: 8px;
+        }
 
-::-webkit-scrollbar-track {
-    background: var(--bg); /* 軌道與背景顏色一致，營造無邊框感 */
-}
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
 
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, transparent, var(--primary), transparent);
-    background-color: rgba(255, 255, 255, 0.1); /* 備用色 */
-    border-radius: 10px;
-    border: 2px solid var(--bg); /* 透過 border 營造出 padding 的縮排效果 */
-}
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 2px solid var(--bg);
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary); /* 懸停時變為純黃色，增加反饋感 */
-    box-shadow: 0 0 10px var(--primary);
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
 
-* {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) var(--bg);
-}
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--bg);
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { 
             background-color: var(--bg); 
@@ -51,30 +51,6 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
-
-        .stat-container {
-    font-family: 'Arial', sans-serif;
-    color: #2a9d8f; /* 或者是你主題的主色調 */
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-/* 簡單的淡入動畫 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.stat-container {
-    animation: fadeInUp 0.8s ease-out forwards;
-}
 
         /* --- 智慧位移光暈 --- */
         #smart-glow {
@@ -86,72 +62,68 @@
             pointer-events: none;
             z-index: -1;
             filter: blur(80px);
-            transition: all 1.8s var(--transition); /* 極其絲滑的位移 */
+            transition: all 1.8s var(--transition);
             transform: translate(-50%, -50%);
             top: 50%;
             left: 50%;
         }
 
-        /* --- Google Style Header --- */
+        /* --- Header --- */
         header {
-    position: fixed; 
-    top: 0; 
-    width: 100%; 
-    height: 72px;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    z-index: 1000;
-    
-    /* 核心修正：啟用 Flex 並加入內邊距 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 6%; 
-}
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 72px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%; 
+        }
         .header-logo { 
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
-    text-decoration: none; 
-    color: #fff; 
-    flex: 1; /* 讓左邊佔據等量空間 */
-}
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            text-decoration: none; 
+            color: #fff; 
+            flex: 1;
+        }
         .header-logo img { width: 40px; }
         .header-logo span { font-size: 20px; font-weight: 500; letter-spacing: -0.5px; }
 
         nav { 
-    display: flex; 
-    gap: 32px; 
-    justify-content: center;
-    flex: 2; /* 讓導航欄佔據中間較多空間，確保居中感 */
-}
+            display: flex; 
+            gap: 32px; 
+            justify-content: center;
+            flex: 2;
+        }
         nav a { 
-    text-decoration: none; 
-    color: var(--text-dim); 
-    font-size: 14px; 
-    font-weight: 500; 
-    transition: 0.3s; 
-    white-space: nowrap;
-}
-        nav a:hover { 
-    color: var(--primary); 
-}
+            text-decoration: none; 
+            color: var(--text-dim); 
+            font-size: 14px; 
+            font-weight: 500; 
+            transition: 0.3s; 
+            white-space: nowrap;
+        }
+        nav a:hover { color: var(--primary); }
 
         .header-tag-container {
-    display: flex;
-    justify-content: flex-end;
-    flex: 1; /* 讓右邊佔據等量空間，與左邊平衡 */
-}
+            display: flex;
+            justify-content: flex-end;
+            flex: 1;
+        }
         .version-tag {
-    font-size: 11px; 
-    font-weight: 800; 
-    color: var(--primary); 
-    border: 1px solid var(--primary); 
-    padding: 4px 12px; 
-    border-radius: 4px;
-    white-space: nowrap;
-}
+            font-size: 11px; 
+            font-weight: 800; 
+            color: var(--primary); 
+            border: 1px solid var(--primary); 
+            padding: 4px 12px; 
+            border-radius: 4px;
+            white-space: nowrap;
+        }
         
         /* --- Hero Section --- */
         .hero {
@@ -179,7 +151,6 @@
             font-weight: 300;
         }
 
-        /* --- Centered Buttons --- */
         .btn-group { display: flex; gap: 16px; justify-content: center; }
         .btn {
             padding: 16px 40px; font-size: 15px; font-weight: 700;
@@ -197,7 +168,7 @@
         /* --- Slider --- */
         .slider-section { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
         .viewport { 
-            border: 1px solid var(--border); border-radius: 24px; /* 現代大圓角 */
+            border: 1px solid var(--border); border-radius: 24px; 
             overflow: hidden; background: #050505;
             transition: height 0.5s var(--transition);
         }
@@ -205,17 +176,19 @@
         .slide.active { display: block; animation: fadeIn 1s var(--transition); }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* --- Specs Section (圓角現代化) --- */
+        /* --- Specs Section --- */
         .specs-section { 
             max-width: 1200px; margin: 100px auto; padding: 0 40px;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;
         }
         .spec-card { 
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
             padding: 60px 40px; 
-            border-radius: 32px; /* 現代化大圓角 */
+            border-radius: 32px; 
             transition: all 0.5s var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         .spec-card:hover { 
             border-color: var(--primary); 
@@ -225,6 +198,16 @@
         .spec-label { color: var(--primary); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block; }
         .spec-card h2 { font-size: 64px; margin-bottom: 10px; font-weight: 800; }
         .spec-card p { color: var(--text-dim); font-size: 15px; }
+
+        /* 美化後的下載次數樣式 */
+        .stat-card {
+            background: linear-gradient(145deg, rgba(255, 214, 0, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border: 1px solid rgba(255, 214, 0, 0.3);
+        }
+        .stat-value {
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(255, 214, 0, 0.3);
+        }
 
         /* --- FAQ --- */
         .faq { max-width: 850px; margin: 150px auto; padding: 0 40px; }
@@ -241,9 +224,7 @@
 
         .reveal { opacity: 0; transform: translateY(40px); transition: 1.2s var(--transition); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        section[id] {
-    scroll-margin-top: 72px; /* 這裡設定跟你 Header 的高度一致 */
-}
+        section[id] { scroll-margin-top: 72px; }
     </style>
 </head>
 <body>
@@ -251,21 +232,19 @@
     <div id="smart-glow"></div>
 
     <header>
-    <a href="#" class="header-logo">
-        <img src="Spectra.png" alt="Spectra">
-        <span>Spectra</span>
-    </a>
-    
-    <nav>
-        <a href="#hero">Overview</a>
-        <a href="#specs">Specifications</a>
-        <a href="#faq">Support</a>
-    </nav>
-    
-    <div class="header-tag-container">
-        <div class="version-tag">V3.0 STABLE</div>
-    </div>
-</header>
+        <a href="#" class="header-logo">
+            <img src="Spectra.png" alt="Spectra">
+            <span>Spectra</span>
+        </a>
+        <nav>
+            <a href="#hero">Overview</a>
+            <a href="#specs">Specifications</a>
+            <a href="#faq">Support</a>
+        </nav>
+        <div class="header-tag-container">
+            <div class="version-tag">V3.0 STABLE</div>
+        </div>
+    </header>
 
     <section class="hero" id="hero">
         <div class="reveal">
@@ -305,10 +284,12 @@
             <h3 style="margin-bottom:10px">Detection</h3>
             <p>Ring-level stealth technology protecting your environment from heuristics.</p>
         </div>
-        <div class="stat-container">
-    <span class="counter" data-target="15">0</span><span>k+</span>
-    <p>下載次數</p>
-</div>
+        <div class="spec-card stat-card reveal" style="transition-delay: 0.3s;">
+            <span class="spec-label">Community</span>
+            <h2 class="stat-value"><span class="counter" data-target="15">0</span>k+</h2>
+            <h3 style="margin-bottom:10px">Total Downloads</h3>
+            <p>Trusted by a growing community of developers and power users worldwide.</p>
+        </div>
     </section>
 
     <section class="faq" id="faq">
@@ -351,9 +332,9 @@
         ];
 
         window.addEventListener('scroll', () => {
-            let currentSection = '';
             sections.forEach(sec => {
                 const el = document.getElementById(sec.id);
+                if (!el) return;
                 const rect = el.getBoundingClientRect();
                 if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
                     glow.style.left = sec.x;
@@ -369,19 +350,47 @@
             });
         });
 
-        // Reveal
+        // Reveal & Counter Animation
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // 如果是計數器元件，啟動數字動畫
+                    const counter = entry.target.querySelector('.counter');
+                    if (counter && !counter.classList.contains('counted')) {
+                        startCounter(counter);
+                    }
+                }
             });
-        }, { threshold: 0.1 });
+        }, observerOptions);
+
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        function startCounter(el) {
+            const target = +el.getAttribute('data-target');
+            let count = 0;
+            const speed = 2000 / target; // 2秒內跑完
+
+            const updateCount = () => {
+                if (count < target) {
+                    count++;
+                    el.innerText = count;
+                    setTimeout(updateCount, speed);
+                } else {
+                    el.innerText = target;
+                    el.classList.add('counted');
+                }
+            };
+            updateCount();
+        }
 
         // Slider
         const slides = document.querySelectorAll('.slide');
         const viewport = document.getElementById('viewport');
         let current = 0;
         function updateSlider() {
+            if (slides.length === 0) return;
             slides.forEach(s => s.classList.remove('active'));
             slides[current].classList.add('active');
             const setH = () => { viewport.style.height = slides[current].offsetHeight + 'px'; };

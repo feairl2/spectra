@@ -2,138 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SPECTRA | THE PINNACLE OF EXECUTION</title>
+    <title>SPECTRA // THE PINNACLE OF EXECUTION</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="Spectra.png">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000000;
+            --bg: #050505;
             --surface: #0a0a0a;
-            --primary: #FFD600;
-            --border: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --text-dim: #9aa0a6;
-            --transition: cubic-bezier(0.16, 1, 0.3, 1);
+            --primary: #FFD600; /* 保留核心黃色，但調整周邊色調 */
+            --accent: #1a1a1a;
+            --border: rgba(255, 255, 255, 0.05);
+            --text-main: #f5f5f7;
+            --text-dim: #86868b;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: cubic-bezier(0.2, 0, 0, 1);
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+        /* 隱藏捲動條但保持功能，或使其極簡 */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            border: 2px solid var(--bg);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary) var(--bg);
-            margin: 0; padding: 0; box-sizing: border-box;
-        }
-
-        html { scroll-behavior: smooth; }
         body { 
             background-color: var(--bg); 
             color: var(--text-main); 
-            font-family: 'Inter', sans-serif; 
-            line-height: 1.6;
+            font-family: 'Geist', 'Inter', sans-serif; 
+            line-height: 1.5;
             overflow-x: hidden;
         }
 
-        /* --- 畫布與光暈層 --- */
+        /* --- 背景與網格層 (工程師最愛) --- */
         #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -2;
+            opacity: 0.4;
+        }
+
+        /* 增加掃描線網格效果，更像硬體介面 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255, 214, 0, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -1;
             pointer-events: none;
         }
 
         #smart-glow {
             position: fixed;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255, 214, 0, 0.12) 0%, rgba(255, 214, 0, 0) 70%);
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(255, 214, 0, 0.05) 0%, rgba(255, 214, 0, 0) 60%);
             border-radius: 50%;
             pointer-events: none;
             z-index: -1;
-            filter: blur(80px);
-            /* 移除 transition 改用 JS 驅動平滑跟隨 */
             transform: translate(-50%, -50%);
-            top: 0;
-            left: 0;
             will-change: transform;
         }
 
         /* --- Header --- */
         header {
             position: fixed; 
-            top: 0; 
-            width: 100%; 
-            height: 72px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
+            top: 0; width: 100%; 
+            height: 64px;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             z-index: 1000;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 6%; 
+            padding: 0 40px;
         }
+
         .header-logo { 
             display: flex; 
             align-items: center; 
-            gap: 12px; 
+            gap: 10px; 
             text-decoration: none; 
             color: #fff; 
-            flex: 1;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            letter-spacing: -1px;
         }
-        .header-logo img { width: 40px; }
-        .header-logo span { font-size: 20px; font-weight: 500; letter-spacing: -0.5px; }
+        .header-logo img { width: 28px; filter: grayscale(1); }
 
         nav { 
             display: flex; 
-            gap: 32px; 
-            justify-content: center;
-            flex: 2;
+            gap: 24px; 
+            margin-left: 60px;
         }
         nav a { 
             text-decoration: none; 
             color: var(--text-dim); 
-            font-size: 14px; 
+            font-size: 13px; 
             font-weight: 500; 
-            transition: 0.3s; 
-            white-space: nowrap;
+            transition: color 0.2s; 
         }
         nav a:hover { color: var(--primary); }
 
-        .header-tag-container {
-            display: flex;
-            justify-content: flex-end;
-            flex: 1;
-        }
+        .header-tag-container { margin-left: auto; }
         .version-tag {
-            font-size: 11px; 
-            font-weight: 800; 
+            font-family: var(--font-mono);
+            font-size: 10px; 
             color: var(--primary); 
-            border: 1px solid var(--primary); 
-            padding: 4px 12px; 
-            border-radius: 4px;
-            white-space: nowrap;
+            border: 1px solid rgba(255, 214, 0, 0.3); 
+            padding: 2px 8px; 
+            border-radius: 2px;
+            background: rgba(255, 214, 0, 0.05);
         }
         
         /* --- Hero Section --- */
@@ -142,50 +122,52 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
+            padding: 0 10%;
         }
         .hero h1 { 
-            font-size: clamp(48px, 10vw, 90px); 
-            font-weight: 900; 
-            letter-spacing: -3px; 
-            line-height: 1;
+            font-size: clamp(40px, 8vw, 120px); 
+            font-weight: 800; 
+            letter-spacing: -0.04em; 
+            line-height: 0.9;
             margin-bottom: 24px;
+            text-transform: uppercase;
         }
-        .hero h1 span { color: var(--primary); }
-        .hero p { 
-            font-size: 20px; 
-            color: var(--text-dim); 
-            max-width: 700px; 
-            margin-bottom: 48px;
-            font-weight: 300;
+        .hero h1 span {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
         }
 
-        .btn-group { display: flex; gap: 16px; justify-content: center; }
+        .hero p { 
+            font-size: 18px; 
+            color: var(--text-dim); 
+            max-width: 500px; 
+            margin-bottom: 40px;
+        }
+
+        .btn-group { display: flex; gap: 12px; }
         .btn {
-            padding: 16px 40px; font-size: 15px; font-weight: 700;
-            border-radius: 8px; text-decoration: none; position: relative;
-            transition: 0.3s var(--transition); overflow: hidden;
+            padding: 14px 28px; font-size: 14px; font-weight: 600;
+            border-radius: 4px; text-decoration: none;
+            transition: all 0.3s var(--transition);
+            font-family: var(--font-mono);
         }
         .btn-primary { background: var(--primary); color: #000; }
-        .btn-primary:hover { 
-            transform: translateY(-5px) scale(1.02); 
-            box-shadow: 0 20px 40px rgba(255, 214, 0, 0.2); 
-        }
-        .btn-secondary { border: 1px solid var(--border); color: #fff; }
-        .btn-secondary:hover { border-color: var(--primary); background: rgba(255,214,0,0.05); }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-secondary { background: var(--accent); color: #fff; border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #222; }
 
         /* --- Slider --- */
-        .slider-section { max-width: 1100px; margin: 0 auto 100px; padding: 0 20px; }
+        .slider-section { padding: 0 40px; margin-bottom: 120px; }
         .viewport { 
-            border: 1px solid var(--border); border-radius: 24px; 
-            overflow: hidden; background: #050505;
-            transition: height 0.5s var(--transition);
+            border: 1px solid var(--border);
+            background: #000;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        .slide { width: 100%; display: none; }
-        .slide.active { display: block; animation: fadeIn 1s var(--transition); }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .slide { width: 100%; display: none; filter: contrast(1.1); }
+        .slide.active { display: block; animation: slideIn 0.8s var(--transition); }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- Specs Section --- */
         .specs-section { 
@@ -193,55 +175,52 @@
             margin: 100px auto; 
             padding: 0 40px;
             display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 1px;
+            background: var(--border); /* 網格邊框線效果 */
+            border: 1px solid var(--border);
         }
         .spec-card { 
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 40px 30px;
-            border-radius: 32px; 
-            transition: all 0.5s var(--transition);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
+            background: var(--bg);
+            padding: 60px 40px;
+            transition: background 0.3s;
         }
-        .spec-card:hover { 
-            border-color: var(--primary); 
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-10px);
+        .spec-card:hover { background: #0a0a0a; }
+        .spec-label { 
+            font-family: var(--font-mono);
+            color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; display: block; 
         }
-        .spec-label { color: var(--primary); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block; }
-        .spec-card h2 { font-size: 64px; margin-bottom: 10px; font-weight: 800; }
-        .spec-card p { color: var(--text-dim); font-size: 15px; }
+        .spec-card h2 { font-size: 54px; font-weight: 300; margin-bottom: 10px; font-family: var(--font-mono); }
+        .spec-card h3 { font-size: 14px; text-transform: uppercase; color: var(--text-main); margin-bottom: 15px; }
+        .spec-card p { color: var(--text-dim); font-size: 14px; line-height: 1.6; }
 
-        .stat-card {
-            background: linear-gradient(145deg, rgba(255, 214, 0, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
-            border: 1px solid rgba(255, 214, 0, 0.3);
-        }
-        .stat-value {
-            color: var(--primary);
-            text-shadow: 0 0 20px rgba(255, 214, 0, 0.3);
-        }
+        .stat-value { color: var(--primary); }
 
         /* --- FAQ --- */
-        .faq { max-width: 850px; margin: 150px auto; padding: 0 40px; }
-        .faq h2 { font-size: 36px; margin-bottom: 50px; text-align: center; }
-        .faq-item { border-bottom: 1px solid var(--border); cursor: pointer; padding: 30px 0; }
-        .faq-q { display: flex; justify-content: space-between; font-size: 18px; font-weight: 500; }
-        .faq-a { max-height: 0; overflow: hidden; transition: 0.5s var(--transition); color: var(--text-dim); }
-        .faq-item.active .faq-a { max-height: 200px; margin-top: 20px; }
+        .faq { max-width: 900px; margin: 150px auto; padding: 0 40px; }
+        .faq h2 { font-family: var(--font-mono); font-size: 24px; margin-bottom: 60px; text-align: left; text-transform: uppercase; }
+        .faq-item { border-top: 1px solid var(--border); cursor: pointer; padding: 24px 0; }
+        .faq-q { display: flex; justify-content: space-between; font-size: 16px; font-weight: 500; color: var(--text-main); }
+        .faq-q span { color: var(--text-dim); font-family: var(--font-mono); }
+        .faq-a { max-height: 0; overflow: hidden; transition: 0.4s var(--transition); color: var(--text-dim); font-size: 15px; }
+        .faq-item:hover .faq-q { color: var(--primary); }
+        .faq-item.active .faq-a { max-height: 200px; margin-top: 16px; }
 
         footer { 
-            padding: 100px 40px; text-align: center; border-top: 1px solid var(--border); 
-            color: var(--text-dim); font-size: 12px;
-            position: relative;
-            z-index: 10;
+            padding: 60px 40px; border-top: 1px solid var(--border); 
+            color: var(--text-dim); font-size: 11px; font-family: var(--font-mono);
+            display: flex; justify-content: space-between;
         }
 
-        .reveal { opacity: 0; transform: translateY(40px); transition: 1.2s var(--transition); }
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s var(--transition); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        section[id] { scroll-margin-top: 72px; }
+        
+        @media (max-width: 768px) {
+            header { padding: 0 20px; }
+            nav { display: none; }
+            .hero h1 { font-size: 50px; }
+            .specs-section { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -251,26 +230,26 @@
 
     <header>
         <a href="#" class="header-logo">
-            <img src="Spectra.png" alt="Spectra">
-            <span>Spectra</span>
+            <img src="Spectra.png" alt="S">
+            <span>SPECTRA</span>
         </a>
         <nav>
-            <a href="#hero">Overview</a>
-            <a href="#specs">Specifications</a>
-            <a href="#faq">Support</a>
+            <a href="#hero">// OVERVIEW</a>
+            <a href="#specs">// SPECS</a>
+            <a href="#faq">// DOCS</a>
         </nav>
         <div class="header-tag-container">
-            <div class="version-tag">V3.0 STABLE</div>
+            <div class="version-tag">SYSTEM_STABLE: V3.0</div>
         </div>
     </header>
 
     <section class="hero" id="hero">
         <div class="reveal">
-            <h1>Shine like <span>Spectra</span></h1>
-            <p>Spectra V3 is the next-generation keyless architecture built for high-performance processing and industry-leading security.</p>
+            <h1>Execute<br><span>Everything</span></h1>
+            <p>A low-level kernel architecture designed for absolute performance. Keyless, stealth-driven, and refined for the modern age.</p>
             <div class="btn-group">
-                <a href="https://work.ink/26Yy/Spectra" class="btn btn-primary">Get Spectra</a>
-                <a href="https://discord.gg/7sq3xaHSWc" class="btn btn-secondary">Join Discord</a>
+                <a href="https://work.ink/26Yy/Spectra" class="btn btn-primary">INITIALIZE</a>
+                <a href="https://discord.gg/7sq3xaHSWc" class="btn btn-secondary">SOURCE_NODE</a>
             </div>
         </div>
     </section>
@@ -285,63 +264,56 @@
 
     <section id="specs" class="specs-section">
         <div class="spec-card reveal">
-            <span class="spec-label">Standard</span>
-            <h2>99%</h2>
-            <h3 style="margin-bottom:10px">UNC Score</h3>
-            <p>Universal compatibility across all modern script APIs and execution environments.</p>
+            <span class="spec-label">COMPATIBILITY</span>
+            <h2>99.9%</h2>
+            <h3>UNC Score</h3>
+            <p>Deep-link integration with environment APIs, ensuring sub-millisecond execution overhead.</p>
         </div>
-        <div class="spec-card reveal" style="transition-delay: 0.1s;">
-            <span class="spec-label">Optimized</span>
+        <div class="spec-card reveal">
+            <span class="spec-label">LOGIC_ENGINE</span>
             <h2>98%</h2>
-            <h3 style="margin-bottom:10px">sUNC Score</h3>
-            <p>Provides a high-level execution environment, ensuring compatibility with most scripts.</p>
+            <h3>sUNC Score</h3>
+            <p>Advanced VM abstraction layer providing high-level logic interpretation with zero lag.</p>
         </div>
-        <div class="spec-card reveal" style="transition-delay: 0.2s;">
-            <span class="spec-label">Security</span>
-            <h2>0%</h2>
-            <h3 style="margin-bottom:10px">Detection</h3>
-            <p>Ring-level stealth technology protecting your environment from heuristics.</p>
+        <div class="spec-card reveal">
+            <span class="spec-label">STEALTH_PROTOCOL</span>
+            <h2>0.0%</h2>
+            <h3>Detection Rate</h3>
+            <p>Ring-0 obfuscation preventing heuristic analysis and memory pattern identification.</p>
         </div>
-        <div class="spec-card stat-card reveal" style="transition-delay: 0.3s;">
-            <span class="spec-label">Community</span>
-            <h2 class="stat-value"><span class="counter" data-target="17">0</span>k+</h2>
-            <h3 style="margin-bottom:10px">Total Downloads</h3>
-            <p>Trusted by a growing community of developers and power users worldwide.</p>
+        <div class="spec-card reveal">
+            <span class="spec-label">USER_BASE</span>
+            <h2 class="stat-value"><span class="counter" data-target="17">0</span>K+</h2>
+            <h3>Active Nodes</h3>
+            <p>Global network of power users contributing to the ecosystem's resilience.</p>
         </div>
     </section>
 
     <section class="faq" id="faq">
-        <h2 class="reveal">Support Center</h2>
+        <h2 class="reveal">01_FREQUENTLY_ASKED</h2>
         <div class="reveal">
             <div class="faq-item">
-                <div class="faq-q">Is Spectra truly keyless? <span>+</span></div>
-                <div class="faq-a">Yes. Spectra V3 is 100% keyless. We are supported by community contributors to keep the experience seamless.</div>
+                <div class="faq-q">AUTH_MODEL: IS IT KEYLESS? <span>[展开]</span></div>
+                <div class="faq-a">Confirmed. Spectra V3 operates on a 100% keyless architecture via community-supported nodes.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-q">What is the difference between UNC and sUNC? <span>+</span></div>
-                <div class="faq-a">UNC stands for general function, and sUNC stands for higher-order logic function.</div>
+                <div class="faq-q">CORE_DIFF: UNC VS SUNC? <span>[展开]</span></div>
+                <div class="faq-a">UNC manages standard function calls; sUNC handles recursive higher-order logic and VM instructions.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-q">How do I update? <span>+</span></div>
-                <div class="faq-a">Our powerful automatic update system keeps Spectra always up-to-date with the latest version.</div>
+                <div class="faq-q">FALSE_POSITIVE_WARNING? <span>[展开]</span></div>
+                <div class="faq-a">Memory injection triggers standard AV heuristics. Our modules are verified clean and signed.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-q">Why is it flagged as a virus? <span>+</span></div>
-                <div class="faq-a">Memory injection is often flagged as a "False Positive". Our code is verified, safe, and clean.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-q">Is there a ban risk? <span>+</span></div>
-                <div class="faq-a">While no tool is 100% safe, our stealth bypasses are designed to evade modern detection systems.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-q">When was the Spectra team created? <span>+</span></div>
-                <div class="faq-a">Founded in 2025, the Spectra team comprises several elite members, including UI designers, coders, and web designers.</div>
+                <div class="faq-q">BAN_RISK_ASSESSMENT? <span>[展开]</span></div>
+                <div class="faq-a">We utilize dynamic stealth bypasses, though 100% safety is theoretically impossible in active environments.</div>
             </div>
         </div>
     </section>
 
     <footer>
-        &copy; 2026 Spectra Technologies. Professional Architecture.
+        <div>&copy; 2026 SPECTRA_TECH_GROUP</div>
+        <div>ST_STABLE_BUILD_A22</div>
     </footer>
 
     <script>
@@ -358,17 +330,15 @@
         });
 
         function animateGlow() {
-            // Lerp 公式: current = current + (target - current) * ease
-            currentX += (mouseX - currentX) * 0.08;
-            currentY += (mouseY - currentY) * 0.08;
-            
+            currentX += (mouseX - currentX) * 0.05;
+            currentY += (mouseY - currentY) * 0.05;
             glow.style.left = `${currentX}px`;
             glow.style.top = `${currentY}px`;
             requestAnimationFrame(animateGlow);
         }
         animateGlow();
 
-        // --- 2. 方形慢速粒子系統 ---
+        // --- 2. 工程感方形粒子系統 ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -381,85 +351,63 @@
         resizeCanvas();
 
         class Particle {
-            constructor() {
-                this.init();
-            }
+            constructor() { this.init(); }
             init() {
-                this.size = Math.random() * 6 + 2;
+                this.size = Math.random() * 2 + 1; // 縮小粒子，更細膩
                 this.x = Math.random() * canvas.width;
-                this.y = canvas.height + Math.random() * 100;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = -(Math.random() * 0.5 + 0.2); // 緩慢向上
-                this.rotation = Math.random() * Math.PI * 2;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-                this.alpha = Math.random() * 0.3 + 0.1;
+                this.y = Math.random() * canvas.height;
+                this.vy = -(Math.random() * 0.3 + 0.1);
+                this.alpha = Math.random() * 0.2;
             }
             update() {
-                this.x += this.vx;
                 this.y += this.vy;
-                this.rotation += this.rotationSpeed;
-                if (this.y < -50) this.init(); // 飛出頂部後重置到底部
+                if (this.y < -10) this.y = canvas.height + 10;
             }
             draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
                 ctx.fillStyle = `rgba(255, 214, 0, ${this.alpha})`;
-                ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
-                ctx.restore();
+                ctx.fillRect(this.x, this.y, this.size, this.size);
             }
         }
 
-        // 初始化粒子數量 (平均分佈)
-        for (let i = 0; i < 60; i++) {
-            let p = new Particle();
-            p.y = Math.random() * canvas.height; // 初始分佈在全螢幕
-            particles.push(p);
-        }
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
         animateParticles();
 
-        // --- 其餘代碼保留 ---
-        // FAQ
+        // --- FAQ 邏輯 ---
         document.querySelectorAll('.faq-item').forEach(item => {
             item.addEventListener('click', () => {
-                item.classList.toggle('active');
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
             });
         });
 
-        // Reveal & Counter Animation
-        const observerOptions = { threshold: 0.1 };
+        // --- Reveal & Counter ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                     const counter = entry.target.querySelector('.counter');
-                    if (counter && !counter.classList.contains('counted')) {
-                        startCounter(counter);
-                    }
+                    if (counter && !counter.classList.contains('counted')) startCounter(counter);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         function startCounter(el) {
             const target = +el.getAttribute('data-target');
             let count = 0;
-            const speed = 2000 / target; 
             const updateCount = () => {
                 if (count < target) {
                     count++;
                     el.innerText = count;
-                    setTimeout(updateCount, speed);
+                    setTimeout(updateCount, 40);
                 } else {
                     el.innerText = target;
                     el.classList.add('counted');
@@ -468,7 +416,7 @@
             updateCount();
         }
 
-        // Slider
+        // --- Slider ---
         const slides = document.querySelectorAll('.slide');
         const viewport = document.getElementById('viewport');
         let current = 0;
@@ -482,7 +430,6 @@
         }
         setInterval(updateSlider, 5000);
         window.addEventListener('load', updateSlider);
-        window.addEventListener('resize', updateSlider);
     </script>
 </body>
 </html>

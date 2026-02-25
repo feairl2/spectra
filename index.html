@@ -2,263 +2,268 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SPECTRA // THE NEW STANDARD</title>
+    <title>SPECTRA | REDEFINING EXECUTION</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #000000;
-            --card-bg: #0a0a0c;
+            --surface: #111111;
+            --accent: #ffffff;
             --text-main: #ffffff;
             --text-dim: #86868b;
-            --accent: #ffffff;
-            --border: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.12);
+            --radius-lg: 32px;
+            --radius-sm: 12px;
             --transition: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         html { scroll-behavior: smooth; }
-        
-        body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Inter', -apple-system, sans-serif; 
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+        body { background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* --- 背景裝飾 --- */
-        .ambient-glow {
-            position: fixed;
-            top: 0; left: 50%;
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% -20%, rgba(255,255,255,0.08) 0%, transparent 70%);
+        /* --- 氛圍裝飾 --- */
+        .glow {
+            position: fixed; top: -10%; left: 50%; transform: translateX(-50%);
+            width: 80vw; height: 60vh;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
             z-index: -1; pointer-events: none;
         }
 
-        /* --- Header --- */
+        /* --- Navigation --- */
         header {
-            position: fixed; top: 0; width: 100%; height: 60px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
+            position: fixed; top: 0; width: 100%; height: 64px;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(25px);
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 40px; z-index: 1000;
         }
-
-        .logo { 
-            display: flex; align-items: center; gap: 12px;
-            font-weight: 800; font-size: 18px; letter-spacing: -0.5px;
-            text-decoration: none; color: #fff;
-        }
-        .logo-icon {
-            width: 28px; height: 28px; background: #fff; border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .logo-icon::after { content: 'S'; color: #000; font-size: 18px; font-weight: 900; }
-
-        nav { display: flex; gap: 30px; }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-weight: 700; font-size: 20px; }
+        .logo img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+        
+        nav { display: flex; gap: 35px; }
         nav a { text-decoration: none; color: var(--text-dim); font-size: 13px; font-weight: 500; transition: 0.3s; }
         nav a:hover { color: #fff; }
 
-        .cta-header {
-            background: #fff; color: #000; padding: 6px 16px; border-radius: 20px;
-            font-size: 12px; font-weight: 600; text-decoration: none; transition: 0.3s;
-        }
-        .cta-header:hover { opacity: 0.8; transform: scale(0.95); }
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+        .btn-nav { background: #fff; color: #000; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.3s; }
+        .btn-nav:hover { opacity: 0.85; transform: translateY(-1px); }
 
-        /* --- Hero Section --- */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            padding: 0 20px;
-        }
-        .hero-tag {
-            font-size: 12px; font-weight: 600; color: var(--text-dim);
-            border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px;
-            margin-bottom: 24px; letter-spacing: 1px;
-        }
-        .hero h1 {
-            font-size: clamp(48px, 8vw, 90px); font-weight: 800; letter-spacing: -4px;
-            line-height: 1.1; margin-bottom: 24px;
-        }
-        .hero p {
-            max-width: 600px; color: var(--text-dim); font-size: clamp(16px, 2vw, 20px);
-            margin-bottom: 40px; font-weight: 300;
-        }
+        /* --- Hero --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero-label { font-size: 12px; font-weight: 700; letter-spacing: 3px; color: var(--text-dim); margin-bottom: 20px; text-transform: uppercase; }
+        .hero h1 { font-size: clamp(56px, 12vw, 110px); font-weight: 800; letter-spacing: -5px; line-height: 0.95; margin-bottom: 30px; }
+        .hero p { max-width: 700px; color: var(--text-dim); font-size: clamp(18px, 2.5vw, 24px); line-height: 1.4; margin-bottom: 50px; font-weight: 400; }
 
-        /* --- Feature Sections (Apple Style) --- */
-        .feature-section {
-            padding: 120px 10% 60px;
-            max-width: 1400px; margin: 0 auto;
-        }
-
-        .feature-grid {
-            display: grid; grid-template-columns: 1.2fr 1fr;
-            gap: 80px; align-items: center; margin-bottom: 120px;
-        }
-        .feature-grid.reverse { grid-template-columns: 1fr 1.2fr; }
+        /* --- Sections Layout --- */
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 40px; }
         
-        .feature-content h2 { font-size: 32px; font-weight: 700; margin-bottom: 20px; }
-        .feature-content p { color: var(--text-dim); font-size: 17px; margin-bottom: 30px; }
+        .feature-block { 
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; 
+            padding: 120px 0; opacity: 0; transform: translateY(60px); transition: 1.2s var(--transition);
+        }
+        .feature-block.reveal { opacity: 1; transform: translateY(0); }
+        .feature-block.reverse { grid-template-columns: 1fr 1.2fr; }
 
-        .feature-image {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 10px; overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
-            transition: transform 0.8s var(--transition);
-        }
-        .feature-image img { width: 100%; border-radius: 16px; display: block; transition: 0.5s; }
-        .feature-image:hover img { transform: scale(1.02); }
+        .feature-text h2 { font-size: 48px; font-weight: 700; margin-bottom: 25px; letter-spacing: -2px; }
+        .feature-text p { color: var(--text-dim); font-size: 19px; line-height: 1.6; margin-bottom: 30px; }
+        .feature-tag { display: inline-block; padding: 4px 12px; border: 1px solid var(--border); border-radius: 100px; font-size: 11px; font-weight: 700; color: var(--text-dim); margin-bottom: 20px; }
 
-        /* --- Info Grid --- */
-        .info-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-            padding: 60px 10%; max-width: 1400px; margin: 0 auto 120px;
+        .feature-visual { 
+            background: linear-gradient(145deg, #151515, #050505); 
+            border: 1px solid var(--border); border-radius: var(--radius-lg); 
+            padding: 15px; position: relative; overflow: hidden;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.6);
         }
-        .info-card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            padding: 40px; border-radius: 24px; text-align: center;
+        .feature-visual img { width: 100%; border-radius: 20px; display: block; transition: 0.5s; }
+        .feature-visual:hover img { transform: scale(1.02); }
+
+        /* --- Bento Specs --- */
+        .bento-section { padding: 120px 0; }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .bento-card { 
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); 
+            padding: 45px; transition: 0.5s; cursor: default;
         }
-        .info-card h3 { font-size: 48px; font-weight: 700; margin-bottom: 10px; }
-        .info-card p { color: var(--text-dim); font-size: 14px; }
+        .bento-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-5px); }
+        .bento-card span { font-size: 12px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .bento-card h3 { font-size: 64px; font-weight: 800; margin: 15px 0; letter-spacing: -3px; }
+        .bento-card p { color: var(--text-dim); font-size: 14px; line-height: 1.5; }
+        .bento-card.dark { background: #fff; color: #000; }
+        .bento-card.dark span, .bento-card.dark p { color: rgba(0,0,0,0.5); }
 
         /* --- FAQ --- */
-        .faq { max-width: 800px; margin: 100px auto; padding: 0 20px; }
-        .faq h2 { text-align: center; font-size: 40px; margin-bottom: 60px; }
-        .faq-item { border-bottom: 1px solid var(--border); padding: 24px 0; cursor: pointer; }
-        .faq-q { display: flex; justify-content: space-between; font-weight: 600; font-size: 18px; }
-        .faq-a { max-height: 0; overflow: hidden; transition: 0.5s var(--transition); color: var(--text-dim); margin-top: 0; }
-        .faq-item.active .faq-a { max-height: 100px; margin-top: 20px; }
+        .faq-section { max-width: 900px; margin: 100px auto; padding: 0 40px; }
+        .faq-section h2 { font-size: 56px; text-align: center; margin-bottom: 80px; letter-spacing: -3px; }
+        .faq-item { border-bottom: 1px solid var(--border); padding: 35px 0; cursor: pointer; transition: 0.3s; }
+        .faq-q { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 600; }
+        .faq-icon { width: 24px; height: 24px; position: relative; transition: 0.4s; }
+        .faq-icon::before, .faq-icon::after { content: ''; position: absolute; background: #fff; border-radius: 2px; }
+        .faq-icon::before { width: 100%; height: 2px; top: 11px; }
+        .faq-icon::after { width: 2px; height: 100%; left: 11px; }
+        
+        .faq-item.active .faq-icon { transform: rotate(135deg); }
+        .faq-a { max-height: 0; overflow: hidden; transition: 0.5s var(--transition); color: var(--text-dim); font-size: 17px; margin-top: 0; }
+        .faq-item.active .faq-a { max-height: 200px; margin-top: 25px; }
 
-        footer { padding: 80px 40px; text-align: center; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 13px; }
-
-        /* --- Animations --- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: 1s var(--transition); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* --- Footer --- */
+        footer { padding: 100px 40px; border-top: 1px solid var(--border); text-align: center; }
+        .footer-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 30px; opacity: 0.5; }
+        .footer-logo img { width: 24px; }
+        .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; }
+        .footer-links a { color: var(--text-dim); text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .footer-links a:hover { color: #fff; }
+        .copyright { color: #444; font-size: 12px; letter-spacing: 1px; }
 
         @media (max-width: 1024px) {
-            .feature-grid, .feature-grid.reverse { grid-template-columns: 1fr; text-align: center; }
-            .feature-grid.reverse .feature-content { order: -1; }
-            .info-grid { grid-template-columns: 1fr; }
+            .feature-block, .feature-block.reverse { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .feature-block.reverse .feature-text { order: -1; }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 64px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow"></div>
+    <div class="glow"></div>
 
     <header>
         <a href="#" class="logo">
-            <div class="logo-icon"></div>
-            SPECTRA
+            <img src="Spectra.png" alt="Spectra Logo">
+            <span>Spectra</span>
         </a>
         <nav>
-            <a href="#editor">Editor</a>
-            <a href="#scripts">Scripts</a>
-            <a href="#settings">Settings</a>
-            <a href="#faq">Support</a>
+            <a href="#features">Features</a>
+            <a href="#specs">Specifications</a>
+            <a href="#faq">FAQ</a>
         </nav>
-        <a href="https://work.ink/26Yy/Spectra" class="cta-header">Download Now</a>
+        <div class="header-actions">
+            <a href="https://discord.gg/7sq3xaHSWc" style="color:var(--text-dim); text-decoration:none; font-size:13px;">Discord</a>
+            <a href="https://work.ink/26Yy/Spectra" class="btn-nav">Download Now</a>
+        </div>
     </header>
 
     <section class="hero">
-        <div class="reveal">
-            <div class="hero-tag">VERSION 3.0 IS HERE</div>
-            <h1>Simplicity in<br>Execution.</h1>
-            <p>The most advanced, keyless execution environment ever built for power users. Refined, secure, and incredibly fast.</p>
+        <div class="hero-label">Advanced Execution Architecture</div>
+        <h1>Pure Power.<br>Zero Keys.</h1>
+        <p>A specialized environment built for elite performance, unmatched stealth, and a seamless workflow. The future of execution is here.</p>
+    </section>
+
+    <div class="container" id="features">
+        <div class="feature-block scroll-reveal">
+            <div class="feature-visual">
+                <img src="UI.png" alt="Main Workspace">
+            </div>
+            <div class="feature-text">
+                <div class="feature-tag">WORKSPACE</div>
+                <h2>The Elite Editor.</h2>
+                <p>A fluid, mono-font workspace designed for precision. Featuring real-time syntax highlighting, multi-tab support, and a kernel-linked console for instant feedback.</p>
+                <p style="font-size: 15px; color: #555;">// Fully optimized for 4K displays and high-refresh rates.</p>
+            </div>
+        </div>
+
+        <div class="feature-block reverse scroll-reveal">
+            <div class="feature-text">
+                <div class="feature-tag">LIBRARY</div>
+                <h2>Script Hub Hub.</h2>
+                <p>Manage your entire arsenal from a centralized hub. Search, categorize, and deploy complex scripts in milliseconds. Secure, localized storage means your data never leaves your machine.</p>
+            </div>
+            <div class="feature-visual">
+                <img src="UI2.png" alt="Script Management">
+            </div>
+        </div>
+
+        <div class="feature-block scroll-reveal">
+            <div class="feature-visual">
+                <img src="UI3.png" alt="Settings Configuration">
+            </div>
+            <div class="feature-text">
+                <div class="feature-tag">CORE CONTROL</div>
+                <h2>Deep Tuning.</h2>
+                <p>Take full control over the engine. From memory injection methods to custom UI themes and performance overhead management. Spectra adapts to your hardware, not the other way around.</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="container bento-section" id="specs">
+        <div class="bento-grid">
+            <div class="bento-card scroll-reveal">
+                <span>UNC_Core</span>
+                <h3>99%</h3>
+                <p>Maximum compatibility with all modern APIs and environment calls.</p>
+            </div>
+            <div class="bento-card scroll-reveal" style="transition-delay: 0.1s;">
+                <span>sUNC_Logic</span>
+                <h3>98%</h3>
+                <p>Proprietary logic VM for complex recursive instructions.</p>
+            </div>
+            <div class="bento-card scroll-reveal" style="transition-delay: 0.2s;">
+                <span>Stealth</span>
+                <h3>0%</h3>
+                <p>Zero-trace heuristic footprint using Ring-0 obfuscation techniques.</p>
+            </div>
+            <div class="bento-card dark scroll-reveal" style="transition-delay: 0.3s;">
+                <span>Community</span>
+                <h3><span class="counter" data-target="17">0</span>K+</h3>
+                <p>Global users trusting Spectra for daily high-stakes execution.</p>
+            </div>
         </div>
     </section>
 
-    <section id="editor" class="feature-section">
-        <div class="feature-grid reveal">
-            <div class="feature-image">
-                <img src="UI.png" alt="Spectra Editor Interface">
-            </div>
-            <div class="feature-content">
-                <div class="hero-tag" style="margin-left:0">WORKSPACE</div>
-                <h2>Next-Gen Editor</h2>
-                <p>Experience a fluid editing environment with intelligent syntax highlighting and real-time error detection. Designed for those who demand precision.</p>
-            </div>
+    <section class="faq-section" id="faq">
+        <h2 class="scroll-reveal">Common Queries.</h2>
+        
+        <div class="faq-item scroll-reveal">
+            <div class="faq-q">Is this 100% keyless forever? <div class="faq-icon"></div></div>
+            <div class="faq-a">Yes. Spectra V3 is engineered to be permanently keyless. We rely on community support and non-intrusive monetization to keep the core experience free for all users.</div>
         </div>
-    </section>
 
-    <section id="scripts" class="feature-section" style="background: rgba(255,255,255,0.01);">
-        <div class="feature-grid reverse reveal">
-            <div class="feature-content">
-                <div class="hero-tag" style="margin-left:0">LIBRARY</div>
-                <h2>Script Hub</h2>
-                <p>Organize, manage, and deploy your library instantly. Our cloud-synced repository ensures your most vital tools are always one click away.</p>
-            </div>
-            <div class="feature-image">
-                <img src="UI2.png" alt="Spectra Script Manager">
-            </div>
+        <div class="faq-item scroll-reveal">
+            <div class="faq-q">Why is my antivirus flagging the file? <div class="faq-icon"></div></div>
+            <div class="faq-a">Due to the nature of "Memory Injection" (the core technology behind all executors), security software often flags these actions as suspicious. Spectra is verified non-malicious and safe to use.</div>
         </div>
-    </section>
 
-    <section id="settings" class="feature-section">
-        <div class="feature-grid reveal">
-            <div class="feature-image">
-                <img src="UI3.png" alt="Spectra Configuration">
-            </div>
-            <div class="feature-content">
-                <div class="hero-tag" style="margin-left:0">CONTROL</div>
-                <h2>Deep Configuration</h2>
-                <p>Fine-tune your environment with surgical precision. From kernel-level bypasses to visual themes, everything is under your command.</p>
-            </div>
+        <div class="faq-item scroll-reveal">
+            <div class="faq-q">Who is behind the Spectra Team? <div class="faq-icon"></div></div>
+            <div class="faq-a">Founded in 2025, Spectra is a collective of elite UI/UX designers, kernel-level C++ developers, and reverse engineers dedicated to building the ultimate execution environment.</div>
         </div>
-    </section>
 
-    <section class="info-grid">
-        <div class="info-card reveal">
-            <h3>99%</h3>
-            <p>Unified Compatibility</p>
-        </div>
-        <div class="info-card reveal" style="transition-delay: 0.1s;">
-            <h3>0ms</h3>
-            <p>Execution Latency</p>
-        </div>
-        <div class="info-card reveal" style="transition-delay: 0.2s;">
-            <h3><span class="counter" data-target="17">0</span>K+</h3>
-            <p>Active Deployments</p>
-        </div>
-    </section>
-
-    <section class="faq" id="faq">
-        <h2 class="reveal">Questions?</h2>
-        <div class="reveal">
-            <div class="faq-item">
-                <div class="faq-q">Is Spectra really keyless? <span>+</span></div>
-                <div class="faq-a">Yes. Spectra V3 offers a seamless experience without the need for traditional key systems.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-q">Will it trigger antivirus software? <span>+</span></div>
-                <div class="faq-a">Due to the nature of memory injection, false positives may occur. Spectra is verified safe.</div>
-            </div>
+        <div class="faq-item scroll-reveal">
+            <div class="faq-q">How do I update the system? <div class="faq-icon"></div></div>
+            <div class="faq-a">Spectra features an auto-patching system. Upon launch, it will automatically sync with our servers to ensure you have the latest stealth bypasses and engine improvements.</div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Spectra Technologies. Engineered for the future.</p>
+        <div class="footer-logo">
+            <img src="Spectra.png" alt="">
+            <span>SPECTRA ARCHITECTURE</span>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Documentation</a>
+            <a href="https://discord.gg/7sq3xaHSWc">Community</a>
+        </div>
+        <p class="copyright">© 2026 SPECTRA TECHNOLOGIES. BUILT BY ELITE MEMBERS SINCE 2025. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script>
-        // --- Scroll Reveal Animation ---
-        const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+        // --- 滾動浮現動畫 ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    entry.target.classList.add('reveal');
+                    // 如果內部有數字計時器，觸發它
                     const counter = entry.target.querySelector('.counter');
                     if (counter && !counter.classList.contains('counted')) startCounter(counter);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
 
+        // --- 數字累加效果 ---
         function startCounter(el) {
             const target = +el.getAttribute('data-target');
             let count = 0;
@@ -276,12 +281,12 @@
             update();
         }
 
-        // --- FAQ Logic ---
+        // --- FAQ 收納效果 ---
         document.querySelectorAll('.faq-item').forEach(item => {
             item.addEventListener('click', () => {
-                item.classList.toggle('active');
-                const span = item.querySelector('span');
-                span.innerText = item.classList.contains('active') ? '-' : '+';
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
             });
         });
     </script>

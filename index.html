@@ -23,7 +23,6 @@
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* --- 氛圍裝飾 --- */
         .glow {
             position: fixed; top: -10%; left: 50%; transform: translateX(-50%);
             width: 80vw; height: 60vh;
@@ -50,13 +49,11 @@
         .btn-nav { background: #fff; color: #000; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.3s; }
         .btn-nav:hover { opacity: 0.85; transform: translateY(-1px); }
 
-        /* --- Hero --- */
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
         .hero-label { font-size: 12px; font-weight: 700; letter-spacing: 3px; color: var(--text-dim); margin-bottom: 20px; text-transform: uppercase; }
         .hero h1 { font-size: clamp(56px, 12vw, 110px); font-weight: 800; letter-spacing: -5px; line-height: 0.95; margin-bottom: 30px; }
         .hero p { max-width: 700px; color: var(--text-dim); font-size: clamp(18px, 2.5vw, 24px); line-height: 1.4; margin-bottom: 50px; font-weight: 400; }
 
-        /* --- Sections Layout --- */
         .container { max-width: 1300px; margin: 0 auto; padding: 0 40px; }
         
         .feature-block { 
@@ -79,7 +76,6 @@
         .feature-visual img { width: 100%; border-radius: 5px; display: block; transition: 0.5s; }
         .feature-visual:hover img { transform: scale(1.02); }
 
-        /* --- Bento Specs --- */
         .bento-section { padding: 120px 0; }
         .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
         .bento-card { 
@@ -111,7 +107,6 @@
         .faq-a { max-height: 0; overflow: hidden; transition: 0.5s var(--transition); color: var(--text-dim); font-size: 17px; margin-top: 0; }
         .faq-item.active .faq-a { max-height: 200px; margin-top: 25px; }
 
-        /* --- Footer --- */
         footer { padding: 100px 40px; border-top: 1px solid var(--border); text-align: center; }
         .footer-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 30px; opacity: 0.5; }
         .footer-logo img { width: 24px; }
@@ -252,12 +247,10 @@
     </footer>
 
     <script>
-        // --- 滾動浮現動畫 ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('reveal');
-                    // 如果內部有數字計時器，觸發它
                     const counter = entry.target.querySelector('.counter');
                     if (counter && !counter.classList.contains('counted')) startCounter(counter);
                 }
@@ -266,7 +259,6 @@
 
         document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
 
-        // --- 數字累加效果 ---
         function startCounter(el) {
             const target = +el.getAttribute('data-target');
             let count = 0;
@@ -284,7 +276,6 @@
             update();
         }
 
-        // --- FAQ 收納效果 ---
         document.querySelectorAll('.faq-item').forEach(item => {
             item.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');

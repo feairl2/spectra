@@ -2,341 +2,1398 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SPECTRA | Advanced Execution Architecture</title>
+    <title>SPECTRA | Modern Execution Platform</title>
     <link rel="icon" type="image/png" href="Spectra.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+    <meta name="theme-color" content="#06b6d4">
+    <meta name="description" content="A modern execution platform built for stability, speed, and a seamless workflow. Spectra delivers a refined next-generation interface for advanced users.">
+
+    <meta property="og:title" content="SPECTRA | Modern Execution Platform">
+    <meta property="og:description" content="Built for stability, precision, and control. Experience the next evolution of Spectra.">
+    <meta property="og:image" content="Spectra.png">
+    <meta property="og:type" content="website">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg: #050505;
-            --surface: #0a0a0a;
-            --surface-secondary: #121212;
-            --accent: #ffffff;
-            --accent-soft: rgba(255, 255, 255, 0.05);
-            --text-main: #f5f5f7;
-            --text-dim: #86868b;
-            --border: rgba(255, 255, 255, 0.08);
-            --radius-xl: 28px;
-            --radius-lg: 16px;
-            --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --bg: #06090b;
+            --bg-secondary: #0a1013;
+            --surface: rgba(13, 18, 22, 0.72);
+            --surface-strong: rgba(15, 21, 26, 0.92);
+            --surface-soft: rgba(255,255,255,0.025);
+
+            --accent: #14b8a6;
+            --accent-2: #67e8f9;
+            --accent-3: #a7f3d0;
+
+            --text-main: #f4f8fb;
+            --text-soft: rgba(244,248,251,0.78);
+            --text-dim: rgba(244,248,251,0.48);
+
+            --border: rgba(255,255,255,0.08);
+            --border-strong: rgba(255,255,255,0.14);
+
+            --shadow-lg: 0 30px 80px rgba(0,0,0,0.45);
+            --shadow-accent: 0 0 30px rgba(20, 184, 166, 0.18);
+
+            --radius-xl: 30px;
+            --radius-lg: 22px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+
+            --transition: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+            --font-main: "Inter", sans-serif;
+            --font-mono: "JetBrains Mono", monospace;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        html { scroll-behavior: smooth; }
-        body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: var(--font-main); 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 50% -10%, rgba(20, 184, 166, 0.12), transparent 35%),
+                radial-gradient(circle at 20% 20%, rgba(103, 232, 249, 0.07), transparent 28%),
+                radial-gradient(circle at 80% 18%, rgba(167, 243, 208, 0.05), transparent 22%),
+                linear-gradient(180deg, #05080a 0%, #06090b 40%, #070c0f 100%);
+            color: var(--text-main);
+            font-family: var(--font-main);
             overflow-x: hidden;
+            line-height: 1.55;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .noise,
+        .grid,
+        .blobs,
+        .particles {
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+        }
+
+        .noise {
+            opacity: 0.045;
+            background-image:
+                radial-gradient(rgba(255,255,255,0.20) 0.5px, transparent 0.5px);
+            background-size: 8px 8px;
+            mix-blend-mode: soft-light;
+        }
+
+        .grid {
+            z-index: -4;
+            opacity: 0.22;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(circle at center, black 20%, transparent 85%);
+            -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 85%);
+        }
+
+        .blobs::before,
+        .blobs::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(110px);
+            opacity: 0.75;
+        }
+
+        .blobs::before {
+            width: 540px;
+            height: 540px;
+            left: 50%;
+            top: -140px;
+            transform: translateX(-50%);
+            background: rgba(20, 184, 166, 0.12);
+        }
+
+        .blobs::after {
+            width: 360px;
+            height: 360px;
+            left: 22%;
+            top: 15%;
+            background: rgba(103, 232, 249, 0.06);
+        }
+
+        .particles span {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 999px;
+            background: rgba(167, 243, 208, 0.32);
+            box-shadow: 0 0 18px rgba(167, 243, 208, 0.35);
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(16px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.65;
+            }
+            100% {
+                transform: translateY(-18px);
+                opacity: 0;
+            }
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at center, rgba(20,184,166,0.06), transparent 40%),
+                linear-gradient(180deg, #05080a 0%, #06090b 100%);
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+        }
+
+        .loader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-inner {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 26px;
+            width: min(92vw, 320px);
+            text-align: center;
+        }
+
+        .loader-logo {
+            width: 78px;
+            height: 78px;
+            border-radius: 22px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 24px rgba(20,184,166,0.18));
+        }
+
+        .loader-bar {
+            position: relative;
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(10px);
+        }
+
+        .loader-progress {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 0%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #0d9488 0%, #14b8a6 50%, #A3E4D7 100%);
+            box-shadow: 0 0 18px rgba(163, 228, 215, 0.35), 0 0 30px rgba(20, 184, 166, 0.18);
+            transition: width 0.08s linear;
+        }
+
+        .loader-percent {
+            font-size: 12px;
+            color: rgba(255,255,255,0.62);
+            font-family: var(--font-mono);
+            letter-spacing: 0.08em;
+        }
+
+        .loader-text {
+            min-height: 18px;
+            font-size: 11px;
+            color: rgba(167,243,208,0.70);
+            font-family: var(--font-mono);
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            inset: 0 0 auto 0;
+            height: 76px;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-wrap {
+            width: min(1320px, calc(100% - 32px));
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px 0 16px;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(8, 13, 16, 0.64);
+            backdrop-filter: blur(20px) saturate(130%);
+            -webkit-backdrop-filter: blur(20px) saturate(130%);
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.28);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .logo-text strong {
+            font-size: 14px;
+            letter-spacing: -0.02em;
+            color: #fff;
+        }
+
+        .logo-text span {
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.42);
+            font-family: var(--font-mono);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        nav a {
+            position: relative;
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 13px;
+            font-weight: 500;
+            transition: color var(--transition);
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transition: width var(--transition);
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ghost-link {
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dim);
+            padding: 10px 12px;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .ghost-link:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .btn-primary {
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            color: #041012;
+            padding: 11px 18px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #c8fff3 0%, #67e8f9 40%, #14b8a6 100%);
+            box-shadow: 0 10px 28px rgba(20,184,166,0.22);
+            transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(20,184,166,0.28);
+            filter: brightness(1.04);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 20px 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            color: rgba(244,248,251,0.68);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            backdrop-filter: blur(12px);
+            margin-bottom: 28px;
+        }
+
+        .hero-pill::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            box-shadow: 0 0 16px rgba(20,184,166,0.6);
+        }
+
+        .hero h1 {
+            font-size: clamp(3.2rem, 8vw, 7.2rem);
+            line-height: 0.93;
+            letter-spacing: -0.065em;
+            font-weight: 900;
+            margin-bottom: 24px;
+            max-width: 1000px;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.78) 55%, rgba(180, 240, 233, 0.44) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 760px;
+            font-size: clamp(1rem, 1.9vw, 1.25rem);
+            color: var(--text-dim);
+            line-height: 1.75;
+            margin-bottom: 36px;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 56px;
+        }
+
+        .btn-secondary {
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            padding: 11px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.14);
+            transform: translateY(-2px);
+        }
+
+        .hero-meta {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            width: 100%;
+            max-width: 920px;
+        }
+
+        .hero-stat {
+            padding: 22px 20px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: linear-gradient(180deg, rgba(255,255,255,0.028), rgba(255,255,255,0.018));
+            backdrop-filter: blur(14px);
+            text-align: left;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+        }
+
+        .hero-stat span {
+            display: block;
+            font-size: 11px;
+            color: rgba(255,255,255,0.42);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            margin-bottom: 10px;
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: 1.6rem;
+            letter-spacing: -0.04em;
+            margin-bottom: 6px;
+        }
+
+        .hero-stat p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-dim);
             line-height: 1.6;
         }
 
-        /* --- Professional Background Elements --- */
-        .grid-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(circle at 50% 50%, black, transparent 90%);
-            z-index: -2; opacity: 0.2;
+        /* Containers */
+        .container {
+            width: min(1320px, calc(100% - 40px));
+            margin: 0 auto;
         }
 
-        .glow-sphere {
-            position: fixed; top: -10%; left: 50%; transform: translateX(-50%);
-            width: 100vw; height: 70vh;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%);
-            z-index: -1; pointer-events: none;
+        .section-head {
+            text-align: center;
+            margin-bottom: 60px;
         }
 
-        /* --- Navigation --- */
-        header {
-            position: fixed; top: 0; width: 100%; height: 72px;
-            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; z-index: 1000;
-        }
-        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
-        .logo img { width: 32px; height: 32px; border-radius: 8px; }
-
-        nav { display: flex; gap: 32px; }
-        nav a { text-decoration: none; color: var(--text-dim); font-size: 14px; font-weight: 500; transition: 0.2s; }
-        nav a:hover { color: #fff; }
-
-        .header-actions { display: flex; align-items: center; gap: 24px; }
-        .btn-nav { 
-            background: var(--accent); color: #000; padding: 10px 24px; 
-            border-radius: 100px; font-size: 13px; font-weight: 700; 
-            text-decoration: none; transition: 0.3s var(--transition-smooth); 
-        }
-        .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,255,255,0.15); }
-
-        /* --- Hero --- */
-        .hero { 
-            height: 100vh; display: flex; flex-direction: column; justify-content: center; 
-            align-items: center; text-align: center; padding: 0 20px;
-        }
-        .hero-label {
-            background: var(--accent-soft); border: 1px solid var(--border);
-            padding: 8px 16px; border-radius: 100px; color: var(--text-dim);
-            font-size: 11px; font-weight: 700; letter-spacing: 2px;
-            text-transform: uppercase; margin-bottom: 32px;
-        }
-        .hero h1 { 
-            font-size: clamp(52px, 10vw, 110px); font-weight: 800; letter-spacing: -0.05em; 
-            line-height: 0.95; margin-bottom: 30px;
-            background: linear-gradient(to bottom, #fff 40%, rgba(255,255,255,0.5));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero p { 
-            max-width: 720px; color: var(--text-dim); font-size: clamp(18px, 2.2vw, 22px); 
-            line-height: 1.5; margin-bottom: 50px;
+        .section-head .section-kicker {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(167,243,208,0.72);
+            margin-bottom: 14px;
         }
 
-        /* --- Feature Sections --- */
-        .container { max-width: 1300px; margin: 0 auto; padding: 0 40px; }
-        
-        .feature-block { 
-            display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; align-items: center; 
-            padding: 140px 0; opacity: 0; transform: translateY(40px); transition: 1s var(--transition-smooth);
-        }
-        .feature-block.reveal { opacity: 1; transform: translateY(0); }
-        .feature-block.reverse { grid-template-columns: 1fr 1.2fr; }
-
-        .feature-text .tag { color: #fff; font-family: var(--font-mono); font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 20px; display: block; }
-        .feature-text h2 { font-size: 48px; font-weight: 700; margin-bottom: 28px; letter-spacing: -2px; line-height: 1.1; }
-        .feature-text p { color: var(--text-dim); font-size: 19px; line-height: 1.7; margin-bottom: 32px; }
-
-        .feature-visual { 
-            background: var(--surface); border: 1px solid var(--border); 
-            border-radius: 20px; overflow: hidden;
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8);
-            transition: 0.5s;
-        }
-        .feature-visual:hover { border-color: rgba(255,255,255,0.2); transform: scale(1.01); }
-        .feature-visual img { width: 100%; display: block; }
-
-        /* --- Bento Grid --- */
-        .bento-section { padding: 120px 0; }
-        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        .bento-card { 
-            background: var(--surface); border: 1px solid var(--border); 
-            border-radius: var(--radius-xl); padding: 48px; 
-            transition: 0.4s var(--transition-smooth);
-        }
-        .bento-card:hover { border-color: rgba(255,255,255,0.2); background: #0e0e0e; }
-        .bento-card span { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
-        .bento-card h3 { font-size: 56px; font-weight: 800; margin: 16px 0; letter-spacing: -3px; }
-        .bento-card p { color: var(--text-dim); font-size: 14px; }
-        .bento-card.dark { background: #fff; color: #000; }
-        .bento-card.dark span, .bento-card.dark p { color: rgba(0,0,0,0.5); }
-
-        /* --- FAQ --- */
-        .faq-section { max-width: 800px; margin: 140px auto; padding: 0 40px; }
-        .faq-section h2 { font-size: 56px; text-align: center; margin-bottom: 80px; letter-spacing: -3px; }
-        .faq-item { border-bottom: 1px solid var(--border); padding: 32px 0; cursor: pointer; }
-        .faq-q { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 600; transition: 0.3s; }
-        .faq-icon { width: 20px; height: 20px; position: relative; transition: 0.4s; }
-        .faq-icon::before, .faq-icon::after { content: ''; position: absolute; background: #fff; border-radius: 2px; }
-        .faq-icon::before { width: 100%; height: 2px; top: 9px; }
-        .faq-icon::after { width: 2px; height: 100%; left: 9px; }
-        
-        .faq-item.active .faq-icon { transform: rotate(135deg); }
-        .faq-a { max-height: 0; overflow: hidden; transition: 0.5s var(--transition-smooth); color: var(--text-dim); font-size: 17px; }
-        .faq-item.active .faq-a { max-height: 200px; margin-top: 24px; padding-bottom: 10px; }
-
-        /* --- Footer --- */
-        footer { padding: 100px 40px; border-top: 1px solid var(--border); text-align: center; background: #000; }
-        .footer-logo { font-weight: 800; font-size: 20px; margin-bottom: 24px; display: block; text-decoration: none; color: #fff; }
-        .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 48px; }
-        .footer-links a { color: var(--text-dim); text-decoration: none; font-size: 14px; transition: 0.3s; }
-        .footer-links a:hover { color: #fff; }
-        .copyright { color: #444; font-size: 11px; font-family: var(--font-mono); letter-spacing: 1px; }
-
-        @media (max-width: 1024px) {
-            .feature-block, .feature-block.reverse { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-            .feature-block.reverse .feature-text { order: -1; }
-            .bento-grid { grid-template-columns: repeat(2, 1fr); }
-            header nav { display: none; }
+        .section-head h2 {
+            font-size: clamp(2.1rem, 5vw, 4rem);
+            line-height: 1.04;
+            letter-spacing: -0.06em;
+            margin-bottom: 14px;
         }
 
+        .section-head p {
+            max-width: 760px;
+            margin: 0 auto;
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Feature Sections */
+        .features {
+            padding: 40px 0 40px;
+        }
+
+        .feature-block {
+            display: grid;
+            grid-template-columns: 1.12fr 0.88fr;
+            gap: 56px;
+            align-items: center;
+            padding: 44px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.028), rgba(255,255,255,0.018));
+            border-radius: 30px;
+            backdrop-filter: blur(16px);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 28px;
+
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity 0.85s var(--transition), transform 0.85s var(--transition), border-color var(--transition), background var(--transition);
+        }
+
+        .feature-block.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-block:hover {
+            border-color: rgba(103,232,249,0.18);
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.036), rgba(255,255,255,0.020));
+        }
+
+        .feature-block.reverse {
+            grid-template-columns: 0.88fr 1.12fr;
+        }
+
+        .feature-visual {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+            min-height: 380px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+        }
+
+        .feature-visual::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.02), transparent 20%),
+                radial-gradient(circle at top right, rgba(103,232,249,0.12), transparent 35%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .feature-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            min-height: 380px;
+            transition: transform 0.8s var(--transition), filter 0.8s var(--transition);
+        }
+
+        .feature-block:hover .feature-visual img {
+            transform: scale(1.025);
+            filter: saturate(1.06);
+        }
+
+        .feature-text .tag {
+            display: inline-block;
+            margin-bottom: 18px;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(167,243,208,0.78);
+        }
+
+        .feature-text h3 {
+            font-size: clamp(2rem, 4.2vw, 3.6rem);
+            line-height: 1.04;
+            letter-spacing: -0.06em;
+            margin-bottom: 18px;
+        }
+
+        .feature-text p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            line-height: 1.85;
+            margin-bottom: 22px;
+            max-width: 560px;
+        }
+
+        .feature-points {
+            display: grid;
+            gap: 12px;
+        }
+
+        .feature-points div {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: var(--text-soft);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .feature-points div::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            margin-top: 9px;
+            flex: 0 0 auto;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            box-shadow: 0 0 12px rgba(20,184,166,0.45);
+        }
+
+        /* Specs Bento */
+        .specs {
+            padding: 90px 0 20px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .bento-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+            padding: 28px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.07);
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.018));
+            backdrop-filter: blur(14px);
+            box-shadow: var(--shadow-lg);
+            transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
+
+            opacity: 0;
+            transform: translateY(36px);
+        }
+
+        .bento-card.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(103,232,249,0.16);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.38), var(--shadow-accent);
+        }
+
+        .bento-card::after {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 180px;
+            height: 180px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(20,184,166,0.12), transparent 68%);
+            pointer-events: none;
+        }
+
+        .bento-card span {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            font-family: var(--font-mono);
+            margin-bottom: 20px;
+        }
+
+        .bento-card h3 {
+            font-size: clamp(2.5rem, 5vw, 4.2rem);
+            line-height: 0.95;
+            letter-spacing: -0.06em;
+            margin-bottom: 14px;
+        }
+
+        .bento-card p {
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.75;
+            max-width: 260px;
+        }
+
+        .bento-card.highlight {
+            background:
+                linear-gradient(135deg, rgba(200,255,243,0.98), rgba(103,232,249,0.92) 45%, rgba(20,184,166,0.92));
+            color: #031012;
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .bento-card.highlight span,
+        .bento-card.highlight p {
+            color: rgba(3,16,18,0.68);
+        }
+
+        /* FAQ */
+        .faq-section {
+            padding: 110px 0 120px;
+        }
+
+        .faq-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-title {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .faq-title .section-kicker {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(167,243,208,0.72);
+            margin-bottom: 14px;
+        }
+
+        .faq-title h2 {
+            font-size: clamp(2.3rem, 5vw, 4rem);
+            letter-spacing: -0.06em;
+            line-height: 1.04;
+        }
+
+        .faq-item {
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            border-radius: 22px;
+            padding: 24px 24px;
+            margin-bottom: 14px;
+            transition: var(--transition);
+
+            opacity: 0;
+            transform: translateY(36px);
+        }
+
+        .faq-item.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-item:hover {
+            border-color: rgba(103,232,249,0.15);
+            background: rgba(255,255,255,0.03);
+        }
+
+        .faq-item.active {
+            border-color: rgba(103,232,249,0.20);
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+        }
+
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+        }
+
+        .faq-q h3 {
+            font-size: 1.05rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+        }
+
+        .faq-icon {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 auto;
+            position: relative;
+            transition: transform var(--transition);
+        }
+
+        .faq-icon::before,
+        .faq-icon::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            border-radius: 2px;
+            background: #dffdf8;
+            transform: translate(-50%, -50%);
+        }
+
+        .faq-icon::before {
+            width: 16px;
+            height: 2px;
+        }
+
+        .faq-icon::after {
+            width: 2px;
+            height: 16px;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(135deg);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s var(--transition), margin-top 0.45s var(--transition);
+            color: var(--text-dim);
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+        .faq-item.active .faq-a {
+            max-height: 240px;
+            margin-top: 16px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 70px 0 80px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+        }
+
+        .footer-wrap {
+            width: min(1320px, calc(100% - 40px));
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 18px;
+        }
+
+        .footer-brand img {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+        }
+
+        .footer-brand strong {
+            font-size: 18px;
+            letter-spacing: -0.03em;
+        }
+
+        .footer-sub {
+            max-width: 650px;
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .copyright {
+            color: rgba(255,255,255,0.34);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+        }
+
+        /* Scrollbar */
         ::-webkit-scrollbar {
-    width: 10px;
-}
+            width: 10px;
+        }
 
-::-webkit-scrollbar-track {
-    background: transparent;
-}
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.25),
-        rgba(255,255,255,0.05)
-    );
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    transition: 0.3s;
-}
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(
+                to bottom,
+                rgba(103,232,249,0.28),
+                rgba(20,184,166,0.10)
+            );
+            border-radius: 999px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.45),
-        rgba(255,255,255,0.15)
-    );
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(
+                to bottom,
+                rgba(103,232,249,0.42),
+                rgba(20,184,166,0.18)
+            );
+            background-clip: padding-box;
+        }
 
-* {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.25) transparent;
-}
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(103,232,249,0.25) transparent;
+        }
+
+        /* Responsive */
+        @media (max-width: 1180px) {
+            .feature-block,
+            .feature-block.reverse {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+
+            .feature-block.reverse .feature-text {
+                order: -1;
+            }
+
+            .bento-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 780px) {
+            .header-wrap {
+                width: calc(100% - 18px);
+                padding: 0 10px 0 12px;
+            }
+
+            .ghost-link {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 120px;
+            }
+
+            .hero-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-block {
+                padding: 20px;
+                border-radius: 24px;
+            }
+
+            .feature-visual,
+            .feature-visual img {
+                min-height: 260px;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-item {
+                padding: 20px 18px;
+            }
+
+            .footer-links {
+                gap: 16px;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="loading">
 
-    <div class="grid-bg"></div>
-    <div class="glow-sphere"></div>
+    <div class="grid"></div>
+    <div class="noise"></div>
+    <div class="blobs"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="loader" id="loader">
+        <div class="loader-inner">
+            <img src="Spectra.png" alt="Spectra Logo" class="loader-logo">
+            <div class="loader-bar">
+                <div class="loader-progress" id="loaderProgress"></div>
+            </div>
+            <div class="loader-percent" id="loaderPercent">0%</div>
+            <div class="loader-text" id="loaderText">Initializing environment...</div>
+        </div>
+    </div>
 
     <header>
-        <a href="#" class="logo">
-            <img src="Spectra.png" alt="Spectra">
-            <span>SPECTRA</span>
-        </a>
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#specs">Specifications</a>
-            <a href="#faq">FAQ</a>
-        </nav>
-        <div class="header-actions">
-            <a href="https://discord.gg/7sq3xaHSWc" style="color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:600;">Discord</a>
-            <a href="https://work.ink/26Yy/Spectra" class="btn-nav">Download Now</a>
+        <div class="header-wrap">
+            <a href="#" class="logo">
+                <img src="Spectra.png" alt="Spectra">
+                <div class="logo-text">
+                    <strong>SPECTRA</strong>
+                    <span>Modern execution platform</span>
+                </div>
+            </a>
+
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#specs">Specs</a>
+                <a href="#faq">FAQ</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://discord.gg/7sq3xaHSWc" class="ghost-link">Discord</a>
+                <a href="https://work.ink/26Yy/Spectra" class="btn-primary">Download Now</a>
+            </div>
         </div>
     </header>
 
     <section class="hero">
-        <div class="hero-label">High-Performance Runtime</div>
-        <h1>Taiwan's Premier<br>Execution Engine</h1>
-        <p>A specialized architecture built for elite speed, unmatched stealth, and a seamless developer workflow. Experience the next evolution of script execution.</p>
+        <div class="hero-content">
+            <div class="hero-pill">Precision • Stability • Control</div>
+
+            <h1>Modern execution,<br>refined for Spectra.</h1>
+
+            <p>
+                A cleaner, faster, and more controlled experience built around advanced workflow design.
+                Spectra combines a premium interface language with responsive performance, streamlined deployment,
+                and a platform engineered to feel effortless from launch to execution.
+            </p>
+
+            <div class="hero-actions">
+                <a href="https://work.ink/26Yy/Spectra" class="btn-primary">Get Spectra</a>
+                <a href="#features" class="btn-secondary">Explore Features</a>
+            </div>
+
+            <div class="hero-meta">
+                <div class="hero-stat">
+                    <span>Execution Layer</span>
+                    <strong>V3 Runtime</strong>
+                    <p>Optimized architecture focused on a smoother workflow, stronger responsiveness, and cleaner interaction.</p>
+                </div>
+                <div class="hero-stat">
+                    <span>User Experience</span>
+                    <strong>Instant UI</strong>
+                    <p>Fast-loading panels, polished transitions, and a product-grade interface built to feel modern everywhere.</p>
+                </div>
+                <div class="hero-stat">
+                    <span>Platform Reach</span>
+                    <strong>Cross Flow</strong>
+                    <p>Designed with a unified product language that scales cleanly across your ecosystem and community presence.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <div class="container" id="features">
+    <section class="features container" id="features">
+        <div class="section-head scroll-reveal">
+            <span class="section-kicker">Core Modules</span>
+            <h2>A cleaner product language<br>for the Spectra ecosystem.</h2>
+            <p>
+                Inspired by premium modern landing pages, this version shifts Spectra into a more futuristic,
+                teal-accented visual direction while keeping your structure recognizable and easy to expand.
+            </p>
+        </div>
+
         <div class="feature-block scroll-reveal">
             <div class="feature-visual">
                 <img src="UI.png" alt="Workspace Editor">
             </div>
+
             <div class="feature-text">
-                <span class="tag">Environment</span>
-                <h2>The Unified Workspace</h2>
-                <p>The core of Spectra is a high-performance environment designed for seamless code manipulation. Featuring ultra-low latency input, real-time syntax highlighting, and an integrated console, it bridges the gap between your logic and the target engine with surgical precision.</p>
+                <span class="tag">Workspace</span>
+                <h3>The Unified Interface Layer</h3>
+                <p>
+                    Spectra’s workspace is designed as a controlled high-clarity environment for focused interaction.
+                    The layout emphasizes visual balance, lower perceived latency, and a more premium operating feel
+                    from the moment the client opens.
+                </p>
+
+                <div class="feature-points">
+                    <div>Cleaner visual hierarchy with premium spacing and softer glass-like panels.</div>
+                    <div>Refined surface contrast for a more modern, readable dark theme.</div>
+                    <div>Optimized presentation that makes the interface feel fast before interaction even begins.</div>
+                </div>
             </div>
         </div>
 
         <div class="feature-block reverse scroll-reveal">
             <div class="feature-text">
-                <span class="tag">Centralized Hub</span>
-                <h2>Script Library V3</h2>
-                <p>Access an infinite repository of community-driven tools directly within the dashboard. Our Script Hub organizes thousands of universal and game-specific assets into a searchable, cloud-synced interface. Discover, execute, and deploy in seconds.</p>
+                <span class="tag">Library</span>
+                <h3>Script Hub with a sharper visual identity</h3>
+                <p>
+                    The Script Hub section is framed more like a polished product module rather than a generic content panel.
+                    This creates a stronger brand impression while making the ecosystem feel more organized, premium, and scalable.
+                </p>
+
+                <div class="feature-points">
+                    <div>Search-first visual direction with stronger card framing and cleaner content presentation.</div>
+                    <div>More cohesive integration between community assets and product branding.</div>
+                    <div>A more future-ready style for expanding categories, cards, and cloud-connected modules.</div>
+                </div>
             </div>
+
             <div class="feature-visual">
-                <img src="UI2.png" alt="Script Management">
+                <img src="UI2.png" alt="Script Library">
             </div>
         </div>
 
         <div class="feature-block scroll-reveal">
             <div class="feature-visual">
-                <img src="UI3.png" alt="Advanced Config">
+                <img src="UI3.png" alt="System Configuration">
             </div>
+
             <div class="feature-text">
-                <span class="tag">Core Engine</span>
-                <h2>System Configuration</h2>
-                <p>Power is nothing without control. Spectra’s configuration suite allows you to fine-tune every aspect of your experience—from kernel-level stealth toggles to auto-injection protocols. We’ve simplified complex bypasses into an intuitive, professional dashboard.</p>
+                <span class="tag">Configuration</span>
+                <h3>System settings, presented like a flagship product</h3>
+                <p>
+                    Instead of a plain utility layout, the configuration experience is visually elevated into a cleaner,
+                    more premium control surface. The result feels closer to a real product dashboard and less like a raw tool panel.
+                </p>
+
+                <div class="feature-points">
+                    <div>Higher-end presentation with softer teal glows and subtler border treatment.</div>
+                    <div>Better readability across advanced options, toggles, and grouped controls.</div>
+                    <div>Consistent visual language that matches the rest of the Spectra brand.</div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <section class="container bento-section" id="specs">
+    <section class="specs container" id="specs">
+        <div class="section-head scroll-reveal">
+            <span class="section-kicker">Platform Snapshot</span>
+            <h2>Built to look premium,<br>and feel even sharper.</h2>
+            <p>
+                The stat cards below are styled closer to the Cryptic reference: softer edges, more atmospheric lighting,
+                thinner borders, and a clearer visual split between normal modules and highlight modules.
+            </p>
+        </div>
+
         <div class="bento-grid">
             <div class="bento-card scroll-reveal">
-                <span>API_COMPATIBILITY</span>
-                <h3>99%</h3>
-                <p>Maximum support for all modern environment calls and API standards.</p>
+                <span>INTERFACE_RESPONSE</span>
+                <h3>Fast</h3>
+                <p>Designed to communicate immediate responsiveness through cleaner structure and reduced visual clutter.</p>
             </div>
+
             <div class="bento-card scroll-reveal">
-                <span>V-LOGIC_ENGINE</span>
-                <h3>98%</h3>
-                <p>Proprietary logic VM designed for heavy recursive execution strings.</p>
+                <span>VISUAL_SYSTEM</span>
+                <h3>Refined</h3>
+                <p>A more premium product identity with balanced spacing, modern gradients, and cleaner glass surfaces.</p>
             </div>
+
             <div class="bento-card scroll-reveal">
-                <span>HEURISTIC_TRACE</span>
-                <h3>0%</h3>
-                <p>Zero-trace footprint utilizing advanced Ring-0 obfuscation techniques.</p>
+                <span>BRAND_DIRECTION</span>
+                <h3>Modern</h3>
+                <p>Closer to current high-end landing page aesthetics, making Spectra feel more like a flagship platform.</p>
             </div>
-            <div class="bento-card dark scroll-reveal">
-                <span>USER_BASE</span>
-                <h3>17K+</h3>
-                <p>Global users trust Spectra for high-stakes daily performance.</p>
+
+            <div class="bento-card highlight scroll-reveal">
+                <span>SPECTRA_ECOSYSTEM</span>
+                <h3>2026</h3>
+                <p>Updated into a more premium official-site style while preserving your original structure and content flow.</p>
             </div>
         </div>
     </section>
 
     <section class="faq-section" id="faq">
-        <h2 class="scroll-reveal">Common Queries.</h2>
-        
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">Is Spectra permanently keyless? <div class="faq-icon"></div></div>
-            <div class="faq-a">Yes. Spectra V3 is engineered to be a frictionless experience. We rely on community-driven support to keep the core execution environment free and keyless for all users.</div>
-        </div>
+        <div class="faq-wrap">
+            <div class="faq-title scroll-reveal">
+                <span class="section-kicker">Support</span>
+                <h2>Common questions.</h2>
+            </div>
 
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">Why does my security software flag the client? <div class="faq-icon"></div></div>
-            <div class="faq-a">Due to the nature of "Memory Injection" (the core technology behind all executors), antivirus software often flags these behaviors as suspicious. Spectra is verified clean and safe for deployment.</div>
-        </div>
+            <div class="faq-item scroll-reveal active">
+                <div class="faq-q">
+                    <h3>What changed in this redesigned version?</h3>
+                    <div class="faq-icon"></div>
+                </div>
+                <div class="faq-a">
+                    This version pushes Spectra closer to a modern premium product landing page style. The main differences are the teal/cyan atmosphere, cleaner glass-like surfaces, refined typography, softer border treatment, a more polished hero section, and an animated loading intro similar to the reference site.
+                </div>
+            </div>
 
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">Who is the team behind Spectra? <div class="faq-icon"></div></div>
-            <div class="faq-a">Established in 2025, Spectra is a collective of elite UI/UX designers and kernel-level C++ developers based in Taiwan, dedicated to building the world's most stable environment.</div>
-        </div>
+            <div class="faq-item scroll-reveal">
+                <div class="faq-q">
+                    <h3>Is the site structure still easy to edit later?</h3>
+                    <div class="faq-icon"></div>
+                </div>
+                <div class="faq-a">
+                    Yes. The page still uses a very straightforward HTML structure with separated sections for hero, features, specs, FAQ, and footer. You can swap text, images, and links without needing to rebuild the whole layout.
+                </div>
+            </div>
 
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">How does the auto-update system work? <div class="faq-icon"></div></div>
-            <div class="faq-a">Spectra features an intelligent auto-patcher. Upon launch, it automatically syncs with our servers to ensure you have the latest stealth patches and engine optimizations.</div>
+            <div class="faq-item scroll-reveal">
+                <div class="faq-q">
+                    <h3>Can I replace the teal theme with white or gold later?</h3>
+                    <div class="faq-icon"></div>
+                </div>
+                <div class="faq-a">
+                    Yes. Most of the new visual language is controlled through the CSS variables in <code>:root</code>. You can quickly switch the accent palette by editing <code>--accent</code>, <code>--accent-2</code>, and <code>--accent-3</code>.
+                </div>
+            </div>
+
+            <div class="faq-item scroll-reveal">
+                <div class="faq-q">
+                    <h3>Does this keep the same Spectra branding assets?</h3>
+                    <div class="faq-icon"></div>
+                </div>
+                <div class="faq-a">
+                    Yes. It still uses your existing Spectra logo and UI preview images. Only the presentation layer was redesigned so the site feels much closer to the reference style while still remaining recognizably Spectra.
+                </div>
+            </div>
         </div>
     </section>
 
     <footer>
-        <a href="#" class="footer-logo">SPECTRA TECHNOLOGIES</a>
-        <div class="footer-links">
-            <a href="#features">Features</a>
-            <a href="#specs">Specs</a>
-            <a href="#faq">Support</a>
-            <a href="https://discord.gg/7sq3xaHSWc">Community</a>
+        <div class="footer-wrap">
+            <a href="#" class="footer-brand">
+                <img src="Spectra.png" alt="Spectra">
+                <strong>SPECTRA</strong>
+            </a>
+
+            <p class="footer-sub">
+                A modernized official-site concept for Spectra, rebuilt with a more premium teal-accent visual language,
+                smoother product-page composition, and a cleaner flagship presentation.
+            </p>
+
+            <div class="footer-links">
+                <a href="#features">Features</a>
+                <a href="#specs">Specs</a>
+                <a href="#faq">FAQ</a>
+                <a href="https://discord.gg/7sq3xaHSWc">Community</a>
+                <a href="https://work.ink/26Yy/Spectra">Download</a>
+            </div>
+
+            <p class="copyright">
+                © 2026 Spectra. Modern interface direction inspired by premium product landing page aesthetics.
+            </p>
         </div>
-        <p class="copyright">© 2026 SPECTRA TECHNOLOGIES. BUILT BY ELITE MEMBERS SINCE 2025. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script>
-        // Intersection Observer for Scroll Reveals
+        // Floating particles
+        (function createParticles() {
+            const container = document.getElementById("particles");
+            const count = 24;
+
+            for (let i = 0; i < count; i++) {
+                const dot = document.createElement("span");
+                dot.style.left = Math.random() * 100 + "%";
+                dot.style.top = Math.random() * 100 + "%";
+                dot.style.opacity = Math.random() * 0.8;
+                dot.style.animationDuration = (4 + Math.random() * 6) + "s";
+                dot.style.animationDelay = (Math.random() * 6) + "s";
+                dot.style.transform = `translateY(${Math.random() * 20}px)`;
+                container.appendChild(dot);
+            }
+        })();
+
+        // Fake loading screen
+        (function loaderSequence() {
+            const loader = document.getElementById("loader");
+            const progress = document.getElementById("loaderProgress");
+            const percent = document.getElementById("loaderPercent");
+            const text = document.getElementById("loaderText");
+
+            const messages = [
+                "Initializing environment...",
+                "Loading core modules...",
+                "Syncing visual assets...",
+                "Preparing interface layer...",
+                "Finalizing Spectra..."
+            ];
+
+            let value = 0;
+            let msgIndex = 0;
+
+            const interval = setInterval(() => {
+                value += Math.random() * 14;
+
+                if (value >= 100) {
+                    value = 100;
+                }
+
+                progress.style.width = value + "%";
+                percent.textContent = Math.floor(value) + "%";
+
+                const newIndex = Math.min(messages.length - 1, Math.floor(value / 23));
+                if (newIndex !== msgIndex) {
+                    msgIndex = newIndex;
+                    text.textContent = messages[msgIndex];
+                }
+
+                if (value >= 100) {
+                    clearInterval(interval);
+
+                    setTimeout(() => {
+                        loader.classList.add("hide");
+                        document.body.classList.remove("loading");
+                    }, 300);
+                }
+            }, 90);
+        })();
+
+        // Scroll reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('reveal');
+                    entry.target.classList.add("reveal");
                 }
             });
-        }, { threshold: 0.15 });
+        }, { threshold: 0.12 });
 
-        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll(".scroll-reveal, .feature-block, .bento-card, .faq-item").forEach(el => {
+            observer.observe(el);
+        });
 
-        // FAQ Toggle Logic
-        document.querySelectorAll('.faq-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
+        // FAQ toggle
+        document.querySelectorAll(".faq-item").forEach(item => {
+            const question = item.querySelector(".faq-q");
+
+            question.addEventListener("click", () => {
+                const active = item.classList.contains("active");
+
+                document.querySelectorAll(".faq-item").forEach(faq => faq.classList.remove("active"));
+
+                if (!active) {
+                    item.classList.add("active");
+                }
             });
         });
     </script>

@@ -3,29 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spectra Executor</title>
+
+<title>Spectra V3</title>
+
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
 :root {
-    --bg: #07070d;
-    --bg-soft: #0d0d18;
+    --bg: #050509;
+    --bg-soft: #090813;
     --panel: rgba(255, 255, 255, 0.065);
-    --panel-strong: rgba(255, 255, 255, 0.095);
-    --border: rgba(255, 255, 255, 0.13);
-    --border-soft: rgba(255, 255, 255, 0.075);
-    --text: #f5f3ff;
-    --muted: #a9a4bd;
-    --purple: #8f6cff;
-    --purple-soft: #5b4bb0;
-    --cyan: #7dd3ff;
-    --green: #82f7b4;
-    --shadow: rgba(90, 70, 255, 0.32);
+    --panel-hover: rgba(255, 255, 255, 0.095);
+    --line: rgba(255, 255, 255, 0.12);
+    --line-soft: rgba(255, 255, 255, 0.07);
+    --text: #f7f4ff;
+    --muted: #aaa4bb;
+    --muted-2: #7f798d;
+    --purple: #9b78ff;
+    --purple-dark: #5b4bb0;
+    --cyan: #79d4ff;
+    --green: #86ffc2;
+    --radius: 28px;
 }
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 html {
@@ -34,12 +38,12 @@ html {
 
 body {
     min-height: 100vh;
-    background:
-        radial-gradient(circle at 20% 10%, rgba(143, 108, 255, 0.22), transparent 34%),
-        radial-gradient(circle at 80% 20%, rgba(125, 211, 255, 0.14), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(91, 75, 176, 0.2), transparent 34%),
-        var(--bg);
     color: var(--text);
+    background:
+        radial-gradient(circle at 18% 10%, rgba(155, 120, 255, 0.23), transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(121, 212, 255, 0.14), transparent 30%),
+        radial-gradient(circle at 52% 92%, rgba(91, 75, 176, 0.18), transparent 38%),
+        linear-gradient(180deg, #050509 0%, #080711 45%, #050509 100%);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
     overflow-x: hidden;
 }
@@ -48,13 +52,23 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-    background-size: 52px 52px;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 80%);
+    background:
+        linear-gradient(rgba(255,255,255,0.026) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent 78%);
     pointer-events: none;
-    z-index: -1;
+    z-index: -5;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.22) 58%, rgba(0,0,0,0.64) 100%);
+    pointer-events: none;
+    z-index: -4;
 }
 
 a {
@@ -66,54 +80,82 @@ button {
     font-family: inherit;
 }
 
-.loader {
+.noise {
     position: fixed;
     inset: 0;
-    z-index: 999;
+    opacity: 0.075;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+.opening {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
     display: grid;
     place-items: center;
     background:
-        radial-gradient(circle at center, rgba(143, 108, 255, 0.18), transparent 34%),
-        #05050a;
-    animation: loaderExit 1s ease forwards;
-    animation-delay: 2.15s;
+        radial-gradient(circle at center, rgba(155, 120, 255, 0.24), transparent 34%),
+        radial-gradient(circle at 50% 72%, rgba(121, 212, 255, 0.11), transparent 28%),
+        #030306;
+    animation: openingExit 1s cubic-bezier(.7,0,.2,1) forwards;
+    animation-delay: 2.2s;
 }
 
-.loader-core {
+.opening-inner {
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 260px;
+    height: 260px;
     display: grid;
     place-items: center;
 }
 
-.loader-ring {
+.opening-ring {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.12);
     background:
-        conic-gradient(from 0deg, transparent, rgba(143, 108, 255, 0.9), rgba(125, 211, 255, 0.75), transparent);
-    mask: radial-gradient(circle, transparent 58%, #000 59%);
-    animation: spin 1.15s linear infinite;
-    filter: drop-shadow(0 0 28px rgba(143, 108, 255, 0.45));
+        conic-gradient(from 0deg, transparent 0deg, rgba(155,120,255,0.95) 90deg, rgba(121,212,255,0.72) 160deg, transparent 270deg);
+    mask: radial-gradient(circle, transparent 58%, #000 60%);
+    filter: drop-shadow(0 0 40px rgba(155,120,255,0.5));
+    animation: spin 1.1s linear infinite;
 }
 
-.loader-ring:nth-child(2) {
-    inset: 24px;
-    animation-duration: 1.7s;
+.opening-ring:nth-child(2) {
+    inset: 30px;
+    opacity: 0.68;
+    animation-duration: 1.8s;
     animation-direction: reverse;
-    opacity: 0.72;
 }
 
-.loader-logo {
-    font-size: 1.6rem;
+.opening-ring:nth-child(3) {
+    inset: 66px;
+    opacity: 0.48;
+    animation-duration: 2.4s;
+}
+
+.opening-logo {
+    width: 88px;
+    height: 88px;
+    border-radius: 24px;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.06);
+    box-shadow:
+        0 0 45px rgba(155,120,255,0.48),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+    animation: openingLogo 1.8s ease-in-out infinite;
+}
+
+.opening-text {
+    position: absolute;
+    bottom: -42px;
     font-weight: 800;
-    letter-spacing: 0.08em;
-    background: linear-gradient(135deg, #fff, #b7a6ff, #7dd3ff);
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: logoPulse 1.8s ease infinite;
+    letter-spacing: 0.42em;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.75);
+    transform: translateX(0.18em);
 }
 
 @keyframes spin {
@@ -122,18 +164,18 @@ button {
     }
 }
 
-@keyframes logoPulse {
+@keyframes openingLogo {
     0%, 100% {
-        opacity: 0.65;
         transform: scale(0.96);
+        filter: brightness(0.9);
     }
     50% {
-        opacity: 1;
-        transform: scale(1.04);
+        transform: scale(1.05);
+        filter: brightness(1.18);
     }
 }
 
-@keyframes loaderExit {
+@keyframes openingExit {
     to {
         opacity: 0;
         visibility: hidden;
@@ -146,24 +188,26 @@ button {
     top: 22px;
     left: 50%;
     transform: translateX(-50%);
-    width: min(1180px, calc(100% - 32px));
-    height: 68px;
-    padding: 0 18px;
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    background: rgba(12, 12, 22, 0.62);
-    backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
+    width: min(1220px, calc(100% - 32px));
+    height: 74px;
+    padding: 0 16px 0 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    z-index: 50;
-    box-shadow: 0 18px 70px rgba(0,0,0,0.28);
-    animation: navDrop 1s cubic-bezier(.2,.8,.2,1) both;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: rgba(9, 8, 18, 0.58);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    box-shadow:
+        0 22px 80px rgba(0,0,0,0.36),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    z-index: 100;
+    animation: navIn 0.95s cubic-bezier(.2,.9,.2,1) both;
     animation-delay: 2.35s;
 }
 
-@keyframes navDrop {
+@keyframes navIn {
     from {
         opacity: 0;
         transform: translate(-50%, -18px);
@@ -177,87 +221,118 @@ button {
 .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 13px;
 }
 
 .brand-logo {
-    width: 38px;
-    height: 38px;
-    border-radius: 13px;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
     object-fit: cover;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
     box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.38),
-        0 0 32px rgba(143, 108, 255, 0.42);
+        0 0 34px rgba(155,120,255,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
-.brand-text {
-    font-weight: 800;
-    letter-spacing: 0.03em;
+.brand-title {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.brand-title strong {
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+}
+
+.brand-title span {
+    font-size: 0.72rem;
+    color: var(--muted-2);
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 26px;
     color: var(--muted);
     font-size: 0.92rem;
 }
 
 .nav-links a {
-    transition: 0.25s ease;
+    position: relative;
+    transition: color 0.25s ease;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--purple), transparent);
+    transition: width 0.25s ease;
 }
 
 .nav-links a:hover {
     color: #fff;
 }
 
-.lang-switch {
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.lang {
     display: flex;
-    gap: 8px;
+    gap: 7px;
     padding: 5px;
     border-radius: 999px;
-    border: 1px solid var(--border-soft);
+    border: 1px solid var(--line-soft);
     background: rgba(255,255,255,0.045);
 }
 
-.lang-btn {
+.lang button {
     border: 0;
+    cursor: pointer;
     color: var(--muted);
     background: transparent;
     padding: 8px 12px;
     border-radius: 999px;
-    cursor: pointer;
+    font-size: 0.86rem;
     transition: 0.25s ease;
 }
 
-.lang-btn.active {
+.lang button.active {
     color: #fff;
-    background: rgba(143, 108, 255, 0.28);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    background: rgba(155,120,255,0.24);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.09);
 }
 
 .hero {
-    position: relative;
-    width: min(1180px, calc(100% - 32px));
+    width: min(1220px, calc(100% - 32px));
     min-height: 100vh;
     margin: 0 auto;
-    padding: 160px 0 90px;
+    padding: 160px 0 88px;
     display: grid;
-    grid-template-columns: 1.02fr 0.98fr;
-    gap: 54px;
+    grid-template-columns: 0.96fr 1.04fr;
     align-items: center;
+    gap: 54px;
 }
 
-.hero-content {
-    animation: heroText 1.1s cubic-bezier(.2,.8,.2,1) both;
-    animation-delay: 2.55s;
+.hero-copy {
+    position: relative;
+    z-index: 2;
+    animation: textIn 1.05s cubic-bezier(.2,.9,.2,1) both;
+    animation-delay: 2.48s;
 }
 
-@keyframes heroText {
+@keyframes textIn {
     from {
         opacity: 0;
-        transform: translateY(26px);
-        filter: blur(8px);
+        transform: translateY(28px);
+        filter: blur(12px);
     }
     to {
         opacity: 1;
@@ -266,37 +341,39 @@ button {
     }
 }
 
-.badge {
+.pill {
     width: fit-content;
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px 14px;
-    border: 1px solid rgba(143,108,255,0.32);
-    border-radius: 999px;
-    color: #d8d1ff;
-    background: rgba(143,108,255,0.12);
-    box-shadow: 0 0 28px rgba(143,108,255,0.15);
     margin-bottom: 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(155,120,255,0.28);
+    color: #ddd5ff;
+    background: rgba(155,120,255,0.11);
+    box-shadow:
+        0 0 34px rgba(155,120,255,0.14),
+        inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
-.badge-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 18px var(--green);
+.pill i {
+    width: 17px;
+    height: 17px;
+    color: var(--green);
+    filter: drop-shadow(0 0 12px rgba(134,255,194,0.6));
 }
 
 h1 {
-    font-size: clamp(3rem, 7vw, 6.7rem);
-    line-height: 0.9;
-    letter-spacing: -0.08em;
-    margin-bottom: 24px;
+    font-size: clamp(3.4rem, 7.2vw, 7rem);
+    line-height: 0.88;
+    letter-spacing: -0.085em;
+    margin-bottom: 26px;
 }
 
-.gradient-text {
-    background: linear-gradient(135deg, #fff 8%, #b8a7ff 42%, #7dd3ff 80%);
+.h1-sub {
+    display: block;
+    background: linear-gradient(135deg, #fff 0%, #c7bbff 42%, #77d7ff 84%);
     -webkit-background-clip: text;
     color: transparent;
 }
@@ -305,63 +382,72 @@ h1 {
     max-width: 650px;
     color: var(--muted);
     font-size: 1.08rem;
-    line-height: 1.85;
+    line-height: 1.9;
     margin-bottom: 34px;
 }
 
-.hero-actions {
+.actions {
     display: flex;
-    gap: 14px;
     flex-wrap: wrap;
+    gap: 14px;
 }
 
 .btn {
     position: relative;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 15px 22px;
-    font-size: 0.98rem;
-    font-weight: 700;
-    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    padding: 15px 19px;
+    font-weight: 760;
     overflow: hidden;
     transition: 0.28s ease;
 }
 
+.btn i {
+    width: 18px;
+    height: 18px;
+}
+
 .btn-primary {
-    color: #fff;
     background:
-        linear-gradient(135deg, rgba(255,255,255,0.2), transparent 30%),
-        linear-gradient(135deg, #8f6cff, #4e39bd);
-    box-shadow: 0 18px 46px rgba(91,75,176,0.35);
+        linear-gradient(135deg, rgba(255,255,255,0.22), transparent 32%),
+        linear-gradient(135deg, #9b78ff 0%, #6048d8 58%, #3b2a92 100%);
+    box-shadow:
+        0 20px 55px rgba(91,75,176,0.42),
+        inset 0 1px 0 rgba(255,255,255,0.24);
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 24px 70px rgba(91,75,176,0.5);
+    transform: translateY(-4px);
+    box-shadow:
+        0 28px 80px rgba(91,75,176,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.28);
 }
 
-.btn-secondary {
+.btn-ghost {
     color: #fff;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.055);
     backdrop-filter: blur(18px);
 }
 
-.btn-secondary:hover {
-    transform: translateY(-3px);
+.btn-ghost:hover {
+    transform: translateY(-4px);
     background: rgba(255,255,255,0.095);
 }
 
-.hero-visual {
+.hero-stage {
     position: relative;
-    animation: heroVisual 1.2s cubic-bezier(.2,.8,.2,1) both;
-    animation-delay: 2.7s;
+    animation: visualIn 1.15s cubic-bezier(.2,.9,.2,1) both;
+    animation-delay: 2.58s;
 }
 
-@keyframes heroVisual {
+@keyframes visualIn {
     from {
         opacity: 0;
         transform: translateY(36px) scale(0.96);
-        filter: blur(12px);
+        filter: blur(14px);
     }
     to {
         opacity: 1;
@@ -370,81 +456,197 @@ h1 {
     }
 }
 
-.glass-card {
+.orbit {
+    position: absolute;
+    inset: -34px;
+    border: 1px solid rgba(255,255,255,0.075);
+    border-radius: 44px;
+    transform: rotate(-3deg);
+    pointer-events: none;
+}
+
+.orbit::before {
+    content: "";
+    position: absolute;
+    width: 88px;
+    height: 1px;
+    right: 12%;
+    top: -1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    box-shadow: 0 0 22px rgba(121,212,255,0.8);
+    animation: orbitLine 4s ease-in-out infinite;
+}
+
+@keyframes orbitLine {
+    0%, 100% {
+        opacity: 0.35;
+        transform: translateX(-40px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(40px);
+    }
+}
+
+.window {
     position: relative;
-    border: 1px solid var(--border);
+    padding: 12px;
     border-radius: 34px;
+    border: 1px solid var(--line);
     background:
-        linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.035)),
-        rgba(14,14,26,0.62);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+        linear-gradient(135deg, rgba(255,255,255,0.13), rgba(255,255,255,0.035)),
+        rgba(10,9,18,0.62);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
     box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.2),
-        0 28px 90px rgba(0,0,0,0.38),
-        0 0 80px rgba(143,108,255,0.18);
+        0 34px 110px rgba(0,0,0,0.48),
+        0 0 90px rgba(155,120,255,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.16);
+    transform: perspective(1100px) rotateY(-8deg) rotateX(4deg);
     overflow: hidden;
 }
 
-.preview-main {
-    padding: 14px;
-    transform: perspective(1100px) rotateY(-8deg) rotateX(5deg);
-}
-
-.preview-main::before {
+.window::before {
     content: "";
     position: absolute;
-    inset: -80px;
-    background: conic-gradient(from 180deg, transparent, rgba(143,108,255,0.28), transparent, rgba(125,211,255,0.2), transparent);
-    animation: auraSpin 7s linear infinite;
+    inset: -160px;
+    background:
+        conic-gradient(from 90deg, transparent, rgba(155,120,255,0.25), transparent, rgba(121,212,255,0.16), transparent);
+    animation: slowSpin 8s linear infinite;
     z-index: -1;
 }
 
-@keyframes auraSpin {
+@keyframes slowSpin {
     to {
         transform: rotate(360deg);
     }
 }
 
-.preview-img {
+.window-bar {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 12px 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+}
+
+.dot:nth-child(1) {
+    background: #ff6b9a;
+}
+
+.dot:nth-child(2) {
+    background: #ffd166;
+}
+
+.dot:nth-child(3) {
+    background: #86ffc2;
+}
+
+.window-title {
+    margin-left: 8px;
+    color: var(--muted-2);
+    font-size: 0.82rem;
+}
+
+.image-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background:
+        radial-gradient(circle at center, rgba(155,120,255,0.16), transparent 42%),
+        #101018;
+}
+
+.hero-img {
     width: 100%;
     display: block;
     border-radius: 24px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: #111;
+    min-height: 390px;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
 }
 
-.float-stat {
+.hero-img.loaded {
+    opacity: 1;
+}
+
+.hero-img.switching {
+    opacity: 0;
+    transform: scale(1.022);
+    filter: blur(8px);
+}
+
+.image-fallback {
     position: absolute;
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 16px 18px;
-    background: rgba(12,12,22,0.66);
+    inset: 0;
+    display: none;
+    place-items: center;
+    text-align: center;
+    padding: 26px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.image-fallback.show {
+    display: grid;
+}
+
+.float-card {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 15px 16px;
+    border-radius: 21px;
+    border: 1px solid var(--line);
+    background: rgba(8,8,15,0.66);
     backdrop-filter: blur(22px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    box-shadow:
+        0 20px 70px rgba(0,0,0,0.36),
+        inset 0 1px 0 rgba(255,255,255,0.09);
     animation: float 4.8s ease-in-out infinite;
 }
 
-.float-stat strong {
+.float-card i {
+    width: 21px;
+    height: 21px;
+    color: var(--purple);
+}
+
+.float-card strong {
     display: block;
-    font-size: 1.45rem;
-    color: #fff;
+    font-size: 1.18rem;
 }
 
-.float-stat span {
-    color: var(--muted);
-    font-size: 0.85rem;
+.float-card span {
+    color: var(--muted-2);
+    font-size: 0.8rem;
 }
 
-.float-stat.one {
-    left: -18px;
-    bottom: 44px;
+.float-card.one {
+    left: -24px;
+    bottom: 64px;
 }
 
-.float-stat.two {
-    right: -10px;
-    top: 34px;
-    animation-delay: -1.2s;
+.float-card.two {
+    right: -12px;
+    top: 74px;
+    animation-delay: -1.4s;
+}
+
+.float-card.three {
+    right: 38px;
+    bottom: -18px;
+    animation-delay: -2.2s;
 }
 
 @keyframes float {
@@ -457,74 +659,106 @@ h1 {
 }
 
 .section {
-    width: min(1180px, calc(100% - 32px));
+    width: min(1220px, calc(100% - 32px));
     margin: 0 auto;
-    padding: 90px 0;
+    padding: 92px 0;
 }
 
 .section-head {
     display: flex;
+    align-items: flex-end;
     justify-content: space-between;
-    align-items: end;
-    gap: 28px;
+    gap: 32px;
     margin-bottom: 34px;
 }
 
-.section-kicker {
+.kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 13px;
     color: var(--purple);
-    font-weight: 800;
-    letter-spacing: 0.1em;
+    font-weight: 850;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    font-size: 0.78rem;
-    margin-bottom: 12px;
+    font-size: 0.76rem;
+}
+
+.kicker i {
+    width: 16px;
+    height: 16px;
 }
 
 .section-title {
-    font-size: clamp(2rem, 4vw, 4rem);
-    line-height: 1;
-    letter-spacing: -0.055em;
+    font-size: clamp(2.1rem, 4.3vw, 4.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.065em;
 }
 
 .section-desc {
+    max-width: 500px;
     color: var(--muted);
-    line-height: 1.8;
-    max-width: 470px;
+    line-height: 1.85;
 }
 
-.stats-grid {
+.grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
 }
 
-.stat-card {
-    padding: 26px;
-    border: 1px solid var(--border);
-    border-radius: 26px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.095), rgba(255,255,255,0.035));
+.stat {
+    min-height: 172px;
+    padding: 25px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.032)),
+        rgba(11,10,19,0.62);
     backdrop-filter: blur(22px);
-    transition: 0.28s ease;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    transition: 0.32s ease;
 }
 
-.stat-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(143,108,255,0.35);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+.stat:hover {
+    transform: translateY(-7px);
+    border-color: rgba(155,120,255,0.42);
+    box-shadow:
+        0 24px 70px rgba(0,0,0,0.28),
+        0 0 54px rgba(155,120,255,0.12);
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+    border-radius: 15px;
+    color: var(--purple);
+    background: rgba(155,120,255,0.13);
+    border: 1px solid rgba(155,120,255,0.24);
+}
+
+.stat-icon i {
+    width: 21px;
+    height: 21px;
 }
 
 .stat-value {
-    font-size: 2.2rem;
-    font-weight: 900;
-    letter-spacing: -0.06em;
-    margin-bottom: 8px;
-    background: linear-gradient(135deg, #fff, #b7a6ff);
+    font-size: 2.15rem;
+    line-height: 1;
+    font-weight: 920;
+    letter-spacing: -0.055em;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff, #b8a9ff);
     -webkit-background-clip: text;
     color: transparent;
 }
 
 .stat-label {
     color: var(--muted);
-    line-height: 1.55;
+    line-height: 1.5;
 }
 
 .features {
@@ -533,191 +767,298 @@ h1 {
     gap: 18px;
 }
 
-.feature-card {
+.feature {
     position: relative;
-    min-height: 240px;
-    padding: 28px;
-    border: 1px solid var(--border);
-    border-radius: 28px;
+    min-height: 255px;
+    padding: 27px;
+    border-radius: 30px;
+    border: 1px solid var(--line);
     background:
-        linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.035)),
-        rgba(12,12,22,0.6);
+        linear-gradient(135deg, rgba(255,255,255,0.105), rgba(255,255,255,0.028)),
+        rgba(10,9,18,0.62);
     backdrop-filter: blur(24px);
     overflow: hidden;
     transition: 0.35s ease;
 }
 
-.feature-card::after {
+.feature::before {
     content: "";
     position: absolute;
-    width: 160px;
-    height: 160px;
-    right: -60px;
-    bottom: -60px;
-    border-radius: 50%;
-    background: rgba(143,108,255,0.22);
-    filter: blur(18px);
+    inset: 0;
+    background:
+        radial-gradient(circle at 86% 82%, rgba(155,120,255,0.23), transparent 34%),
+        radial-gradient(circle at 20% 0%, rgba(121,212,255,0.08), transparent 26%);
+    opacity: 0.8;
+    pointer-events: none;
 }
 
-.feature-card:hover {
+.feature:hover {
     transform: translateY(-8px);
-    border-color: rgba(143,108,255,0.42);
+    border-color: rgba(155,120,255,0.42);
+    box-shadow:
+        0 26px 80px rgba(0,0,0,0.28),
+        0 0 60px rgba(155,120,255,0.12);
+}
+
+.feature > * {
+    position: relative;
+    z-index: 1;
 }
 
 .feature-icon {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     display: grid;
     place-items: center;
-    border-radius: 17px;
-    background: rgba(143,108,255,0.18);
-    border: 1px solid rgba(143,108,255,0.28);
     margin-bottom: 22px;
-    box-shadow: 0 0 28px rgba(143,108,255,0.18);
+    border-radius: 18px;
+    color: #fff;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04)),
+        rgba(155,120,255,0.18);
+    border: 1px solid rgba(155,120,255,0.3);
+    box-shadow: 0 0 32px rgba(155,120,255,0.18);
 }
 
-.feature-card h3 {
-    font-size: 1.28rem;
+.feature-icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.feature h3 {
+    font-size: 1.24rem;
+    letter-spacing: -0.02em;
     margin-bottom: 12px;
 }
 
-.feature-card p {
+.feature p {
     color: var(--muted);
-    line-height: 1.75;
+    line-height: 1.78;
 }
 
-.gallery-wrap {
-    border: 1px solid var(--border);
-    border-radius: 34px;
-    padding: 18px;
+.showcase {
+    position: relative;
+    padding: 17px;
+    border-radius: 36px;
+    border: 1px solid var(--line);
     background:
-        linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.035)),
-        rgba(12,12,22,0.56);
-    backdrop-filter: blur(26px);
-    box-shadow: 0 28px 90px rgba(0,0,0,0.28);
+        linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.035)),
+        rgba(10,9,18,0.64);
+    backdrop-filter: blur(28px);
+    box-shadow:
+        0 35px 110px rgba(0,0,0,0.34),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    overflow: hidden;
 }
 
-.gallery-top {
+.showcase::before {
+    content: "";
+    position: absolute;
+    inset: -220px;
+    background:
+        conic-gradient(from 180deg, transparent, rgba(155,120,255,0.16), transparent, rgba(121,212,255,0.12), transparent);
+    animation: slowSpin 10s linear infinite;
+    pointer-events: none;
+}
+
+.showcase > * {
+    position: relative;
+    z-index: 1;
+}
+
+.showcase-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
-.gallery-tabs {
+.tabs {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-.tab-btn {
-    border: 1px solid var(--border-soft);
-    background: rgba(255,255,255,0.05);
-    color: var(--muted);
-    border-radius: 14px;
-    padding: 10px 14px;
+.tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
-    transition: 0.24s ease;
+    border: 1px solid var(--line-soft);
+    border-radius: 15px;
+    padding: 10px 13px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.045);
+    transition: 0.25s ease;
 }
 
-.tab-btn.active {
+.tab i {
+    width: 16px;
+    height: 16px;
+}
+
+.tab.active {
     color: #fff;
-    background: rgba(143,108,255,0.22);
-    border-color: rgba(143,108,255,0.42);
+    border-color: rgba(155,120,255,0.46);
+    background: rgba(155,120,255,0.22);
+    box-shadow: 0 0 28px rgba(155,120,255,0.12);
 }
 
-.gallery-status {
+.preview-status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
     color: var(--muted);
     font-size: 0.92rem;
 }
 
-.gallery-screen {
+.preview-status i {
+    width: 17px;
+    height: 17px;
+    color: var(--green);
+}
+
+.preview {
     position: relative;
     overflow: hidden;
-    border-radius: 26px;
-    border: 1px solid rgba(255,255,255,0.09);
-    background: #0c0c14;
+    border-radius: 27px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background:
+        radial-gradient(circle at center, rgba(155,120,255,0.16), transparent 42%),
+        #090912;
 }
 
-.gallery-img {
+.preview::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(120deg, rgba(255,255,255,0.14), transparent 22%, transparent 78%, rgba(155,120,255,0.09));
+    pointer-events: none;
+}
+
+.preview img {
     width: 100%;
-    min-height: 420px;
+    min-height: 470px;
     object-fit: cover;
     display: block;
-    opacity: 1;
+    opacity: 0;
     transform: scale(1);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    transition:
+        opacity 0.34s ease,
+        transform 0.34s ease,
+        filter 0.34s ease;
 }
 
-.gallery-img.switching {
+.preview img.loaded {
+    opacity: 1;
+}
+
+.preview img.switching {
     opacity: 0;
-    transform: scale(1.025);
+    transform: scale(1.022);
+    filter: blur(8px);
+}
+
+.preview-fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    place-items: center;
+    text-align: center;
+    padding: 26px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.preview-fallback.show {
+    display: grid;
 }
 
 .cta {
     position: relative;
     overflow: hidden;
-    padding: 54px;
-    border: 1px solid var(--border);
-    border-radius: 36px;
+    padding: 58px;
+    border-radius: 38px;
+    border: 1px solid var(--line);
     background:
-        radial-gradient(circle at 20% 20%, rgba(143,108,255,0.28), transparent 36%),
-        radial-gradient(circle at 90% 20%, rgba(125,211,255,0.16), transparent 30%),
-        rgba(12,12,22,0.65);
-    backdrop-filter: blur(28px);
-    box-shadow: 0 34px 100px rgba(0,0,0,0.32);
+        radial-gradient(circle at 20% 22%, rgba(155,120,255,0.28), transparent 34%),
+        radial-gradient(circle at 86% 20%, rgba(121,212,255,0.15), transparent 30%),
+        linear-gradient(135deg, rgba(255,255,255,0.095), rgba(255,255,255,0.025)),
+        rgba(10,9,18,0.68);
+    backdrop-filter: blur(30px);
+    box-shadow:
+        0 34px 110px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.12);
 }
 
 .cta::before {
     content: "";
     position: absolute;
-    inset: -2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
-    transform: translateX(-100%);
-    animation: shine 5s ease-in-out infinite;
+    top: 0;
+    left: -35%;
+    width: 35%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    transform: skewX(-18deg);
+    animation: shine 5.5s ease-in-out infinite;
 }
 
 @keyframes shine {
-    0%, 55% {
-        transform: translateX(-100%);
+    0%, 54% {
+        left: -45%;
     }
-    85%, 100% {
-        transform: translateX(100%);
+    82%, 100% {
+        left: 115%;
     }
 }
 
 .cta h2 {
-    max-width: 760px;
-    font-size: clamp(2.2rem, 5vw, 4.8rem);
-    line-height: 0.95;
-    letter-spacing: -0.07em;
+    max-width: 800px;
+    font-size: clamp(2.35rem, 5vw, 5rem);
+    line-height: 0.94;
+    letter-spacing: -0.075em;
     margin-bottom: 20px;
 }
 
 .cta p {
-    max-width: 690px;
+    max-width: 710px;
     color: var(--muted);
     line-height: 1.85;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .footer {
-    width: min(1180px, calc(100% - 32px));
+    width: min(1220px, calc(100% - 32px));
     margin: 0 auto;
-    padding: 34px 0 46px;
-    color: var(--muted);
+    padding: 36px 0 46px;
+    border-top: 1px solid var(--line-soft);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 18px;
-    border-top: 1px solid var(--border-soft);
+    color: var(--muted-2);
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-left img {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: rgba(255,255,255,0.08);
 }
 
 .reveal {
     opacity: 0;
-    transform: translateY(28px);
-    transition: 0.75s cubic-bezier(.2,.8,.2,1);
+    transform: translateY(30px);
+    transition: 0.75s cubic-bezier(.2,.9,.2,1);
 }
 
 .reveal.show {
@@ -725,56 +1066,44 @@ h1 {
     transform: translateY(0);
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1040px) {
     .hero {
         grid-template-columns: 1fr;
-        padding-top: 140px;
+        padding-top: 145px;
     }
 
-    .preview-main {
+    .window {
         transform: none;
     }
 
-    .stats-grid,
+    .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .features {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .section-head {
-        align-items: start;
+        align-items: flex-start;
         flex-direction: column;
-    }
-
-    .nav-links {
-        display: none;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 780px) {
+    .nav-links {
+        display: none;
+    }
+
     .nav {
-        height: auto;
-        padding: 12px;
-        border-radius: 18px;
+        height: 68px;
     }
 
-    .brand-text {
-        font-size: 0.95rem;
+    .brand-title span {
+        display: none;
     }
 
-    .lang-btn {
-        padding: 7px 9px;
-    }
-
-    .hero {
-        padding-top: 130px;
-    }
-
-    .stats-grid,
-    .features {
-        grid-template-columns: 1fr;
-    }
-
-    .float-stat {
+    .float-card {
         position: relative;
         left: auto !important;
         right: auto !important;
@@ -783,22 +1112,66 @@ h1 {
         margin-top: 12px;
     }
 
-    .hero-visual {
+    .hero-stage {
         display: grid;
-        gap: 12px;
+        gap: 10px;
     }
 
-    .gallery-img {
-        min-height: 260px;
+    .showcase-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 620px) {
+    .nav {
+        width: calc(100% - 22px);
+        top: 12px;
+        border-radius: 20px;
+        padding: 0 10px 0 12px;
+    }
+
+    .brand-logo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .lang button {
+        padding: 7px 9px;
+    }
+
+    .hero {
+        width: calc(100% - 22px);
+        padding-top: 125px;
+    }
+
+    h1 {
+        font-size: clamp(3rem, 16vw, 5rem);
+    }
+
+    .section {
+        width: calc(100% - 22px);
+        padding: 72px 0;
+    }
+
+    .grid-4,
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .preview img,
+    .hero-img {
+        min-height: 270px;
     }
 
     .cta {
-        padding: 32px;
+        padding: 34px;
     }
 
     .footer {
+        width: calc(100% - 22px);
         flex-direction: column;
-        align-items: start;
+        align-items: flex-start;
     }
 }
 </style>
@@ -806,28 +1179,35 @@ h1 {
 
 <body>
 
-<div class="loader">
-    <div class="loader-core">
-        <div class="loader-ring"></div>
-        <div class="loader-ring"></div>
-        <div class="loader-logo">SPECTRA</div>
+<div class="noise"></div>
+
+<div class="opening">
+    <div class="opening-inner">
+        <div class="opening-ring"></div>
+        <div class="opening-ring"></div>
+        <div class="opening-ring"></div>
+        <img class="opening-logo safe-img" src="Logo.png" alt="Spectra Logo" data-fallback-text="Logo.png">
+        <div class="opening-text">SPECTRA</div>
     </div>
 </div>
 
 <header class="nav">
-    <a href="#" class="brand">
-        <img class="brand-logo" src="logo.png" alt="Spectra Logo">
-        <div class="brand-text">Spectra</div>
+    <a class="brand" href="#">
+        <img class="brand-logo safe-img" src="Logo.png" alt="Spectra Logo" data-fallback-text="Logo.png">
+        <div class="brand-title">
+            <strong>Spectra</strong>
+            <span>V3 Glass Edition</span>
+        </div>
     </a>
 
     <nav class="nav-links">
         <a href="#overview" data-i18n="navOverview">Overview</a>
-        <a href="#features" data-i18n="navFeatures">Features</a>
-        <a href="#ui" data-i18n="navUI">UI Preview</a>
+        <a href="#craft" data-i18n="navCraft">Craft</a>
+        <a href="#preview" data-i18n="navPreview">Preview</a>
         <a href="#release" data-i18n="navRelease">Release</a>
     </nav>
 
-    <div class="lang-switch">
+    <div class="lang">
         <button class="lang-btn active" data-lang="en">EN</button>
         <button class="lang-btn" data-lang="zh">中文</button>
     </div>
@@ -835,40 +1215,75 @@ h1 {
 
 <main>
     <section class="hero">
-        <div class="hero-content">
-            <div class="badge">
-                <span class="badge-dot"></span>
-                <span data-i18n="badge">Current Release · V3</span>
+        <div class="hero-copy">
+            <div class="pill">
+                <i data-lucide="sparkles"></i>
+                <span data-i18n="badge">Spectra V3 · 94% sUNC / 99% UNC</span>
             </div>
 
             <h1>
-                <span data-i18n="heroLine1">A sharper</span><br>
-                <span class="gradient-text" data-i18n="heroLine2">execution experience.</span>
+                <span data-i18n="heroTop">Built quiet.</span>
+                <span class="h1-sub" data-i18n="heroBottom">Runs sharp.</span>
             </h1>
 
             <p class="hero-desc" data-i18n="heroDesc">
-                Spectra is a powerful, discreet script executor crafted by the Chinese-speaking Spectra development team. Built around glass, light, motion, and speed, V3 delivers a peak visual interface with 94% sUNC / 99% UNC support and fast automatic updates.
+                Spectra V3 is a Roblox script executor from the Chinese-speaking Spectra development team. It keeps the interface clean, dark, and glass-focused, with fast automatic updates and a workspace made for direct control.
             </p>
 
-            <div class="hero-actions">
-                <a class="btn btn-primary" href="#ui" data-i18n="btnPreview">View Interface</a>
-                <a class="btn btn-secondary" href="#features" data-i18n="btnExplore">Explore Features</a>
+            <div class="actions">
+                <a class="btn btn-primary" href="#preview">
+                    <i data-lucide="monitor-play"></i>
+                    <span data-i18n="heroBtn1">View interface</span>
+                </a>
+
+                <a class="btn btn-ghost" href="#craft">
+                    <i data-lucide="wand-sparkles"></i>
+                    <span data-i18n="heroBtn2">See details</span>
+                </a>
             </div>
         </div>
 
-        <div class="hero-visual">
-            <div class="glass-card preview-main">
-                <img class="preview-img" src="UI1.png" alt="Spectra UI Preview">
+        <div class="hero-stage">
+            <div class="orbit"></div>
+
+            <div class="window">
+                <div class="window-bar">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="window-title">Spectra / UI1.png</span>
+                </div>
+
+                <div class="image-wrap">
+                    <img class="hero-img" id="heroImage" src="UI1.png" alt="Spectra UI1">
+                    <div class="image-fallback" id="heroFallback">
+                        UI1.png was not found. Put UI1.png beside Spectra.html.
+                    </div>
+                </div>
             </div>
 
-            <div class="float-stat one">
-                <strong>94%</strong>
-                <span>sUNC</span>
+            <div class="float-card one">
+                <i data-lucide="shield-check"></i>
+                <div>
+                    <strong>99%</strong>
+                    <span>UNC</span>
+                </div>
             </div>
 
-            <div class="float-stat two">
-                <strong>99%</strong>
-                <span>UNC</span>
+            <div class="float-card two">
+                <i data-lucide="zap"></i>
+                <div>
+                    <strong>Auto</strong>
+                    <span data-i18n="floatUpdate">Update</span>
+                </div>
+            </div>
+
+            <div class="float-card three">
+                <i data-lucide="scan-eye"></i>
+                <div>
+                    <strong>V3</strong>
+                    <span data-i18n="floatEdition">Current</span>
+                </div>
             </div>
         </div>
     </section>
@@ -876,241 +1291,335 @@ h1 {
     <section class="section reveal" id="overview">
         <div class="section-head">
             <div>
-                <div class="section-kicker" data-i18n="overviewKicker">Spectra V3</div>
-                <h2 class="section-title" data-i18n="overviewTitle">Built for speed, polished for impact.</h2>
+                <div class="kicker">
+                    <i data-lucide="orbit"></i>
+                    <span data-i18n="overviewKicker">Overview</span>
+                </div>
+
+                <h2 class="section-title" data-i18n="overviewTitle">
+                    A darker workspace for execution.
+                </h2>
             </div>
+
             <p class="section-desc" data-i18n="overviewDesc">
-                Every detail is tuned for a clean dark interface, premium glass layers, smooth transitions, and a focused workspace that feels light, fast, and refined.
+                V3 keeps the layout focused: fewer distractions, clear panels, direct navigation, and a visual style built around shadow, glass, and controlled glow.
             </p>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
+        <div class="grid-4">
+            <div class="stat">
+                <div class="stat-icon">
+                    <i data-lucide="badge-check"></i>
+                </div>
                 <div class="stat-value">V3</div>
-                <div class="stat-label" data-i18n="statVersion">Current public version</div>
+                <div class="stat-label" data-i18n="stat1">Current version</div>
             </div>
-            <div class="stat-card">
+
+            <div class="stat">
+                <div class="stat-icon">
+                    <i data-lucide="activity"></i>
+                </div>
                 <div class="stat-value">94%</div>
-                <div class="stat-label" data-i18n="statSunc">sUNC compatibility</div>
+                <div class="stat-label" data-i18n="stat2">sUNC support</div>
             </div>
-            <div class="stat-card">
+
+            <div class="stat">
+                <div class="stat-icon">
+                    <i data-lucide="cpu"></i>
+                </div>
                 <div class="stat-value">99%</div>
-                <div class="stat-label" data-i18n="statUnc">UNC compatibility</div>
+                <div class="stat-label" data-i18n="stat3">UNC support</div>
             </div>
-            <div class="stat-card">
+
+            <div class="stat">
+                <div class="stat-icon">
+                    <i data-lucide="refresh-cw"></i>
+                </div>
                 <div class="stat-value">Auto</div>
-                <div class="stat-label" data-i18n="statUpdate">Fast automatic updates</div>
+                <div class="stat-label" data-i18n="stat4">Fast update cycle</div>
             </div>
         </div>
     </section>
 
-    <section class="section reveal" id="features">
+    <section class="section reveal" id="craft">
         <div class="section-head">
             <div>
-                <div class="section-kicker" data-i18n="featuresKicker">Core Features</div>
-                <h2 class="section-title" data-i18n="featuresTitle">A dark glass interface with serious presence.</h2>
+                <div class="kicker">
+                    <i data-lucide="layers-3"></i>
+                    <span data-i18n="craftKicker">Craft</span>
+                </div>
+
+                <h2 class="section-title" data-i18n="craftTitle">
+                    Glass panels. Clean motion. No noise.
+                </h2>
             </div>
-            <p class="section-desc" data-i18n="featuresDesc">
-                Spectra V3 focuses on visual quality, stable execution flow, quick refresh cycles, and a polished user experience from launch to workspace.
+
+            <p class="section-desc" data-i18n="craftDesc">
+                Spectra keeps the surface refined without turning the page into a template. Every section is built to feel close to a real product landing page.
             </p>
         </div>
 
         <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">✦</div>
-                <h3 data-i18n="feature1Title">Glassmorphism Visuals</h3>
-                <p data-i18n="feature1Desc">Deep dark tones, layered blur, soft highlights, and cinematic motion create Spectra’s signature look.</p>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i data-lucide="gem"></i>
+                </div>
+                <h3 data-i18n="feature1Title">Glass interface</h3>
+                <p data-i18n="feature1Desc">Dark panels, thin borders, soft blur, and measured lighting give V3 its own visual identity.</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3 data-i18n="feature2Title">Fast Auto Updates</h3>
-                <p data-i18n="feature2Desc">A rapid update rhythm keeps the experience fresh, responsive, and ready for the newest build.</p>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i data-lucide="rocket"></i>
+                </div>
+                <h3 data-i18n="feature2Title">Fast updates</h3>
+                <p data-i18n="feature2Desc">Automatic updates reduce manual work and keep the client moving with the latest build.</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">◆</div>
-                <h3 data-i18n="feature3Title">Powerful Workspace</h3>
-                <p data-i18n="feature3Desc">A strong and discreet execution environment designed for clean operation and focused control.</p>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i data-lucide="eye-off"></i>
+                </div>
+                <h3 data-i18n="feature3Title">Discreet profile</h3>
+                <p data-i18n="feature3Desc">The experience is kept compact, quiet, and focused on execution rather than unnecessary decoration.</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">☄</div>
-                <h3 data-i18n="feature4Title">Peak Interface Design</h3>
-                <p data-i18n="feature4Desc">From panels to navigation, every surface is shaped for a premium visual feast.</p>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i data-lucide="sparkle"></i>
+                </div>
+                <h3 data-i18n="feature4Title">Premium presentation</h3>
+                <p data-i18n="feature4Desc">Opening motion, preview transitions, and layered depth make the site feel closer to a polished release page.</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">◈</div>
-                <h3 data-i18n="feature5Title">High Compatibility</h3>
-                <p data-i18n="feature5Desc">94% sUNC and 99% UNC support provide a strong foundation for advanced script execution.</p>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i data-lucide="terminal-square"></i>
+                </div>
+                <h3 data-i18n="feature5Title">Compatibility</h3>
+                <p data-i18n="feature5Desc">V3 highlights 94% sUNC and 99% UNC support as one of its core selling points.</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">✧</div>
-                <h3 data-i18n="feature6Title">Spectra Craft</h3>
-                <p data-i18n="feature6Desc">A top-tier creation proudly built by the Chinese-speaking Spectra development team.</p>
+            <div class="feature">
+                <div class="feature-icon">
+                    <i data-lucide="crown"></i>
+                </div>
+                <h3 data-i18n="feature6Title">Spectra team</h3>
+                <p data-i18n="feature6Desc">A release presented by the Chinese-speaking Spectra development team.</p>
             </div>
         </div>
     </section>
 
-    <section class="section reveal" id="ui">
+    <section class="section reveal" id="preview">
         <div class="section-head">
             <div>
-                <div class="section-kicker" data-i18n="uiKicker">Interface Preview</div>
-                <h2 class="section-title" data-i18n="uiTitle">Four views. One visual identity.</h2>
+                <div class="kicker">
+                    <i data-lucide="panel-top"></i>
+                    <span data-i18n="previewKicker">Preview</span>
+                </div>
+
+                <h2 class="section-title" data-i18n="previewTitle">
+                    Four screens, loaded locally.
+                </h2>
             </div>
-            <p class="section-desc" data-i18n="uiDesc">
-                Preview the Spectra interface across four prepared screens. Place UI1.png, UI2.png, UI3.png, and UI4.png next to this HTML file.
+
+            <p class="section-desc" data-i18n="previewDesc">
+                The gallery reads UI1.png, UI2.png, UI3.png, and UI4.png from the same folder as Spectra.html.
             </p>
         </div>
 
-        <div class="gallery-wrap">
-            <div class="gallery-top">
-                <div class="gallery-tabs">
-                    <button class="tab-btn active" data-img="UI1.png">UI1</button>
-                    <button class="tab-btn" data-img="UI2.png">UI2</button>
-                    <button class="tab-btn" data-img="UI3.png">UI3</button>
-                    <button class="tab-btn" data-img="UI4.png">UI4</button>
+        <div class="showcase">
+            <div class="showcase-top">
+                <div class="tabs">
+                    <button class="tab active" data-img="UI1.png" data-name="UI1.png">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>UI1</span>
+                    </button>
+
+                    <button class="tab" data-img="UI2.png" data-name="UI2.png">
+                        <i data-lucide="panel-left"></i>
+                        <span>UI2</span>
+                    </button>
+
+                    <button class="tab" data-img="UI3.png" data-name="UI3.png">
+                        <i data-lucide="scan-line"></i>
+                        <span>UI3</span>
+                    </button>
+
+                    <button class="tab" data-img="UI4.png" data-name="UI4.png">
+                        <i data-lucide="app-window"></i>
+                        <span>UI4</span>
+                    </button>
                 </div>
 
-                <div class="gallery-status" data-i18n="galleryStatus">Live UI preview</div>
+                <div class="preview-status">
+                    <i data-lucide="circle-check"></i>
+                    <span id="previewStatus" data-i18n="previewStatus">Loaded from current folder</span>
+                </div>
             </div>
 
-            <div class="gallery-screen">
-                <img class="gallery-img" id="galleryImage" src="UI1.png" alt="Spectra UI Preview">
+            <div class="preview">
+                <img id="mainPreview" src="UI1.png" alt="Spectra UI Preview">
+                <div class="preview-fallback" id="previewFallback">
+                    UI1.png was not found. Put UI1.png beside Spectra.html.
+                </div>
             </div>
         </div>
     </section>
 
     <section class="section reveal" id="release">
         <div class="cta">
-            <h2 data-i18n="ctaTitle">Spectra V3 is shaped for the next visual standard.</h2>
+            <h2 data-i18n="ctaTitle">
+                Spectra V3, presented by the Chinese Spectra team.
+            </h2>
+
             <p data-i18n="ctaDesc">
-                A powerful script executor wrapped in shadow, glass, light, and motion. Spectra is the top-tier work of the Chinese-speaking Spectra development team, made to deliver both performance and atmosphere.
+                A dark glass Roblox executor website for V3: 94% sUNC, 99% UNC, automatic updates, local UI previews, and a visual direction built around depth rather than clutter.
             </p>
-            <a class="btn btn-primary" href="#overview" data-i18n="ctaButton">Back to Overview</a>
+
+            <a class="btn btn-primary" href="#preview">
+                <i data-lucide="image"></i>
+                <span data-i18n="ctaBtn">Open preview</span>
+            </a>
         </div>
     </section>
 </main>
 
 <footer class="footer">
-    <div>© 2026 Spectra Development Team</div>
-    <div data-i18n="footerText">Crafted for V3 · Dark Glass Edition</div>
+    <div class="footer-left">
+        <img class="safe-img" src="Logo.png" alt="Spectra Logo">
+        <span>© 2026 Spectra Development Team</span>
+    </div>
+
+    <span data-i18n="footer">Spectra V3 · Dark Glass Release</span>
 </footer>
 
 <script>
+const imageFiles = {
+    logo: "Logo.png",
+    ui1: "UI1.png",
+    ui2: "UI2.png",
+    ui3: "UI3.png",
+    ui4: "UI4.png"
+};
+
 const translations = {
     en: {
         navOverview: "Overview",
-        navFeatures: "Features",
-        navUI: "UI Preview",
+        navCraft: "Craft",
+        navPreview: "Preview",
         navRelease: "Release",
 
-        badge: "Current Release · V3",
-        heroLine1: "A sharper",
-        heroLine2: "execution experience.",
-        heroDesc: "Spectra is a powerful, discreet script executor crafted by the Chinese-speaking Spectra development team. Built around glass, light, motion, and speed, V3 delivers a peak visual interface with 94% sUNC / 99% UNC support and fast automatic updates.",
-        btnPreview: "View Interface",
-        btnExplore: "Explore Features",
+        badge: "Spectra V3 · 94% sUNC / 99% UNC",
+        heroTop: "Built quiet.",
+        heroBottom: "Runs sharp.",
+        heroDesc: "Spectra V3 is a Roblox script executor from the Chinese-speaking Spectra development team. It keeps the interface clean, dark, and glass-focused, with fast automatic updates and a workspace made for direct control.",
+        heroBtn1: "View interface",
+        heroBtn2: "See details",
 
-        overviewKicker: "Spectra V3",
-        overviewTitle: "Built for speed, polished for impact.",
-        overviewDesc: "Every detail is tuned for a clean dark interface, premium glass layers, smooth transitions, and a focused workspace that feels light, fast, and refined.",
+        floatUpdate: "Update",
+        floatEdition: "Current",
 
-        statVersion: "Current public version",
-        statSunc: "sUNC compatibility",
-        statUnc: "UNC compatibility",
-        statUpdate: "Fast automatic updates",
+        overviewKicker: "Overview",
+        overviewTitle: "A darker workspace for execution.",
+        overviewDesc: "V3 keeps the layout focused: fewer distractions, clear panels, direct navigation, and a visual style built around shadow, glass, and controlled glow.",
 
-        featuresKicker: "Core Features",
-        featuresTitle: "A dark glass interface with serious presence.",
-        featuresDesc: "Spectra V3 focuses on visual quality, stable execution flow, quick refresh cycles, and a polished user experience from launch to workspace.",
+        stat1: "Current version",
+        stat2: "sUNC support",
+        stat3: "UNC support",
+        stat4: "Fast update cycle",
 
-        feature1Title: "Glassmorphism Visuals",
-        feature1Desc: "Deep dark tones, layered blur, soft highlights, and cinematic motion create Spectra’s signature look.",
+        craftKicker: "Craft",
+        craftTitle: "Glass panels. Clean motion. No noise.",
+        craftDesc: "Spectra keeps the surface refined without turning the page into a template. Every section is built to feel close to a real product landing page.",
 
-        feature2Title: "Fast Auto Updates",
-        feature2Desc: "A rapid update rhythm keeps the experience fresh, responsive, and ready for the newest build.",
+        feature1Title: "Glass interface",
+        feature1Desc: "Dark panels, thin borders, soft blur, and measured lighting give V3 its own visual identity.",
 
-        feature3Title: "Powerful Workspace",
-        feature3Desc: "A strong and discreet execution environment designed for clean operation and focused control.",
+        feature2Title: "Fast updates",
+        feature2Desc: "Automatic updates reduce manual work and keep the client moving with the latest build.",
 
-        feature4Title: "Peak Interface Design",
-        feature4Desc: "From panels to navigation, every surface is shaped for a premium visual feast.",
+        feature3Title: "Discreet profile",
+        feature3Desc: "The experience is kept compact, quiet, and focused on execution rather than unnecessary decoration.",
 
-        feature5Title: "High Compatibility",
-        feature5Desc: "94% sUNC and 99% UNC support provide a strong foundation for advanced script execution.",
+        feature4Title: "Premium presentation",
+        feature4Desc: "Opening motion, preview transitions, and layered depth make the site feel closer to a polished release page.",
 
-        feature6Title: "Spectra Craft",
-        feature6Desc: "A top-tier creation proudly built by the Chinese-speaking Spectra development team.",
+        feature5Title: "Compatibility",
+        feature5Desc: "V3 highlights 94% sUNC and 99% UNC support as one of its core selling points.",
 
-        uiKicker: "Interface Preview",
-        uiTitle: "Four views. One visual identity.",
-        uiDesc: "Preview the Spectra interface across four prepared screens. Place UI1.png, UI2.png, UI3.png, and UI4.png next to this HTML file.",
-        galleryStatus: "Live UI preview",
+        feature6Title: "Spectra team",
+        feature6Desc: "A release presented by the Chinese-speaking Spectra development team.",
 
-        ctaTitle: "Spectra V3 is shaped for the next visual standard.",
-        ctaDesc: "A powerful script executor wrapped in shadow, glass, light, and motion. Spectra is the top-tier work of the Chinese-speaking Spectra development team, made to deliver both performance and atmosphere.",
-        ctaButton: "Back to Overview",
+        previewKicker: "Preview",
+        previewTitle: "Four screens, loaded locally.",
+        previewDesc: "The gallery reads UI1.png, UI2.png, UI3.png, and UI4.png from the same folder as Spectra.html.",
+        previewStatus: "Loaded from current folder",
 
-        footerText: "Crafted for V3 · Dark Glass Edition"
+        ctaTitle: "Spectra V3, presented by the Chinese Spectra team.",
+        ctaDesc: "A dark glass Roblox executor website for V3: 94% sUNC, 99% UNC, automatic updates, local UI previews, and a visual direction built around depth rather than clutter.",
+        ctaBtn: "Open preview",
+
+        footer: "Spectra V3 · Dark Glass Release"
     },
 
     zh: {
         navOverview: "總覽",
-        navFeatures: "特色",
-        navUI: "介面預覽",
+        navCraft: "工藝",
+        navPreview: "預覽",
         navRelease: "版本",
 
-        badge: "目前版本 · V3",
-        heroLine1: "更銳利的",
-        heroLine2: "執行體驗。",
-        heroDesc: "Spectra 是由中文圈 Spectra 開發團隊頂極鉅獻打造的強大且低調腳本執行器。以光影、玻璃、速度與動態視覺為核心，V3 帶來巔峰介面視覺饗宴，支援 94% sUNC / 99% UNC，並具備快速自動更新能力。",
-        btnPreview: "查看介面",
-        btnExplore: "探索特色",
+        badge: "Spectra V3 · 94% sUNC / 99% UNC",
+        heroTop: "低調啟動。",
+        heroBottom: "銳利執行。",
+        heroDesc: "Spectra V3 是由中文圈 Spectra 開發團隊打造的 Roblox 腳本執行器。介面以深色、玻璃、光影為主軸，搭配快速自動更新與更直接的操作工作區。",
+        heroBtn1: "查看介面",
+        heroBtn2: "查看細節",
 
-        overviewKicker: "Spectra V3",
-        overviewTitle: "為速度而生，為質感而打磨。",
-        overviewDesc: "每一個細節都圍繞深色美學、玻璃層次、柔順動畫與專注工作區打造，讓整體體驗輕快、乾淨且高級。",
+        floatUpdate: "更新",
+        floatEdition: "目前版本",
 
-        statVersion: "目前公開版本",
-        statSunc: "sUNC 相容度",
-        statUnc: "UNC 相容度",
-        statUpdate: "快速自動更新",
+        overviewKicker: "總覽",
+        overviewTitle: "為執行而生的深色工作區。",
+        overviewDesc: "V3 把版面維持得更集中：減少干擾、清楚分區、直接導航，並以陰影、玻璃和克制光暈建立整體視覺。",
 
-        featuresKicker: "核心特色",
-        featuresTitle: "擁有強烈存在感的深色玻璃介面。",
-        featuresDesc: "Spectra V3 專注於視覺品質、穩定執行流程、快速更新節奏，以及從啟動到操作都精緻流暢的使用體驗。",
+        stat1: "目前版本",
+        stat2: "sUNC 支援",
+        stat3: "UNC 支援",
+        stat4: "快速更新節奏",
 
-        feature1Title: "光影玻璃視覺",
-        feature1Desc: "深色基底、模糊玻璃、柔和高光與電影感動畫，構成 Spectra 標誌性的視覺語言。",
+        craftKicker: "工藝",
+        craftTitle: "玻璃面板。乾淨動態。沒有雜訊。",
+        craftDesc: "Spectra 的頁面不走模板感，而是以更接近正式產品發布頁的方式呈現，讓每個區塊都有自己的節奏。",
 
-        feature2Title: "快速自動更新",
-        feature2Desc: "高效率更新節奏，讓體驗保持新鮮、快速，並能跟上最新版本狀態。",
+        feature1Title: "玻璃介面",
+        feature1Desc: "深色面板、細邊框、柔和模糊和克制光線，建立 V3 的專屬視覺。",
 
-        feature3Title: "強大工作區",
-        feature3Desc: "強大且低調的執行環境，為乾淨操作與專注控制而設計。",
+        feature2Title: "快速更新",
+        feature2Desc: "自動更新降低手動處理，讓客戶端更快跟上最新版本。",
 
-        feature4Title: "巔峰介面設計",
-        feature4Desc: "從面板到導航，每一個表面都為高級視覺饗宴而塑形。",
+        feature3Title: "低調定位",
+        feature3Desc: "整體體驗保持緊湊、安靜，重點放在執行與控制，而不是多餘裝飾。",
 
-        feature5Title: "高相容能力",
-        feature5Desc: "94% sUNC 與 99% UNC 支援，提供進階腳本執行所需的強大基礎。",
+        feature4Title: "高級呈現",
+        feature4Desc: "開場動畫、預覽切換和層次深度，讓頁面更接近完整發布頁。",
 
-        feature6Title: "Spectra 工藝",
-        feature6Desc: "中文圈 Spectra 開發團隊頂極鉅獻打造，主打質感、速度與完整氛圍。",
+        feature5Title: "相容能力",
+        feature5Desc: "V3 以 94% sUNC 與 99% UNC 支援作為核心賣點之一。",
 
-        uiKicker: "介面預覽",
-        uiTitle: "四個頁面，同一套視覺語言。",
-        uiDesc: "預覽 Spectra 的四張介面圖。請將 UI1.png、UI2.png、UI3.png、UI4.png 放在這份 HTML 旁邊。",
-        galleryStatus: "即時介面預覽",
+        feature6Title: "Spectra 團隊",
+        feature6Desc: "由中文圈 Spectra 開發團隊頂級鉅獻打造。",
 
-        ctaTitle: "Spectra V3，為下一個視覺標準而生。",
-        ctaDesc: "一款被陰影、玻璃、光線與動態包覆的強大腳本執行器。Spectra 由中文圈 Spectra 開發團隊頂極鉅獻打造，為效能與氛圍同時而生。",
-        ctaButton: "回到總覽",
+        previewKicker: "預覽",
+        previewTitle: "四張介面圖，直接本地載入。",
+        previewDesc: "圖片會從 Spectra.html 同一層資料夾讀取 UI1.png、UI2.png、UI3.png、UI4.png。",
+        previewStatus: "從目前資料夾載入",
 
-        footerText: "V3 打造 · Dark Glass Edition"
+        ctaTitle: "Spectra V3，由中文圈 Spectra 團隊打造。",
+        ctaDesc: "V3 官網主打深色玻璃、94% sUNC、99% UNC、快速自動更新、本地 UI 預覽，以及不雜亂的高級光影視覺。",
+        ctaBtn: "開啟預覽",
+
+        footer: "Spectra V3 · Dark Glass Release"
     }
 };
 
@@ -1121,7 +1630,8 @@ function setLanguage(lang) {
     document.documentElement.lang = lang === "zh" ? "zh-TW" : "en";
 
     translatable.forEach(element => {
-        const key = element.getAttribute("data-i18n");
+        const key = element.dataset.i18n;
+
         if (translations[lang][key]) {
             element.textContent = translations[lang][key];
         }
@@ -1138,6 +1648,74 @@ langButtons.forEach(button => {
     });
 });
 
+function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+
+        img.onload = () => resolve(src);
+        img.onerror = () => reject(src);
+        img.src = src;
+    });
+}
+
+function markImageLoaded(imgElement, fallbackElement) {
+    if (!imgElement) {
+        return;
+    }
+
+    if (imgElement.complete && imgElement.naturalWidth > 0) {
+        imgElement.classList.add("loaded");
+
+        if (fallbackElement) {
+            fallbackElement.classList.remove("show");
+        }
+
+        return;
+    }
+
+    imgElement.addEventListener("load", () => {
+        imgElement.classList.add("loaded");
+
+        if (fallbackElement) {
+            fallbackElement.classList.remove("show");
+        }
+    });
+
+    imgElement.addEventListener("error", () => {
+        imgElement.classList.remove("loaded");
+
+        if (fallbackElement) {
+            fallbackElement.classList.add("show");
+        }
+    });
+}
+
+function prepareLocalImages() {
+    const logoImages = document.querySelectorAll(".safe-img");
+
+    logoImages.forEach(img => {
+        img.addEventListener("error", () => {
+            img.style.opacity = "0";
+        });
+
+        if (img.complete && img.naturalWidth === 0) {
+            img.style.opacity = "0";
+        }
+    });
+
+    const heroImage = document.getElementById("heroImage");
+    const heroFallback = document.getElementById("heroFallback");
+    const mainPreview = document.getElementById("mainPreview");
+    const previewFallback = document.getElementById("previewFallback");
+
+    markImageLoaded(heroImage, heroFallback);
+    markImageLoaded(mainPreview, previewFallback);
+
+    Object.values(imageFiles).forEach(src => {
+        preloadImage(src).catch(() => {});
+    });
+}
+
 const revealItems = document.querySelectorAll(".reveal");
 
 const revealObserver = new IntersectionObserver(entries => {
@@ -1152,28 +1730,83 @@ const revealObserver = new IntersectionObserver(entries => {
 
 revealItems.forEach(item => revealObserver.observe(item));
 
-const tabButtons = document.querySelectorAll(".tab-btn");
-const galleryImage = document.getElementById("galleryImage");
-const heroPreview = document.querySelector(".preview-img");
+const tabs = document.querySelectorAll(".tab");
+const mainPreview = document.getElementById("mainPreview");
+const heroImage = document.getElementById("heroImage");
+const previewFallback = document.getElementById("previewFallback");
+const heroFallback = document.getElementById("heroFallback");
+const previewStatus = document.getElementById("previewStatus");
+const windowTitle = document.querySelector(".window-title");
 
-tabButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        const image = button.dataset.img;
+tabs.forEach(tab => {
+    tab.addEventListener("click", async () => {
+        const src = tab.dataset.img;
+        const name = tab.dataset.name;
 
-        tabButtons.forEach(tab => tab.classList.remove("active"));
-        button.classList.add("active");
+        tabs.forEach(item => item.classList.remove("active"));
+        tab.classList.add("active");
 
-        galleryImage.classList.add("switching");
+        mainPreview.classList.add("switching");
+        heroImage.classList.add("switching");
 
-        setTimeout(() => {
-            galleryImage.src = image;
-            heroPreview.src = image;
-            galleryImage.classList.remove("switching");
-        }, 260);
+        try {
+            await preloadImage(src);
+
+            setTimeout(() => {
+                mainPreview.src = src;
+                heroImage.src = src;
+
+                mainPreview.classList.add("loaded");
+                heroImage.classList.add("loaded");
+
+                mainPreview.classList.remove("switching");
+                heroImage.classList.remove("switching");
+
+                previewFallback.classList.remove("show");
+                heroFallback.classList.remove("show");
+
+                if (windowTitle) {
+                    windowTitle.textContent = "Spectra / " + name;
+                }
+
+                if (previewStatus) {
+                    previewStatus.textContent = document.documentElement.lang === "zh-TW"
+                        ? "已載入 " + name
+                        : "Loaded " + name;
+                }
+            }, 220);
+        } catch (error) {
+            setTimeout(() => {
+                mainPreview.classList.remove("loaded");
+                heroImage.classList.remove("loaded");
+
+                mainPreview.classList.remove("switching");
+                heroImage.classList.remove("switching");
+
+                previewFallback.textContent = name + " was not found. Put " + name + " beside Spectra.html.";
+                heroFallback.textContent = name + " was not found. Put " + name + " beside Spectra.html.";
+
+                previewFallback.classList.add("show");
+                heroFallback.classList.add("show");
+
+                if (previewStatus) {
+                    previewStatus.textContent = document.documentElement.lang === "zh-TW"
+                        ? "找不到 " + name
+                        : "Missing " + name;
+                }
+            }, 220);
+        }
     });
 });
 
-setLanguage("en");
+document.addEventListener("DOMContentLoaded", () => {
+    prepareLocalImages();
+    setLanguage("en");
+
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+});
 </script>
 
 </body>

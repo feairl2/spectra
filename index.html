@@ -1,1435 +1,1180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SPECTRA | Modern Execution Platform</title>
-    <link rel="icon" type="image/png" href="Spectra.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="theme-color" content="#06b6d4">
-    <meta name="description" content="Spectra is a high-performance Roblox executor featuring fast injection, stable execution, a built-in script hub, and advanced automation tools.">
-
-    <meta property="og:title" content="SPECTRA | Modern Execution Platform">
-    <meta property="og:description" content="A powerful Roblox executor with fast injection, clean UI, and built-in tools for script execution and automation.">
-    <meta property="og:image" content="Spectra.png">
-    <meta property="og:type" content="website">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --bg: #06090b;
-            --bg-secondary: #0a1013;
-            --surface: rgba(13, 18, 22, 0.72);
-            --surface-strong: rgba(15, 21, 26, 0.92);
-            --surface-soft: rgba(255,255,255,0.025);
-
-            --accent: #14b8a6;
-            --accent-2: #67e8f9;
-            --accent-3: #a7f3d0;
-
-            --text-main: #f4f8fb;
-            --text-soft: rgba(244,248,251,0.78);
-            --text-dim: rgba(244,248,251,0.48);
-
-            --border: rgba(255,255,255,0.08);
-            --border-strong: rgba(255,255,255,0.14);
-
-            --shadow-lg: 0 30px 80px rgba(0,0,0,0.45);
-            --shadow-accent: 0 0 30px rgba(20, 184, 166, 0.18);
-
-            --radius-xl: 30px;
-            --radius-lg: 22px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-
-            --transition: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-
-            --font-main: "Inter", sans-serif;
-            --font-mono: "JetBrains Mono", monospace;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background:
-                radial-gradient(circle at 50% -10%, rgba(20, 184, 166, 0.12), transparent 35%),
-                radial-gradient(circle at 20% 20%, rgba(103, 232, 249, 0.07), transparent 28%),
-                radial-gradient(circle at 80% 18%, rgba(167, 243, 208, 0.05), transparent 22%),
-                linear-gradient(180deg, #05080a 0%, #06090b 40%, #070c0f 100%);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            overflow-x: hidden;
-            line-height: 1.55;
-        }
-
-        body.loading {
-            overflow: hidden;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        img {
-            max-width: 100%;
-            display: block;
-        }
-
-        .noise,
-        .grid,
-        .blobs,
-        .particles {
-            pointer-events: none;
-            position: fixed;
-            inset: 0;
-            z-index: -3;
-        }
-
-        .noise {
-            opacity: 0.045;
-            background-image:
-                radial-gradient(rgba(255,255,255,0.20) 0.5px, transparent 0.5px);
-            background-size: 8px 8px;
-            mix-blend-mode: soft-light;
-        }
-
-        .grid {
-            z-index: -4;
-            opacity: 0.22;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-            background-size: 64px 64px;
-            mask-image: radial-gradient(circle at center, black 20%, transparent 85%);
-            -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 85%);
-        }
-
-        .blobs::before,
-        .blobs::after {
-            content: "";
-            position: absolute;
-            border-radius: 999px;
-            filter: blur(110px);
-            opacity: 0.75;
-        }
-
-        .blobs::before {
-            width: 540px;
-            height: 540px;
-            left: 50%;
-            top: -140px;
-            transform: translateX(-50%);
-            background: rgba(20, 184, 166, 0.12);
-        }
-
-        .blobs::after {
-            width: 360px;
-            height: 360px;
-            left: 22%;
-            top: 15%;
-            background: rgba(103, 232, 249, 0.06);
-        }
-
-        .particles span {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            border-radius: 999px;
-            background: rgba(167, 243, 208, 0.32);
-            box-shadow: 0 0 18px rgba(167, 243, 208, 0.35);
-            animation: floatParticle linear infinite;
-        }
-
-        @keyframes floatParticle {
-            0% {
-                transform: translateY(16px);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                opacity: 0.65;
-            }
-            100% {
-                transform: translateY(-18px);
-                opacity: 0;
-            }
-        }
-
-        /* Loading Screen */
-        .loader {
-            position: fixed;
-            inset: 0;
-            z-index: 5000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background:
-                radial-gradient(circle at center, rgba(20,184,166,0.06), transparent 40%),
-                linear-gradient(180deg, #05080a 0%, #06090b 100%);
-            transition: opacity 0.7s ease, visibility 0.7s ease;
-        }
-
-        .loader.hide {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-inner {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 26px;
-            width: min(92vw, 320px);
-            text-align: center;
-        }
-
-        .loader-logo {
-            width: 78px;
-            height: 78px;
-            border-radius: 22px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 24px rgba(20,184,166,0.18));
-        }
-
-        .loader-bar {
-            position: relative;
-            width: 100%;
-            height: 8px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.05);
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.04);
-            backdrop-filter: blur(10px);
-        }
-
-        .loader-progress {
-            position: absolute;
-            inset: 0 auto 0 0;
-            width: 0%;
-            border-radius: inherit;
-            background: linear-gradient(90deg, #0d9488 0%, #14b8a6 50%, #A3E4D7 100%);
-            box-shadow: 0 0 18px rgba(163, 228, 215, 0.35), 0 0 30px rgba(20, 184, 166, 0.18);
-            transition: width 0.08s linear;
-        }
-
-        .loader-percent {
-            font-size: 12px;
-            color: rgba(255,255,255,0.62);
-            font-family: var(--font-mono);
-            letter-spacing: 0.08em;
-        }
-
-        .loader-text {
-            min-height: 18px;
-            font-size: 11px;
-            color: rgba(167,243,208,0.70);
-            font-family: var(--font-mono);
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            inset: 0 0 auto 0;
-            height: 76px;
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .header-wrap {
-            width: min(1320px, calc(100% - 32px));
-            height: 58px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 18px 0 16px;
-            border: 1px solid rgba(255,255,255,0.07);
-            background: rgba(8, 13, 16, 0.64);
-            backdrop-filter: blur(20px) saturate(130%);
-            -webkit-backdrop-filter: blur(20px) saturate(130%);
-            border-radius: 18px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.28);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .logo img {
-            width: 34px;
-            height: 34px;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-        }
-
-        .logo-text strong {
-            font-size: 14px;
-            letter-spacing: -0.02em;
-            color: #fff;
-        }
-
-        .logo-text span {
-            font-size: 10px;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.42);
-            font-family: var(--font-mono);
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-        }
-
-        nav a {
-            position: relative;
-            text-decoration: none;
-            color: var(--text-dim);
-            font-size: 13px;
-            font-weight: 500;
-            transition: color var(--transition);
-        }
-
-        nav a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -6px;
-            width: 0;
-            height: 1px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            transition: width var(--transition);
-        }
-
-        nav a:hover {
-            color: #fff;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .ghost-link {
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-dim);
-            padding: 10px 12px;
-            border-radius: 12px;
-            transition: var(--transition);
-        }
-
-        .ghost-link:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.04);
-        }
-
-        .btn-primary {
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            color: #041012;
-            padding: 11px 18px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #c8fff3 0%, #67e8f9 40%, #14b8a6 100%);
-            box-shadow: 0 10px 28px rgba(20,184,166,0.22);
-            transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
-            white-space: nowrap;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 34px rgba(20,184,166,0.28);
-            filter: brightness(1.04);
-        }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 140px 20px 80px;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 1100px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .hero-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 16px;
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.03);
-            color: rgba(244,248,251,0.68);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            backdrop-filter: blur(12px);
-            margin-bottom: 28px;
-        }
-
-        .hero-pill::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, var(--accent-2), var(--accent));
-            box-shadow: 0 0 16px rgba(20,184,166,0.6);
-        }
-
-        .hero h1 {
-            font-size: clamp(3.2rem, 8vw, 7.2rem);
-            line-height: 0.93;
-            letter-spacing: -0.065em;
-            font-weight: 900;
-            margin-bottom: 24px;
-            max-width: 1000px;
-            background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.78) 55%, rgba(180, 240, 233, 0.44) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            max-width: 760px;
-            font-size: clamp(1rem, 1.9vw, 1.25rem);
-            color: var(--text-dim);
-            line-height: 1.75;
-            margin-bottom: 36px;
-        }
-
-        .hero-actions {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 56px;
-        }
-
-        .btn-secondary {
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-main);
-            padding: 11px 18px;
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.03);
-            transition: var(--transition);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.14);
-            transform: translateY(-2px);
-        }
-
-        .hero-meta {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 14px;
-            width: 100%;
-            max-width: 920px;
-        }
-
-        .hero-stat {
-            padding: 22px 20px;
-            border-radius: 22px;
-            border: 1px solid rgba(255,255,255,0.07);
-            background: linear-gradient(180deg, rgba(255,255,255,0.028), rgba(255,255,255,0.018));
-            backdrop-filter: blur(14px);
-            text-align: left;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
-        }
-
-        .hero-stat span {
-            display: block;
-            font-size: 11px;
-            color: rgba(255,255,255,0.42);
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            font-family: var(--font-mono);
-            margin-bottom: 10px;
-        }
-
-        .hero-stat strong {
-            display: block;
-            font-size: 1.6rem;
-            letter-spacing: -0.04em;
-            margin-bottom: 6px;
-        }
-
-        .hero-stat p {
-            margin: 0;
-            font-size: 13px;
-            color: var(--text-dim);
-            line-height: 1.6;
-        }
-
-        /* Containers */
-        .container {
-            width: min(1320px, calc(100% - 40px));
-            margin: 0 auto;
-        }
-
-        .section-head {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-head .section-kicker {
-            display: inline-block;
-            font-family: var(--font-mono);
-            font-size: 11px;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: rgba(167,243,208,0.72);
-            margin-bottom: 14px;
-        }
-
-        .section-head h2 {
-            font-size: clamp(2.1rem, 5vw, 4rem);
-            line-height: 1.04;
-            letter-spacing: -0.06em;
-            margin-bottom: 14px;
-        }
-
-        .section-head p {
-            max-width: 760px;
-            margin: 0 auto;
-            color: var(--text-dim);
-            font-size: 1rem;
-            line-height: 1.8;
-        }
-
-        /* Feature Sections */
-        .features {
-            padding: 40px 0 40px;
-        }
-
-        .feature-block {
-            display: grid;
-            grid-template-columns: 1.12fr 0.88fr;
-            gap: 56px;
-            align-items: center;
-            padding: 44px;
-            border: 1px solid rgba(255,255,255,0.06);
-            background:
-                linear-gradient(180deg, rgba(255,255,255,0.028), rgba(255,255,255,0.018));
-            border-radius: 30px;
-            backdrop-filter: blur(16px);
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 28px;
-
-            opacity: 0;
-            transform: translateY(36px);
-            transition: opacity 0.85s var(--transition), transform 0.85s var(--transition), border-color var(--transition), background var(--transition);
-        }
-
-        .feature-block.reveal {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .feature-block:hover {
-            border-color: rgba(103,232,249,0.18);
-            background:
-                linear-gradient(180deg, rgba(255,255,255,0.036), rgba(255,255,255,0.020));
-        }
-
-        .feature-block.reverse {
-            grid-template-columns: 0.88fr 1.12fr;
-        }
-
-        .feature-visual {
-            position: relative;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.07);
-            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-            min-height: 380px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
-        }
-
-        .feature-visual::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(180deg, rgba(255,255,255,0.02), transparent 20%),
-                radial-gradient(circle at top right, rgba(103,232,249,0.12), transparent 35%);
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .feature-visual img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            min-height: 380px;
-            transition: transform 0.8s var(--transition), filter 0.8s var(--transition);
-        }
-
-        .feature-block:hover .feature-visual img {
-            transform: scale(1.025);
-            filter: saturate(1.06);
-        }
-
-        .feature-text .tag {
-            display: inline-block;
-            margin-bottom: 18px;
-            font-size: 11px;
-            font-family: var(--font-mono);
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: rgba(167,243,208,0.78);
-        }
-
-        .feature-text h3 {
-            font-size: clamp(2rem, 4.2vw, 3.6rem);
-            line-height: 1.04;
-            letter-spacing: -0.06em;
-            margin-bottom: 18px;
-        }
-
-        .feature-text p {
-            font-size: 1rem;
-            color: var(--text-dim);
-            line-height: 1.85;
-            margin-bottom: 22px;
-            max-width: 560px;
-        }
-
-        .feature-points {
-            display: grid;
-            gap: 12px;
-        }
-
-        .feature-points div {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            color: var(--text-soft);
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-        .feature-points div::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            margin-top: 9px;
-            flex: 0 0 auto;
-            background: linear-gradient(135deg, var(--accent-2), var(--accent));
-            box-shadow: 0 0 12px rgba(20,184,166,0.45);
-        }
-
-        /* Specs Bento */
-        .specs {
-            padding: 90px 0 20px;
-        }
-
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 18px;
-        }
-
-        .bento-card {
-            position: relative;
-            overflow: hidden;
-            min-height: 250px;
-            padding: 28px;
-            border-radius: 28px;
-            border: 1px solid rgba(255,255,255,0.07);
-            background:
-                linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.018));
-            backdrop-filter: blur(14px);
-            box-shadow: var(--shadow-lg);
-            transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
-
-            opacity: 0;
-            transform: translateY(36px);
-        }
-
-        .bento-card.reveal {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .bento-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(103,232,249,0.16);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.38), var(--shadow-accent);
-        }
-
-        .bento-card::after {
-            content: "";
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 180px;
-            height: 180px;
-            border-radius: 999px;
-            background: radial-gradient(circle, rgba(20,184,166,0.12), transparent 68%);
-            pointer-events: none;
-        }
-
-        .bento-card span {
-            display: inline-block;
-            font-size: 11px;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.45);
-            font-family: var(--font-mono);
-            margin-bottom: 20px;
-        }
-
-        .bento-card h3 {
-            font-size: clamp(2.5rem, 5vw, 4.2rem);
-            line-height: 0.95;
-            letter-spacing: -0.06em;
-            margin-bottom: 14px;
-        }
-
-        .bento-card p {
-            color: var(--text-dim);
-            font-size: 14px;
-            line-height: 1.75;
-            max-width: 260px;
-        }
-
-        .bento-card.highlight {
-            background:
-                linear-gradient(135deg, rgba(200,255,243,0.98), rgba(103,232,249,0.92) 45%, rgba(20,184,166,0.92));
-            color: #031012;
-            border-color: rgba(255,255,255,0.18);
-        }
-
-        .bento-card.highlight span,
-        .bento-card.highlight p {
-            color: rgba(3,16,18,0.68);
-        }
-
-        /* FAQ */
-        .faq-section {
-            padding: 110px 0 120px;
-        }
-
-        .faq-wrap {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .faq-title {
-            text-align: center;
-            margin-bottom: 56px;
-        }
-
-        .faq-title .section-kicker {
-            display: inline-block;
-            font-family: var(--font-mono);
-            font-size: 11px;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: rgba(167,243,208,0.72);
-            margin-bottom: 14px;
-        }
-
-        .faq-title h2 {
-            font-size: clamp(2.3rem, 5vw, 4rem);
-            letter-spacing: -0.06em;
-            line-height: 1.04;
-        }
-
-        .faq-item {
-            border: 1px solid rgba(255,255,255,0.06);
-            background: rgba(255,255,255,0.02);
-            border-radius: 22px;
-            padding: 24px 24px;
-            margin-bottom: 14px;
-            transition: var(--transition);
-
-            opacity: 0;
-            transform: translateY(36px);
-        }
-
-        .faq-item.reveal {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .faq-item:hover {
-            border-color: rgba(103,232,249,0.15);
-            background: rgba(255,255,255,0.03);
-        }
-
-        .faq-item.active {
-            border-color: rgba(103,232,249,0.20);
-            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-        }
-
-        .faq-q {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            cursor: pointer;
-        }
-
-        .faq-q h3 {
-            font-size: 1.05rem;
-            font-weight: 650;
-            letter-spacing: -0.02em;
-        }
-
-        .faq-icon {
-            width: 20px;
-            height: 20px;
-            flex: 0 0 auto;
-            position: relative;
-            transition: transform var(--transition);
-        }
-
-        .faq-icon::before,
-        .faq-icon::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            border-radius: 2px;
-            background: #dffdf8;
-            transform: translate(-50%, -50%);
-        }
-
-        .faq-icon::before {
-            width: 16px;
-            height: 2px;
-        }
-
-        .faq-icon::after {
-            width: 2px;
-            height: 16px;
-        }
-
-        .faq-item.active .faq-icon {
-            transform: rotate(135deg);
-        }
-
-        .faq-a {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.45s var(--transition), margin-top 0.45s var(--transition);
-            color: var(--text-dim);
-            font-size: 15px;
-            line-height: 1.9;
-        }
-
-        .faq-item.active .faq-a {
-            max-height: 240px;
-            margin-top: 16px;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding: 70px 0 80px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
-        }
-
-        .footer-wrap {
-            width: min(1320px, calc(100% - 40px));
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .footer-brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            margin-bottom: 18px;
-        }
-
-        .footer-brand img {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-        }
-
-        .footer-brand strong {
-            font-size: 18px;
-            letter-spacing: -0.03em;
-        }
-
-        .footer-sub {
-            max-width: 650px;
-            color: var(--text-dim);
-            line-height: 1.8;
-            margin-bottom: 28px;
-            font-size: 14px;
-        }
-
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 24px;
-            margin-bottom: 28px;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            color: var(--text-dim);
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: #fff;
-        }
-
-        .copyright {
-            color: rgba(255,255,255,0.34);
-            font-size: 11px;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            font-family: var(--font-mono);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(
-                to bottom,
-                rgba(103,232,249,0.28),
-                rgba(20,184,166,0.10)
-            );
-            border-radius: 999px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(
-                to bottom,
-                rgba(103,232,249,0.42),
-                rgba(20,184,166,0.18)
-            );
-            background-clip: padding-box;
-        }
-
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(103,232,249,0.25) transparent;
-        }
-
-        /* Responsive */
-        @media (max-width: 1180px) {
-            .feature-block,
-            .feature-block.reverse {
-                grid-template-columns: 1fr;
-                gap: 28px;
-            }
-
-            .feature-block.reverse .feature-text {
-                order: -1;
-            }
-
-            .bento-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            nav {
-                display: none;
-            }
-        }
-
-        @media (max-width: 780px) {
-            .header-wrap {
-                width: calc(100% - 18px);
-                padding: 0 10px 0 12px;
-            }
-
-            .ghost-link {
-                display: none;
-            }
-
-            .hero {
-                padding-top: 120px;
-            }
-
-            .hero-meta {
-                grid-template-columns: 1fr;
-            }
-
-            .feature-block {
-                padding: 20px;
-                border-radius: 24px;
-            }
-
-            .feature-visual,
-            .feature-visual img {
-                min-height: 260px;
-            }
-
-            .bento-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .faq-item {
-                padding: 20px 18px;
-            }
-
-            .footer-links {
-                gap: 16px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spectra Executor</title>
+
+<style>
+:root {
+    --bg: #07070d;
+    --bg-soft: #0d0d18;
+    --panel: rgba(255, 255, 255, 0.065);
+    --panel-strong: rgba(255, 255, 255, 0.095);
+    --border: rgba(255, 255, 255, 0.13);
+    --border-soft: rgba(255, 255, 255, 0.075);
+    --text: #f5f3ff;
+    --muted: #a9a4bd;
+    --purple: #8f6cff;
+    --purple-soft: #5b4bb0;
+    --cyan: #7dd3ff;
+    --green: #82f7b4;
+    --shadow: rgba(90, 70, 255, 0.32);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(143, 108, 255, 0.22), transparent 34%),
+        radial-gradient(circle at 80% 20%, rgba(125, 211, 255, 0.14), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(91, 75, 176, 0.2), transparent 34%),
+        var(--bg);
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent 80%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+.loader {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(circle at center, rgba(143, 108, 255, 0.18), transparent 34%),
+        #05050a;
+    animation: loaderExit 1s ease forwards;
+    animation-delay: 2.15s;
+}
+
+.loader-core {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    display: grid;
+    place-items: center;
+}
+
+.loader-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12);
+    background:
+        conic-gradient(from 0deg, transparent, rgba(143, 108, 255, 0.9), rgba(125, 211, 255, 0.75), transparent);
+    mask: radial-gradient(circle, transparent 58%, #000 59%);
+    animation: spin 1.15s linear infinite;
+    filter: drop-shadow(0 0 28px rgba(143, 108, 255, 0.45));
+}
+
+.loader-ring:nth-child(2) {
+    inset: 24px;
+    animation-duration: 1.7s;
+    animation-direction: reverse;
+    opacity: 0.72;
+}
+
+.loader-logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    background: linear-gradient(135deg, #fff, #b7a6ff, #7dd3ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: logoPulse 1.8s ease infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes logoPulse {
+    0%, 100% {
+        opacity: 0.65;
+        transform: scale(0.96);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.04);
+    }
+}
+
+@keyframes loaderExit {
+    to {
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.08);
+    }
+}
+
+.nav {
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(1180px, calc(100% - 32px));
+    height: 68px;
+    padding: 0 18px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: rgba(12, 12, 22, 0.62);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+    box-shadow: 0 18px 70px rgba(0,0,0,0.28);
+    animation: navDrop 1s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay: 2.35s;
+}
+
+@keyframes navDrop {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -18px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    object-fit: cover;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.38),
+        0 0 32px rgba(143, 108, 255, 0.42);
+}
+
+.brand-text {
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.nav-links a {
+    transition: 0.25s ease;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.lang-switch {
+    display: flex;
+    gap: 8px;
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: rgba(255,255,255,0.045);
+}
+
+.lang-btn {
+    border: 0;
+    color: var(--muted);
+    background: transparent;
+    padding: 8px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.lang-btn.active {
+    color: #fff;
+    background: rgba(143, 108, 255, 0.28);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+.hero {
+    position: relative;
+    width: min(1180px, calc(100% - 32px));
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 160px 0 90px;
+    display: grid;
+    grid-template-columns: 1.02fr 0.98fr;
+    gap: 54px;
+    align-items: center;
+}
+
+.hero-content {
+    animation: heroText 1.1s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay: 2.55s;
+}
+
+@keyframes heroText {
+    from {
+        opacity: 0;
+        transform: translateY(26px);
+        filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+.badge {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid rgba(143,108,255,0.32);
+    border-radius: 999px;
+    color: #d8d1ff;
+    background: rgba(143,108,255,0.12);
+    box-shadow: 0 0 28px rgba(143,108,255,0.15);
+    margin-bottom: 22px;
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 18px var(--green);
+}
+
+h1 {
+    font-size: clamp(3rem, 7vw, 6.7rem);
+    line-height: 0.9;
+    letter-spacing: -0.08em;
+    margin-bottom: 24px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #fff 8%, #b8a7ff 42%, #7dd3ff 80%);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero-desc {
+    max-width: 650px;
+    color: var(--muted);
+    font-size: 1.08rem;
+    line-height: 1.85;
+    margin-bottom: 34px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 15px 22px;
+    font-size: 0.98rem;
+    font-weight: 700;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.28s ease;
+}
+
+.btn-primary {
+    color: #fff;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.2), transparent 30%),
+        linear-gradient(135deg, #8f6cff, #4e39bd);
+    box-shadow: 0 18px 46px rgba(91,75,176,0.35);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 24px 70px rgba(91,75,176,0.5);
+}
+
+.btn-secondary {
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.095);
+}
+
+.hero-visual {
+    position: relative;
+    animation: heroVisual 1.2s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay: 2.7s;
+}
+
+@keyframes heroVisual {
+    from {
+        opacity: 0;
+        transform: translateY(36px) scale(0.96);
+        filter: blur(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+.glass-card {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 34px;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.035)),
+        rgba(14,14,26,0.62);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        0 28px 90px rgba(0,0,0,0.38),
+        0 0 80px rgba(143,108,255,0.18);
+    overflow: hidden;
+}
+
+.preview-main {
+    padding: 14px;
+    transform: perspective(1100px) rotateY(-8deg) rotateX(5deg);
+}
+
+.preview-main::before {
+    content: "";
+    position: absolute;
+    inset: -80px;
+    background: conic-gradient(from 180deg, transparent, rgba(143,108,255,0.28), transparent, rgba(125,211,255,0.2), transparent);
+    animation: auraSpin 7s linear infinite;
+    z-index: -1;
+}
+
+@keyframes auraSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.preview-img {
+    width: 100%;
+    display: block;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: #111;
+}
+
+.float-stat {
+    position: absolute;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 16px 18px;
+    background: rgba(12,12,22,0.66);
+    backdrop-filter: blur(22px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: float 4.8s ease-in-out infinite;
+}
+
+.float-stat strong {
+    display: block;
+    font-size: 1.45rem;
+    color: #fff;
+}
+
+.float-stat span {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.float-stat.one {
+    left: -18px;
+    bottom: 44px;
+}
+
+.float-stat.two {
+    right: -10px;
+    top: 34px;
+    animation-delay: -1.2s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-14px);
+    }
+}
+
+.section {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 90px 0;
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 28px;
+    margin-bottom: 34px;
+}
+
+.section-kicker {
+    color: var(--purple);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.055em;
+}
+
+.section-desc {
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 470px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.stat-card {
+    padding: 26px;
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.095), rgba(255,255,255,0.035));
+    backdrop-filter: blur(22px);
+    transition: 0.28s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(143,108,255,0.35);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff, #b7a6ff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.stat-label {
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.feature-card {
+    position: relative;
+    min-height: 240px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.035)),
+        rgba(12,12,22,0.6);
+    backdrop-filter: blur(24px);
+    overflow: hidden;
+    transition: 0.35s ease;
+}
+
+.feature-card::after {
+    content: "";
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    right: -60px;
+    bottom: -60px;
+    border-radius: 50%;
+    background: rgba(143,108,255,0.22);
+    filter: blur(18px);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(143,108,255,0.42);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 17px;
+    background: rgba(143,108,255,0.18);
+    border: 1px solid rgba(143,108,255,0.28);
+    margin-bottom: 22px;
+    box-shadow: 0 0 28px rgba(143,108,255,0.18);
+}
+
+.feature-card h3 {
+    font-size: 1.28rem;
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.gallery-wrap {
+    border: 1px solid var(--border);
+    border-radius: 34px;
+    padding: 18px;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.035)),
+        rgba(12,12,22,0.56);
+    backdrop-filter: blur(26px);
+    box-shadow: 0 28px 90px rgba(0,0,0,0.28);
+}
+
+.gallery-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.gallery-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    border: 1px solid var(--border-soft);
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    border-radius: 14px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: 0.24s ease;
+}
+
+.tab-btn.active {
+    color: #fff;
+    background: rgba(143,108,255,0.22);
+    border-color: rgba(143,108,255,0.42);
+}
+
+.gallery-status {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.gallery-screen {
+    position: relative;
+    overflow: hidden;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.09);
+    background: #0c0c14;
+}
+
+.gallery-img {
+    width: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.gallery-img.switching {
+    opacity: 0;
+    transform: scale(1.025);
+}
+
+.cta {
+    position: relative;
+    overflow: hidden;
+    padding: 54px;
+    border: 1px solid var(--border);
+    border-radius: 36px;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(143,108,255,0.28), transparent 36%),
+        radial-gradient(circle at 90% 20%, rgba(125,211,255,0.16), transparent 30%),
+        rgba(12,12,22,0.65);
+    backdrop-filter: blur(28px);
+    box-shadow: 0 34px 100px rgba(0,0,0,0.32);
+}
+
+.cta::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+    transform: translateX(-100%);
+    animation: shine 5s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0%, 55% {
+        transform: translateX(-100%);
+    }
+    85%, 100% {
+        transform: translateX(100%);
+    }
+}
+
+.cta h2 {
+    max-width: 760px;
+    font-size: clamp(2.2rem, 5vw, 4.8rem);
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+    margin-bottom: 20px;
+}
+
+.cta p {
+    max-width: 690px;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 30px;
+}
+
+.footer {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 34px 0 46px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border-top: 1px solid var(--border-soft);
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: 0.75s cubic-bezier(.2,.8,.2,1);
+}
+
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 980px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding-top: 140px;
+    }
+
+    .preview-main {
+        transform: none;
+    }
+
+    .stats-grid,
+    .features {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section-head {
+        align-items: start;
+        flex-direction: column;
+    }
+
+    .nav-links {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .nav {
+        height: auto;
+        padding: 12px;
+        border-radius: 18px;
+    }
+
+    .brand-text {
+        font-size: 0.95rem;
+    }
+
+    .lang-btn {
+        padding: 7px 9px;
+    }
+
+    .hero {
+        padding-top: 130px;
+    }
+
+    .stats-grid,
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .float-stat {
+        position: relative;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: auto !important;
+        margin-top: 12px;
+    }
+
+    .hero-visual {
+        display: grid;
+        gap: 12px;
+    }
+
+    .gallery-img {
+        min-height: 260px;
+    }
+
+    .cta {
+        padding: 32px;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: start;
+    }
+}
+</style>
 </head>
-<body class="loading">
 
-    <div class="grid"></div>
-    <div class="noise"></div>
-    <div class="blobs"></div>
-    <div class="particles" id="particles"></div>
+<body>
 
-    <div class="loader" id="loader">
-        <div class="loader-inner">
-            <img src="Spectra.png" alt="Spectra Logo" class="loader-logo">
-            <div class="loader-bar">
-                <div class="loader-progress" id="loaderProgress"></div>
-            </div>
-            <div class="loader-percent" id="loaderPercent">0%</div>
-            <div class="loader-text" id="loaderText">Initializing environment...</div>
-        </div>
+<div class="loader">
+    <div class="loader-core">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-logo">SPECTRA</div>
     </div>
+</div>
 
-    <header>
-        <div class="header-wrap">
-            <a href="#" class="logo">
-                <img src="Spectra.png" alt="Spectra">
-                <div class="logo-text">
-                    <strong>SPECTRA</strong>
-                    <span>Modern execution platform</span>
-                </div>
-            </a>
+<header class="nav">
+    <a href="#" class="brand">
+        <img class="brand-logo" src="logo.png" alt="Spectra Logo">
+        <div class="brand-text">Spectra</div>
+    </a>
 
-            <nav>
-                <a href="#features">Features</a>
-                <a href="#specs">Specs</a>
-                <a href="#faq">FAQ</a>
-            </nav>
+    <nav class="nav-links">
+        <a href="#overview" data-i18n="navOverview">Overview</a>
+        <a href="#features" data-i18n="navFeatures">Features</a>
+        <a href="#ui" data-i18n="navUI">UI Preview</a>
+        <a href="#release" data-i18n="navRelease">Release</a>
+    </nav>
 
-            <div class="header-actions">
-                <a href="https://discord.gg/7sq3xaHSWc" class="ghost-link">Discord</a>
-                <a href="https://work.ink/26Yy/Spectra" class="btn-primary">Download Now</a>
-            </div>
-        </div>
-    </header>
+    <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="zh">中文</button>
+    </div>
+</header>
 
+<main>
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-pill">Injection • Execution • Automation</div>
+            <div class="badge">
+                <span class="badge-dot"></span>
+                <span data-i18n="badge">Current Release · V3</span>
+            </div>
 
-            <h1>Modern execution,<br>refined for Spectra.</h1>
+            <h1>
+                <span data-i18n="heroLine1">A sharper</span><br>
+                <span class="gradient-text" data-i18n="heroLine2">execution experience.</span>
+            </h1>
 
-            <p>
-                Spectra is designed for fast injection, stable execution, and a smooth scripting workflow.
-Built with a modern UI and optimized performance, it provides a reliable environment for running scripts, managing tabs, and automating tasks without delays.
+            <p class="hero-desc" data-i18n="heroDesc">
+                Spectra is a powerful, discreet script executor crafted by the Chinese-speaking Spectra development team. Built around glass, light, motion, and speed, V3 delivers a peak visual interface with 94% sUNC / 99% UNC support and fast automatic updates.
             </p>
 
             <div class="hero-actions">
-                <a href="https://work.ink/26Yy/Spectra" class="btn-primary">Get Spectra</a>
-                <a href="#features" class="btn-secondary">Explore Features</a>
+                <a class="btn btn-primary" href="#ui" data-i18n="btnPreview">View Interface</a>
+                <a class="btn btn-secondary" href="#features" data-i18n="btnExplore">Explore Features</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="glass-card preview-main">
+                <img class="preview-img" src="UI1.png" alt="Spectra UI Preview">
             </div>
 
-            <div class="hero-meta">
-                <div class="hero-stat">
-                    <span>Execution Layer</span>
-                    <strong>V3 Runtime</strong>
-                    <p>Advanced injection system with high success rate and fast attach performance.</p>
-                </div>
-                <div class="hero-stat">
-                    <span>User Experience</span>
-                    <strong>Instant UI</strong>
-                    <p>Instant UI loading with smooth editor performance and responsive tab switching.</p>
-                </div>
-                <div class="hero-stat">
-                    <span>Platform Reach</span>
-                    <strong>Cross Flow</strong>
-                    <p>Built-in script hub, tools, and automation features designed for everyday usage.</p>
-                </div>
+            <div class="float-stat one">
+                <strong>94%</strong>
+                <span>sUNC</span>
+            </div>
+
+            <div class="float-stat two">
+                <strong>99%</strong>
+                <span>UNC</span>
             </div>
         </div>
     </section>
 
-    <section class="features container" id="features">
-        <div class="section-head scroll-reveal">
-            <span class="section-kicker">Core Modules</span>
-            <h2>Core features of the Spectra executor.</h2>
-            <p>
-                Spectra focuses on performance, stability, and usability. Every feature is built to improve execution speed, script management, and overall workflow efficiency.
+    <section class="section reveal" id="overview">
+        <div class="section-head">
+            <div>
+                <div class="section-kicker" data-i18n="overviewKicker">Spectra V3</div>
+                <h2 class="section-title" data-i18n="overviewTitle">Built for speed, polished for impact.</h2>
+            </div>
+            <p class="section-desc" data-i18n="overviewDesc">
+                Every detail is tuned for a clean dark interface, premium glass layers, smooth transitions, and a focused workspace that feels light, fast, and refined.
             </p>
         </div>
 
-        <div class="feature-block scroll-reveal">
-            <div class="feature-visual">
-                <img src="UI.png" alt="Workspace Editor">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">V3</div>
+                <div class="stat-label" data-i18n="statVersion">Current public version</div>
             </div>
-
-            <div class="feature-text">
-                <span class="tag">Workspace</span>
-                <h3>The Unified Interface Layer</h3>
-                <p>
-                    The Spectra editor provides a fast and responsive scripting environment built on Monaco.
-It supports multi-tab editing, smooth execution, and a clean layout designed for real usage.
-                </p>
-
-                <div class="feature-points">
-                    <div>Monaco-based editor with IntelliSense support</div>
-                    <div>Multi-tab script management system</div>
-                    <div>Fast execution with minimal delay</div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-value">94%</div>
+                <div class="stat-label" data-i18n="statSunc">sUNC compatibility</div>
             </div>
-        </div>
-
-        <div class="feature-block reverse scroll-reveal">
-            <div class="feature-text">
-                <span class="tag">Library</span>
-                <h3>Built-in Script Hub for instant access</h3>
-                <p>
-                    The built-in script hub allows users to browse, search, and execute scripts instantly.
-It eliminates the need to manually paste scripts from external sources.
-                </p>
-
-                <div class="feature-points">
-                    <div>Built-in script library with search functionality</div>
-                    <div>One-click execution system</div>
-                    <div>Organized script categories for easier access</div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-value">99%</div>
+                <div class="stat-label" data-i18n="statUnc">UNC compatibility</div>
             </div>
-
-            <div class="feature-visual">
-                <img src="UI2.png" alt="Script Library">
-            </div>
-        </div>
-
-        <div class="feature-block scroll-reveal">
-            <div class="feature-visual">
-                <img src="UI3.png" alt="System Configuration">
-            </div>
-
-            <div class="feature-text">
-                <span class="tag">Configuration</span>
-                <h3>Full configuration and automation system</h3>
-                <p>
-                    Spectra includes a full configuration system with automation and performance tools built-in.
-                </p>
-
-                <div class="feature-points">
-                    <div>Auto attach system for instant injection</div>
-                    <div>Auto execute scripts on launch</div>
-                    <div>Customizable settings and environment</div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-value">Auto</div>
+                <div class="stat-label" data-i18n="statUpdate">Fast automatic updates</div>
             </div>
         </div>
     </section>
 
-    <section class="specs container" id="specs">
-        <div class="section-head scroll-reveal">
-            <span class="section-kicker">Platform Snapshot</span>
-            <h2>Built to look premium,<br>and feel even sharper.</h2>
-            <p>
-                Spectra focuses on delivering fast execution, stable performance, and a clean user experience for advanced users.
+    <section class="section reveal" id="features">
+        <div class="section-head">
+            <div>
+                <div class="section-kicker" data-i18n="featuresKicker">Core Features</div>
+                <h2 class="section-title" data-i18n="featuresTitle">A dark glass interface with serious presence.</h2>
+            </div>
+            <p class="section-desc" data-i18n="featuresDesc">
+                Spectra V3 focuses on visual quality, stable execution flow, quick refresh cycles, and a polished user experience from launch to workspace.
             </p>
         </div>
 
-        <div class="bento-grid">
-            <div class="bento-card scroll-reveal">
-                <span>INTERFACE_RESPONSE</span>
-                <h3>Fast</h3>
-                <p>Low-latency execution with fast response time.</p>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">✦</div>
+                <h3 data-i18n="feature1Title">Glassmorphism Visuals</h3>
+                <p data-i18n="feature1Desc">Deep dark tones, layered blur, soft highlights, and cinematic motion create Spectra’s signature look.</p>
             </div>
 
-            <div class="bento-card scroll-reveal">
-                <span>VISUAL_SYSTEM</span>
-                <h3>Refined</h3>
-                <p>Clean and optimized UI built for real usage.</p>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 data-i18n="feature2Title">Fast Auto Updates</h3>
+                <p data-i18n="feature2Desc">A rapid update rhythm keeps the experience fresh, responsive, and ready for the newest build.</p>
             </div>
 
-            <div class="bento-card scroll-reveal">
-                <span>BRAND_DIRECTION</span>
-                <h3>Modern</h3>
-                <p>Built with modern architecture for better performance and stability.</p>
+            <div class="feature-card">
+                <div class="feature-icon">◆</div>
+                <h3 data-i18n="feature3Title">Powerful Workspace</h3>
+                <p data-i18n="feature3Desc">A strong and discreet execution environment designed for clean operation and focused control.</p>
             </div>
 
-            <div class="bento-card highlight scroll-reveal">
-                <span>SPECTRA_ECOSYSTEM</span>
-                <h3>2026</h3>
-                <p>Actively maintained and updated with new features.</p>
+            <div class="feature-card">
+                <div class="feature-icon">☄</div>
+                <h3 data-i18n="feature4Title">Peak Interface Design</h3>
+                <p data-i18n="feature4Desc">From panels to navigation, every surface is shaped for a premium visual feast.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">◈</div>
+                <h3 data-i18n="feature5Title">High Compatibility</h3>
+                <p data-i18n="feature5Desc">94% sUNC and 99% UNC support provide a strong foundation for advanced script execution.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✧</div>
+                <h3 data-i18n="feature6Title">Spectra Craft</h3>
+                <p data-i18n="feature6Desc">A top-tier creation proudly built by the Chinese-speaking Spectra development team.</p>
             </div>
         </div>
     </section>
 
-    <section class="faq-section" id="faq">
-    <div class="faq-wrap">
-        <div class="faq-title scroll-reveal">
-            <span class="section-kicker">Support</span>
-            <h2>Common questions.</h2>
-        </div>
-
-        <div class="faq-item scroll-reveal active">
-            <div class="faq-q">
-                <h3>What is Spectra?</h3>
-                <div class="faq-icon"></div>
+    <section class="section reveal" id="ui">
+        <div class="section-head">
+            <div>
+                <div class="section-kicker" data-i18n="uiKicker">Interface Preview</div>
+                <h2 class="section-title" data-i18n="uiTitle">Four views. One visual identity.</h2>
             </div>
-            <div class="faq-a">
-                Spectra is a Roblox executor designed for fast injection, stable execution, and a clean scripting workflow. It combines a modern editor, built-in tools, and automation features into a single platform.
-            </div>
-        </div>
-
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">
-                <h3>How stable is Spectra?</h3>
-                <div class="faq-icon"></div>
-            </div>
-            <div class="faq-a">
-                Spectra uses an optimized injection system with a high success rate. It is designed to reduce crashes, improve attach speed, and maintain consistent execution across updates.
-            </div>
-        </div>
-
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">
-                <h3>Does Spectra support a script hub?</h3>
-                <div class="faq-icon"></div>
-            </div>
-            <div class="faq-a">
-                Yes. Spectra includes a built-in script hub where users can browse, search, and execute scripts instantly without copying from external sources.
-            </div>
-        </div>
-
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">
-                <h3>What editor does Spectra use?</h3>
-                <div class="faq-icon"></div>
-            </div>
-            <div class="faq-a">
-                Spectra uses a Monaco-based editor with IntelliSense support, multi-tab editing, and smooth performance for handling large scripts efficiently.
-            </div>
-        </div>
-
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">
-                <h3>Does Spectra include automation features?</h3>
-                <div class="faq-icon"></div>
-            </div>
-            <div class="faq-a">
-                Yes. Spectra supports auto attach, auto execute, and configurable startup behavior to reduce manual steps and improve workflow speed.
-            </div>
-        </div>
-
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">
-                <h3>Is Spectra fast compared to other executors?</h3>
-                <div class="faq-icon"></div>
-            </div>
-            <div class="faq-a">
-                Spectra is built with performance in mind, focusing on low-latency execution, fast UI loading, and minimal delay between injection and script execution.
-            </div>
-        </div>
-
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">
-                <h3>Can I customize settings?</h3>
-                <div class="faq-icon"></div>
-            </div>
-            <div class="faq-a">
-                Spectra provides a full settings panel where users can configure execution behavior, toggle features, and adjust performance-related options.
-            </div>
-        </div>
-
-        <div class="faq-item scroll-reveal">
-            <div class="faq-q">
-                <h3>Is Spectra actively updated?</h3>
-                <div class="faq-icon"></div>
-            </div>
-            <div class="faq-a">
-                Yes. Spectra is actively maintained with frequent updates, bug fixes, and improvements to ensure compatibility and stability over time.
-            </div>
-        </div>
-
-    </div>
-</section>
-    <footer>
-        <div class="footer-wrap">
-            <a href="#" class="footer-brand">
-                <img src="Spectra.png" alt="Spectra">
-                <strong>SPECTRA</strong>
-            </a>
-
-            <p class="footer-sub">
-                Spectra is a modern Roblox executor focused on performance, stability, and a clean user experience.
-            </p>
-
-            <div class="footer-links">
-                <a href="#features">Features</a>
-                <a href="#specs">Specs</a>
-                <a href="#faq">FAQ</a>
-                <a href="https://discord.gg/7sq3xaHSWc">Community</a>
-                <a href="https://work.ink/26Yy/Spectra">Download</a>
-            </div>
-
-            <p class="copyright">
-                © 2026 Spectra. Built for fast injection, stable execution, and a better scripting workflow.
+            <p class="section-desc" data-i18n="uiDesc">
+                Preview the Spectra interface across four prepared screens. Place UI1.png, UI2.png, UI3.png, and UI4.png next to this HTML file.
             </p>
         </div>
-    </footer>
 
-    <script>
-        // Floating particles
-        (function createParticles() {
-            const container = document.getElementById("particles");
-            const count = 24;
+        <div class="gallery-wrap">
+            <div class="gallery-top">
+                <div class="gallery-tabs">
+                    <button class="tab-btn active" data-img="UI1.png">UI1</button>
+                    <button class="tab-btn" data-img="UI2.png">UI2</button>
+                    <button class="tab-btn" data-img="UI3.png">UI3</button>
+                    <button class="tab-btn" data-img="UI4.png">UI4</button>
+                </div>
 
-            for (let i = 0; i < count; i++) {
-                const dot = document.createElement("span");
-                dot.style.left = Math.random() * 100 + "%";
-                dot.style.top = Math.random() * 100 + "%";
-                dot.style.opacity = Math.random() * 0.8;
-                dot.style.animationDuration = (4 + Math.random() * 6) + "s";
-                dot.style.animationDelay = (Math.random() * 6) + "s";
-                dot.style.transform = `translateY(${Math.random() * 20}px)`;
-                container.appendChild(dot);
-            }
-        })();
+                <div class="gallery-status" data-i18n="galleryStatus">Live UI preview</div>
+            </div>
 
-        // Fake loading screen
-        (function loaderSequence() {
-            const loader = document.getElementById("loader");
-            const progress = document.getElementById("loaderProgress");
-            const percent = document.getElementById("loaderPercent");
-            const text = document.getElementById("loaderText");
+            <div class="gallery-screen">
+                <img class="gallery-img" id="galleryImage" src="UI1.png" alt="Spectra UI Preview">
+            </div>
+        </div>
+    </section>
 
-            const messages = [
-                "Initializing environment...",
-                "Loading core modules...",
-                "Syncing visual assets...",
-                "Preparing interface layer...",
-                "Finalizing Spectra..."
-            ];
+    <section class="section reveal" id="release">
+        <div class="cta">
+            <h2 data-i18n="ctaTitle">Spectra V3 is shaped for the next visual standard.</h2>
+            <p data-i18n="ctaDesc">
+                A powerful script executor wrapped in shadow, glass, light, and motion. Spectra is the top-tier work of the Chinese-speaking Spectra development team, made to deliver both performance and atmosphere.
+            </p>
+            <a class="btn btn-primary" href="#overview" data-i18n="ctaButton">Back to Overview</a>
+        </div>
+    </section>
+</main>
 
-            let value = 0;
-            let msgIndex = 0;
+<footer class="footer">
+    <div>© 2026 Spectra Development Team</div>
+    <div data-i18n="footerText">Crafted for V3 · Dark Glass Edition</div>
+</footer>
 
-            const interval = setInterval(() => {
-                value += Math.random() * 14;
+<script>
+const translations = {
+    en: {
+        navOverview: "Overview",
+        navFeatures: "Features",
+        navUI: "UI Preview",
+        navRelease: "Release",
 
-                if (value >= 100) {
-                    value = 100;
-                }
+        badge: "Current Release · V3",
+        heroLine1: "A sharper",
+        heroLine2: "execution experience.",
+        heroDesc: "Spectra is a powerful, discreet script executor crafted by the Chinese-speaking Spectra development team. Built around glass, light, motion, and speed, V3 delivers a peak visual interface with 94% sUNC / 99% UNC support and fast automatic updates.",
+        btnPreview: "View Interface",
+        btnExplore: "Explore Features",
 
-                progress.style.width = value + "%";
-                percent.textContent = Math.floor(value) + "%";
+        overviewKicker: "Spectra V3",
+        overviewTitle: "Built for speed, polished for impact.",
+        overviewDesc: "Every detail is tuned for a clean dark interface, premium glass layers, smooth transitions, and a focused workspace that feels light, fast, and refined.",
 
-                const newIndex = Math.min(messages.length - 1, Math.floor(value / 23));
-                if (newIndex !== msgIndex) {
-                    msgIndex = newIndex;
-                    text.textContent = messages[msgIndex];
-                }
+        statVersion: "Current public version",
+        statSunc: "sUNC compatibility",
+        statUnc: "UNC compatibility",
+        statUpdate: "Fast automatic updates",
 
-                if (value >= 100) {
-                    clearInterval(interval);
+        featuresKicker: "Core Features",
+        featuresTitle: "A dark glass interface with serious presence.",
+        featuresDesc: "Spectra V3 focuses on visual quality, stable execution flow, quick refresh cycles, and a polished user experience from launch to workspace.",
 
-                    setTimeout(() => {
-                        loader.classList.add("hide");
-                        document.body.classList.remove("loading");
-                    }, 300);
-                }
-            }, 90);
-        })();
+        feature1Title: "Glassmorphism Visuals",
+        feature1Desc: "Deep dark tones, layered blur, soft highlights, and cinematic motion create Spectra’s signature look.",
 
-        // Scroll reveal
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("reveal");
-                }
-            });
-        }, { threshold: 0.12 });
+        feature2Title: "Fast Auto Updates",
+        feature2Desc: "A rapid update rhythm keeps the experience fresh, responsive, and ready for the newest build.",
 
-        document.querySelectorAll(".scroll-reveal, .feature-block, .bento-card, .faq-item").forEach(el => {
-            observer.observe(el);
-        });
+        feature3Title: "Powerful Workspace",
+        feature3Desc: "A strong and discreet execution environment designed for clean operation and focused control.",
 
-        // FAQ toggle
-        document.querySelectorAll(".faq-item").forEach(item => {
-            const question = item.querySelector(".faq-q");
+        feature4Title: "Peak Interface Design",
+        feature4Desc: "From panels to navigation, every surface is shaped for a premium visual feast.",
 
-            question.addEventListener("click", () => {
-                const active = item.classList.contains("active");
+        feature5Title: "High Compatibility",
+        feature5Desc: "94% sUNC and 99% UNC support provide a strong foundation for advanced script execution.",
 
-                document.querySelectorAll(".faq-item").forEach(faq => faq.classList.remove("active"));
+        feature6Title: "Spectra Craft",
+        feature6Desc: "A top-tier creation proudly built by the Chinese-speaking Spectra development team.",
 
-                if (!active) {
-                    item.classList.add("active");
-                }
-            });
-        });
-    </script>
+        uiKicker: "Interface Preview",
+        uiTitle: "Four views. One visual identity.",
+        uiDesc: "Preview the Spectra interface across four prepared screens. Place UI1.png, UI2.png, UI3.png, and UI4.png next to this HTML file.",
+        galleryStatus: "Live UI preview",
+
+        ctaTitle: "Spectra V3 is shaped for the next visual standard.",
+        ctaDesc: "A powerful script executor wrapped in shadow, glass, light, and motion. Spectra is the top-tier work of the Chinese-speaking Spectra development team, made to deliver both performance and atmosphere.",
+        ctaButton: "Back to Overview",
+
+        footerText: "Crafted for V3 · Dark Glass Edition"
+    },
+
+    zh: {
+        navOverview: "總覽",
+        navFeatures: "特色",
+        navUI: "介面預覽",
+        navRelease: "版本",
+
+        badge: "目前版本 · V3",
+        heroLine1: "更銳利的",
+        heroLine2: "執行體驗。",
+        heroDesc: "Spectra 是由中文圈 Spectra 開發團隊頂極鉅獻打造的強大且低調腳本執行器。以光影、玻璃、速度與動態視覺為核心，V3 帶來巔峰介面視覺饗宴，支援 94% sUNC / 99% UNC，並具備快速自動更新能力。",
+        btnPreview: "查看介面",
+        btnExplore: "探索特色",
+
+        overviewKicker: "Spectra V3",
+        overviewTitle: "為速度而生，為質感而打磨。",
+        overviewDesc: "每一個細節都圍繞深色美學、玻璃層次、柔順動畫與專注工作區打造，讓整體體驗輕快、乾淨且高級。",
+
+        statVersion: "目前公開版本",
+        statSunc: "sUNC 相容度",
+        statUnc: "UNC 相容度",
+        statUpdate: "快速自動更新",
+
+        featuresKicker: "核心特色",
+        featuresTitle: "擁有強烈存在感的深色玻璃介面。",
+        featuresDesc: "Spectra V3 專注於視覺品質、穩定執行流程、快速更新節奏，以及從啟動到操作都精緻流暢的使用體驗。",
+
+        feature1Title: "光影玻璃視覺",
+        feature1Desc: "深色基底、模糊玻璃、柔和高光與電影感動畫，構成 Spectra 標誌性的視覺語言。",
+
+        feature2Title: "快速自動更新",
+        feature2Desc: "高效率更新節奏，讓體驗保持新鮮、快速，並能跟上最新版本狀態。",
+
+        feature3Title: "強大工作區",
+        feature3Desc: "強大且低調的執行環境，為乾淨操作與專注控制而設計。",
+
+        feature4Title: "巔峰介面設計",
+        feature4Desc: "從面板到導航，每一個表面都為高級視覺饗宴而塑形。",
+
+        feature5Title: "高相容能力",
+        feature5Desc: "94% sUNC 與 99% UNC 支援，提供進階腳本執行所需的強大基礎。",
+
+        feature6Title: "Spectra 工藝",
+        feature6Desc: "中文圈 Spectra 開發團隊頂極鉅獻打造，主打質感、速度與完整氛圍。",
+
+        uiKicker: "介面預覽",
+        uiTitle: "四個頁面，同一套視覺語言。",
+        uiDesc: "預覽 Spectra 的四張介面圖。請將 UI1.png、UI2.png、UI3.png、UI4.png 放在這份 HTML 旁邊。",
+        galleryStatus: "即時介面預覽",
+
+        ctaTitle: "Spectra V3，為下一個視覺標準而生。",
+        ctaDesc: "一款被陰影、玻璃、光線與動態包覆的強大腳本執行器。Spectra 由中文圈 Spectra 開發團隊頂極鉅獻打造，為效能與氛圍同時而生。",
+        ctaButton: "回到總覽",
+
+        footerText: "V3 打造 · Dark Glass Edition"
+    }
+};
+
+const langButtons = document.querySelectorAll(".lang-btn");
+const translatable = document.querySelectorAll("[data-i18n]");
+
+function setLanguage(lang) {
+    document.documentElement.lang = lang === "zh" ? "zh-TW" : "en";
+
+    translatable.forEach(element => {
+        const key = element.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+        }
+    });
+
+    langButtons.forEach(button => {
+        button.classList.toggle("active", button.dataset.lang === lang);
+    });
+}
+
+langButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        setLanguage(button.dataset.lang);
+    });
+});
+
+const revealItems = document.querySelectorAll(".reveal");
+
+const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+        }
+    });
+}, {
+    threshold: 0.16
+});
+
+revealItems.forEach(item => revealObserver.observe(item));
+
+const tabButtons = document.querySelectorAll(".tab-btn");
+const galleryImage = document.getElementById("galleryImage");
+const heroPreview = document.querySelector(".preview-img");
+
+tabButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const image = button.dataset.img;
+
+        tabButtons.forEach(tab => tab.classList.remove("active"));
+        button.classList.add("active");
+
+        galleryImage.classList.add("switching");
+
+        setTimeout(() => {
+            galleryImage.src = image;
+            heroPreview.src = image;
+            galleryImage.classList.remove("switching");
+        }, 260);
+    });
+});
+
+setLanguage("en");
+</script>
+
 </body>
 </html>
